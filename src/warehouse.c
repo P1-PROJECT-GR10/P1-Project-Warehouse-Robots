@@ -7,40 +7,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int** generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int shelves_amount, int rows, int columns) {
+int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int shelves_amount, int rows, int columns) {
 
-    int** warehouse = (int**)malloc(sizeof(int*)*columns);
+    int* warehouse = (int*)malloc(sizeof(int*)*columns*rows);
 
-    for (int i = 0; i < columns; i++) {
-        warehouse[i] = malloc(sizeof(int)*rows);
+    for (int i = 0; i < columns*rows; i++) {
+        warehouse[i] = empty;
     }
 
-    for (int i = 0; i < columns; i++) {
-        for (int j = 0; j < rows; j++) {
-            warehouse[i][j] = empty;
-        }
-    }
+    return warehouse;
 }
 
 void print_cell(cell_e cell) {
     switch (cell) {
         case empty:
-            printf("| |");
+            printf("0");
             break;
         case shelf:
-            printf("|#|");
+            printf("1");
             break;
     }
 
 }
 
-void print_warehouse(int** warehouse, int rows, int columns) {
+int* get_cell(int* warehouse, int rows, int columns, int x, int y) {
+    return &warehouse[y * columns + x];
+}
+
+void print_warehouse(int* warehouse, int rows, int columns) {
+    printf("%d, %d \n", rows, columns);
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            print_cell(warehouse[i][j]);
+            int* cell = get_cell(warehouse, rows, columns, j, i);
+            print_cell(*cell);
         }
         printf("\n");
     }
 }
-
-
