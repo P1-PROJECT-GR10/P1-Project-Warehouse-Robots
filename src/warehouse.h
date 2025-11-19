@@ -1,10 +1,10 @@
-// Global vars
+// Header vars
 #define MAIN_AISLE_WIDTH 2
 #define AISLE_WIDTH 1
 #define SHELF_LENGTH 6
 #define SHELF_AMOUNT 3
 
-// Global cells
+// Header enums
 typedef enum cell {empty, shelf} cell_e;
 
 // Functions

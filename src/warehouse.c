@@ -8,12 +8,13 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
 
     for (int i = 0, l = 0; i < rows; i++) {
         // i: Row count
-        // l: Working column count
+        // l: Working row count
         if (i > aisle_width-1 && i < rows-aisle_width) { // If i is inbetween top & bottom aisle boundary, l++
             l++;
         }
         for (int j = i * columns, k = 0; j < i * columns + columns; j++, k++) {
             // j: True array position
+            // k: Working column count
             if (i <= aisle_width-1 || i >= rows-aisle_width) { // Top & bottom aisle boundary
                 warehouse[j] = empty; // Top & bottom aisle
             } else { // Generate the rows inbetween top & bottom aisles
