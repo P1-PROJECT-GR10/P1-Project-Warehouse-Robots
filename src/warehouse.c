@@ -1,14 +1,10 @@
-//
-// Created by magnu on 14-11-2025.
-//
-
 #include "warehouse.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int shelves_amount, int rows, int columns) {
-    int* warehouse = (int*)malloc(sizeof(int*)*columns*rows);
+    int* warehouse = malloc(sizeof(*warehouse) * columns * rows);
 
     // shelves_amount is unused, consider removing as working column count is used instead, read comments below
 
