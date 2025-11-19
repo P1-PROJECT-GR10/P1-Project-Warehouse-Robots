@@ -1,16 +1,10 @@
-//
-// Created by magnu on 14-11-2025.
-//
-
 #include "warehouse.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int shelves_amount, int rows, int columns) {
+int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns) {
     int* warehouse = (int*)malloc(sizeof(int*)*columns*rows);
-
-    // shelves_amount is unused, consider removing as working column count is used instead, read comments below
 
     for (int i = 0, l = 0; i < rows; i++) {
         // i: Row count
@@ -53,14 +47,14 @@ void print_cell(cell_e cell) {
 
 }
 
-int* get_cell(int* warehouse, int rows, int columns, int x, int y) {
+int* get_cell(int* warehouse, int columns, int x, int y) {
     return &warehouse[y * columns + x];
 }
 
 void print_warehouse(int* warehouse, int rows, int columns) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            int* cell = get_cell(warehouse, rows, columns, j, i);
+            int* cell = get_cell(warehouse, columns, j, i);
             print_cell(*cell);
             if (j == columns-1) {
                 printf("|"); // Print '|' at end of row
@@ -68,4 +62,18 @@ void print_warehouse(int* warehouse, int rows, int columns) {
         }
         printf("\n");
     }
+}
+
+shelf_t generate_shelf(item_t item, int stock, int x, int y) {
+    shelf_t shelf;
+    shelf.item = item;
+    shelf.stock = stock;
+    shelf.x = x;
+    shelf.y = y;
+}
+
+item_t generate_item(char name[20], double weight) {
+    item_t item;
+    // item.name = name[]; How? Use string library?
+    item.weight = weight;
 }
