@@ -23,7 +23,6 @@ typedef struct shelf {
     int y;
 } shelf_t;
 
-
 // Functions
 int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns);
 void print_cell(cell_e cell);

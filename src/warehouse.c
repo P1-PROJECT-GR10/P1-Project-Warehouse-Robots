@@ -64,11 +64,11 @@ void print_warehouse(int* warehouse, int rows, int columns) {
 
 int file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
-    int succes;
+    int success;
     int i;
     for(i = 0; i < n_items; i++) {
-        succes = fscanf(file, " %s %lf", item.name, &item.weight);
-        if(succes != 2){
+        success = fscanf(file, " %s %lf", item.name, &item.weight);
+        if(success != 2){
             break;
         }
         items[i] = item;
