@@ -3,11 +3,6 @@
 
 #include "warehouse.h"
 
-#define MAIN_AISLE_WIDTH 2
-#define AISLE_WIDTH 1
-#define SHELF_LENGTH 6
-#define SHELF_AMOUNT 3
-
 int main(void) {
 
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
