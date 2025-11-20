@@ -49,6 +49,8 @@ void print_cell(cell_e cell) {
         case shelf:
             printf("|X");
             break;
+        case robot:
+            printf("|R");
     }
 
 }

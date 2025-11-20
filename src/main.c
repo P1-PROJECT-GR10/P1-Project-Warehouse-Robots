@@ -17,7 +17,12 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
+    robot_t* robot1 = create_robot();
+    //print_robot1_id(*robot1);
+
+
     free(warehouse);
+    free(robot1);
 
     return 0;
 }
