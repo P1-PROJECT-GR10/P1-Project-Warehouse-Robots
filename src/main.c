@@ -1,14 +1,32 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "warehouse.h"
 
 int main(void) {
-
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
+    const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
-    int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, SHELF_AMOUNT, rows, columns);
+    FILE *items_file = fopen("items.txt", "r");
+    if (items_file == NULL) {
+        printf("Failed to open file.\n");
+        printf("Remember to set working directory.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    item_t items[n_shelves];
+
+    int item_count = file_read_items(items, n_shelves, items_file);
+    fclose(items_file);
+
+    if (item_count < n_shelves) {
+        printf("Failed to generate %d items, only read %d items from file.\n", n_shelves, item_count);
+    }
+
+    for (int i = 0; i < item_count; i++) {
+        item_t item = items[i];
+        printf("%s | Mass: %lf\n", item.name, item.weight);
+    }
+
+    int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns);
 
     print_warehouse(warehouse, rows, columns);
 

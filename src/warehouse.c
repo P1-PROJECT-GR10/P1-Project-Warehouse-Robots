@@ -1,8 +1,5 @@
 #include "warehouse.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns) {
     int* warehouse = (int*)malloc(sizeof(int*)*columns*rows);
 
@@ -65,16 +62,24 @@ void print_warehouse(int* warehouse, int rows, int columns) {
     }
 }
 
+int file_read_items(item_t* items, int n_items, FILE* file) {
+    item_t item;
+    int succes;
+    int i;
+    for(i = 0; i < n_items; i++) {
+        succes = fscanf(file, " %s %lf", item.name, &item.weight);
+        if(succes != 2){
+            break;
+        }
+        items[i] = item;
+    }
+    return i;
+}
+
 shelf_t generate_shelf(item_t item, int stock, int x, int y) {
     shelf_t shelf;
     shelf.item = item;
     shelf.stock = stock;
     shelf.x = x;
     shelf.y = y;
-}
-
-item_t generate_item(char name[20], double weight) {
-    item_t item;
-    // item.name = name[]; How? Use string library?
-    item.weight = weight;
 }

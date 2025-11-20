@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 // Header vars
 #define MAIN_AISLE_WIDTH 2
 #define AISLE_WIDTH 1
@@ -6,12 +9,6 @@
 
 // Header enums
 typedef enum cell {empty, shelf} cell_e;
-
-// Functions
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns);
-void print_cell(cell_e cell);
-void print_warehouse(int* warehouse, int rows, int columns);
-int* get_cell(int* warehouse, int columns, int x, int y);
 
 // Types
 typedef struct item {
@@ -25,3 +22,12 @@ typedef struct shelf {
     int x;
     int y;
 } shelf_t;
+
+
+// Functions
+int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns);
+void print_cell(cell_e cell);
+void print_warehouse(int* warehouse, int rows, int columns);
+int* get_cell(int* warehouse, int columns, int x, int y);
+
+int file_read_items(item_t* items, int number_of_items, FILE* file);
