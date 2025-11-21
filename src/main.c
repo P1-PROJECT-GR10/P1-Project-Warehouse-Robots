@@ -25,17 +25,12 @@ int main(void) {
     shelf_t* shelves[n_shelves];
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
-    printf("Generated layout");
 
-    for (int i = 0; i < n_shelves; i++) {
-        shelf_t shelf_i = *shelves[i];
-    }
+    print_warehouse(warehouse, rows, columns);
 
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
     }
-
-    print_warehouse(warehouse, rows, columns);
 
     free(warehouse);
 

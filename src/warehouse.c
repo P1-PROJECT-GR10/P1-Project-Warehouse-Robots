@@ -22,7 +22,7 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
                 } else {
                     if (l > aisle_width + 2) {l = 1;} // If l > aisle_width + shelf_width, reset working column count
                     if (l <= 2) { // If l <= shelf_width, place shelf
-                        warehouse[j] = shelf;
+                        warehouse[j]= shelf;
                         shelves[shelf_count] = generate_shelf(items[shelf_count], 10, k, i);
                         shelf_count++;
                     } else { // Else row must be aisle
@@ -70,7 +70,7 @@ int file_read_items(item_t* items, int n_items, FILE* file) {
     for (i = 0; i < n_items; i++) {
         int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
         if(success != 3){
-            break;
+            break; // Add printf for error handling
         }
         items[i] = item;
     }
