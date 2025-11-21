@@ -1,9 +1,10 @@
 //
-// Created by magnu on 14-11-2025.
+// Created by magnus on 14-11-2025.
 //
 
 typedef enum cell {empty, shelf, robot} cell_e;
 typedef enum row {aisle, shelves} row_e;
+typedef enum direction {north, south, east, west} direction_e;
 
 int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int shelves_amount, int rows, int columns);
 void print_cell(cell_e cell);
@@ -22,3 +23,4 @@ typedef struct { // the structure for the robot(s)
 
 robot_t* create_robot();
 void print_robot1_id(robot_t robot1);
+void move_robot(robot_t* robot, int dx, int dy, int* warehouse, int rows, int columns, direction_e direction);
