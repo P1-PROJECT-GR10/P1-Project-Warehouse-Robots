@@ -4,3 +4,5 @@ project(P1_Project C)
 set(CMAKE_C_STANDARD 11)
 
 add_subdirectory(src)
+enable_testing()
+add_subdirectory(tests)
