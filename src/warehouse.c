@@ -90,3 +90,25 @@ struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
     shelf->y = y;
     return shelf;
 }
+
+int search_item(char search_input_color[7], char search_input_name[10], shelf_t shelves[], int n_shelves) {
+    for (int i = 0; i < n_shelves; i++) {
+        if (strcmp(shelves[i].item.color, search_input_color) == 0 ||
+            strcmp(shelves[i].item.name, search_input_name) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+/*
+int search_item(char search_input_color[7], char search_input_name[10], shelf_t shelves[], int n_shelves){
+    for (int i = 0; i < n_shelves; i++){
+        if (strcmp(shelves[i].item.color, search_input_color) == 0 || strcmp(shelves[i].item.name, search_input_name) == 0) {
+            return i;
+        }
+    }
+
+return -1;
+}
+ */
