@@ -1,80 +1,87 @@
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
-oranges 10
+orange bike 10
+orange phone 10
+orange tablet 10
+orange tv 10
+orange chair 10
+orange slots 10
+orange pillow 10
+orange coffee 10
+orange shoes 10
+orange backpack 10
+
+blue bike 10
+blue phone 10
+blue tablet 10
+blue tv 10
+blue chair 10
+blue slots 10
+blue pillow 10
+blue coffee 10
+blue shoes 10
+blue backpack 10
+
+red bike 10
+red phone 10
+red tablet 10
+red tv 10
+red chair 10
+red slots 10
+red pillow 10
+red coffee 10
+red shoes 10
+red backpack 10
+
+green bike 10
+green phone 10
+green tablet 10
+green tv 10
+green chair 10
+green slots 10
+green pillow 10
+green coffee 10
+green shoes 10
+green backpack 10
+
+purple bike 10
+purple phone 10
+purple tablet 10
+purple tv 10
+purple chair 10
+purple slots 10
+purple pillow 10
+purple coffee 10
+purple shoes 10
+purple backpack 10
+
+pink bike 10
+pink phone 10
+pink tablet 10
+pink tv 10
+pink chair 10
+pink slots 10
+pink pillow 10
+pink coffee 10
+pink shoes 10
+pink backpack 10
+
+yellow bike 10
+yellow phone 10
+yellow tablet 10
+yellow tv 10
+yellow chair 10
+yellow slots 10
+yellow pillow 10
+yellow coffee 10
+yellow shoes 10
+yellow backpack 10
+
+silver bike 10
+silver phone 10
+silver tablet 10
+silver tv 10
+silver chair 10
+silver slots 10
+silver pillow 10
+silver coffee 10
+silver shoes 10
+silver backpack 10

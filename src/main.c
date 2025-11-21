@@ -19,7 +19,7 @@ int main(void) {
 
     for (int i = 0; i < item_count; i++) {
         item_t item = items[i];
-        printf("%s | Weight: %lf\n", item.name, item.weight);
+        printf("%s %s | Weight: %lf\n", item.color, item.name, item.weight);
     }
 
     shelf_t* shelves[n_shelves];

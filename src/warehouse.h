@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // Header vars
 #define MAIN_AISLE_WIDTH 2
@@ -12,7 +13,8 @@ typedef enum cell {empty, shelf} cell_e;
 
 // Types
 typedef struct item {
-    char name[20];
+    char color[7];
+    char name[10];
     double weight;
 } item_t;
 

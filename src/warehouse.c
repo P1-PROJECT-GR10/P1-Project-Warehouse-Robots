@@ -32,7 +32,6 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
             }
         }
     }
-    printf("\n1: %d\n", shelf_count);
     return warehouse;
 }
 
@@ -69,8 +68,8 @@ int file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
     int i;
     for (i = 0; i < n_items; i++) {
-        int success = fscanf(file, " %s %lf", item.name, &item.weight);
-        if(success != 2){
+        int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
+        if(success != 3){
             break;
         }
         items[i] = item;
