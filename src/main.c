@@ -17,11 +17,6 @@ int main(void) {
     int item_count = file_read_items(items, n_shelves, items_file);
     fclose(items_file);
 
-    for (int i = 0; i < item_count; i++) {
-        item_t item = items[i];
-        printf("%s %s | Weight: %lf\n", item.color, item.name, item.weight);
-    }
-
     shelf_t* shelves[n_shelves];
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);

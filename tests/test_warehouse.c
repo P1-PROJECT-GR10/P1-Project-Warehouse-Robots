@@ -12,6 +12,7 @@ void test_warehouse(void)
     const int aisle_width      = AISLE_WIDTH;
     const int shelf_length     = SHELF_LENGTH;
     const int shelves_amount   = SHELF_AMOUNT;
+    const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
     const int rows =
         shelves_amount * (2 + aisle_width) + aisle_width;
@@ -19,13 +20,28 @@ void test_warehouse(void)
     const int columns =
         main_aisle_width * 3 + shelf_length * 2;
 
+    FILE* items_file = fopen("items.txt", "r");
+    if (items_file == NULL) {
+        printf("Failed to open file.\n");
+        printf("Remember to set working directory.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    item_t items[n_shelves];
+
+    int item_count = file_read_items(items, n_shelves, items_file);
+    fclose(items_file);
+
+    shelf_t* shelves[n_shelves];
+
     int *warehouse = generate_layout(
         main_aisle_width,
         aisle_width,
         shelf_length,
-        shelves_amount,
         rows,
-        columns
+        columns,
+        shelves,
+        items
     );
     assert(warehouse != NULL); // After comparing test variables with global variables we can begin unit tests.
 
