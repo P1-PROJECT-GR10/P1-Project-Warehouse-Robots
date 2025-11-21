@@ -1,8 +1,9 @@
 #include "warehouse.h"
 
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns) {
+int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items) {
     int* warehouse = (int*)malloc(sizeof(int*)*columns*rows);
 
+    int shelf_count = 0;
     for (int i = 0, l = 0; i < rows; i++) {
         // i: Row count
         // l: Working row count
@@ -22,6 +23,10 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
                     if (l > aisle_width + 2) {l = 1;} // If l > aisle_width + shelf_width, reset working column count
                     if (l <= 2) { // If l <= shelf_width, place shelf
                         warehouse[j] = shelf;
+                        shelf_t new_shelf = generate_shelf(items[shelf_count], 10, i, k);
+                        printf("[%d]: %lf\n", shelf_count, new_shelf.item.weight);
+                        shelves[shelf_count] = &new_shelf;
+                        shelf_count++;
                     } else { // Else row must be aisle
                         warehouse[j] = empty;
                     }
@@ -29,7 +34,6 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
             }
         }
     }
-
     return warehouse;
 }
 
@@ -64,14 +68,16 @@ void print_warehouse(int* warehouse, int rows, int columns) {
 
 int file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
-    int success;
-    int i;
-    for(i = 0; i < n_items; i++) {
+    int success, i;
+    for (i = 0; i < n_items; i++) {
         success = fscanf(file, " %s %lf", item.name, &item.weight);
         if(success != 2){
             break;
         }
         items[i] = item;
+    }
+    if (i < n_items) {
+        printf("Failed to generate %d items, only read %d items from file.\n", n_items, i);
     }
     return i;
 }
@@ -82,4 +88,5 @@ shelf_t generate_shelf(item_t item, int stock, int x, int y) {
     shelf.stock = stock;
     shelf.x = x;
     shelf.y = y;
+    return shelf;
 }

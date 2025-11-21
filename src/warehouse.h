@@ -24,9 +24,10 @@ typedef struct shelf {
 } shelf_t;
 
 // Functions
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns);
+int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items);
 void print_cell(cell_e cell);
 void print_warehouse(int* warehouse, int rows, int columns);
 int* get_cell(int* warehouse, int columns, int x, int y);
 
 int file_read_items(item_t* items, int number_of_items, FILE* file);
+shelf_t generate_shelf(item_t item, int stock, int x, int y);

@@ -5,7 +5,7 @@ int main(void) {
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
     const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
-    FILE *items_file = fopen("items.txt", "r");
+    FILE* items_file = fopen("items.txt", "r");
     if (items_file == NULL) {
         printf("Failed to open file.\n");
         printf("Remember to set working directory.\n");
@@ -17,16 +17,21 @@ int main(void) {
     int item_count = file_read_items(items, n_shelves, items_file);
     fclose(items_file);
 
-    if (item_count < n_shelves) {
-        printf("Failed to generate %d items, only read %d items from file.\n", n_shelves, item_count);
-    }
-
     for (int i = 0; i < item_count; i++) {
         item_t item = items[i];
-        printf("%s | Mass: %lf\n", item.name, item.weight);
+        printf("%s | Weight: %lf\n", item.name, item.weight);
     }
 
-    int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns);
+    shelf_t* shelves[n_shelves];
+
+    int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
+    printf("Generated layout");
+    printf("%p \n", shelves[5]);
+    for (int i = 0; i < n_shelves; i++) {
+        shelf_t shelf_i = *shelves[i];
+        printf("SHELF1: %lf\n", shelf_i.item.weight);
+        printf("SHELF2: %lf\n", shelves[i]->item.weight);
+    }
 
     print_warehouse(warehouse, rows, columns);
 
