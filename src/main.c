@@ -26,11 +26,13 @@ int main(void) {
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
     printf("Generated layout");
-    printf("%p \n", shelves[5]);
+
     for (int i = 0; i < n_shelves; i++) {
         shelf_t shelf_i = *shelves[i];
-        printf("SHELF1: %lf\n", shelf_i.item.weight);
-        printf("SHELF2: %lf\n", shelves[i]->item.weight);
+    }
+
+    for (int i = 0; i < n_shelves; i++) {
+        free(shelves[i]);
     }
 
     print_warehouse(warehouse, rows, columns);

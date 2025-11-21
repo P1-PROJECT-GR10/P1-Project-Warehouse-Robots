@@ -23,9 +23,7 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
                     if (l > aisle_width + 2) {l = 1;} // If l > aisle_width + shelf_width, reset working column count
                     if (l <= 2) { // If l <= shelf_width, place shelf
                         warehouse[j] = shelf;
-                        shelf_t new_shelf = generate_shelf(items[shelf_count], 10, i, k);
-                        printf("[%d]: %lf\n", shelf_count, new_shelf.item.weight);
-                        shelves[shelf_count] = &new_shelf;
+                        shelves[shelf_count] = generate_shelf(items[shelf_count], 10, k, i);
                         shelf_count++;
                     } else { // Else row must be aisle
                         warehouse[j] = empty;
@@ -34,6 +32,7 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
             }
         }
     }
+    printf("\n1: %d\n", shelf_count);
     return warehouse;
 }
 
@@ -68,9 +67,9 @@ void print_warehouse(int* warehouse, int rows, int columns) {
 
 int file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
-    int success, i;
+    int i;
     for (i = 0; i < n_items; i++) {
-        success = fscanf(file, " %s %lf", item.name, &item.weight);
+        int success = fscanf(file, " %s %lf", item.name, &item.weight);
         if(success != 2){
             break;
         }
@@ -82,11 +81,11 @@ int file_read_items(item_t* items, int n_items, FILE* file) {
     return i;
 }
 
-shelf_t generate_shelf(item_t item, int stock, int x, int y) {
-    shelf_t shelf;
-    shelf.item = item;
-    shelf.stock = stock;
-    shelf.x = x;
-    shelf.y = y;
+struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
+    shelf_t* shelf = (shelf_t*)malloc(sizeof(shelf_t));
+    shelf->item = item;
+    shelf->stock = stock;
+    shelf->x = x;
+    shelf->y = y;
     return shelf;
 }

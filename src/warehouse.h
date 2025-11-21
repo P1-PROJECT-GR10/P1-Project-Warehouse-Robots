@@ -30,4 +30,4 @@ void print_warehouse(int* warehouse, int rows, int columns);
 int* get_cell(int* warehouse, int columns, int x, int y);
 
 int file_read_items(item_t* items, int number_of_items, FILE* file);
-shelf_t generate_shelf(item_t item, int stock, int x, int y);
+struct shelf* generate_shelf(item_t item, int stock, int x, int y);
