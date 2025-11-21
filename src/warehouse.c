@@ -1,7 +1,9 @@
 #include "warehouse.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items) {
-    int* warehouse = (int*)malloc(sizeof(int*)*columns*rows);
+    int* warehouse = (int*)malloc(sizeof(*warehouse)*columns*rows);
 
     int shelf_count = 0;
     for (int i = 0, l = 0; i < rows; i++) {
