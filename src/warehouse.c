@@ -1,6 +1,3 @@
-//
-// Created by magnu on 14-11-2025.
-//
 
 #include "warehouse.h"
 

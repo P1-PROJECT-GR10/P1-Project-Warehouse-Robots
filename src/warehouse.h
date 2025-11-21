@@ -1,7 +1,3 @@
-//
-// Created by magnus on 14-11-2025.
-//
-
 typedef enum cell {empty, shelf, robot} cell_e;
 typedef enum row {aisle, shelves} row_e;
 typedef enum direction {north, south, east, west} direction_e;
@@ -15,7 +11,7 @@ typedef struct { // the structure for the robot(s)
     int robot_id; // the id of the robot
     //  double carried_weight;
     int number_of_items;
-    char item[8]; // here I have defined the number of carriable items as a fixed max value,
+    //item_t item[8] // noget alla dette for items på roboten, kræver adgang til item branch
     // this could be changed to maybe a dynamic amount latter possibly.
     int coordinate_x; // the coordinates of the robot, stored as separate integers
     int coordinate_y;
@@ -23,4 +19,4 @@ typedef struct { // the structure for the robot(s)
 
 robot_t* create_robot();
 void print_robot1_id(robot_t robot1);
-void move_robot(robot_t* robot, int dx, int dy, int* warehouse, int rows, int columns, direction_e direction);
+void move_robot(robot_t* robot, int* warehouse, int rows, int columns, direction_e direction);

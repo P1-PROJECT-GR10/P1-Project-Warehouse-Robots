@@ -1,10 +1,3 @@
-//
-// Created by ruben on 19-11-2025.
-//
-
-/*
-Her skal der stå noget om hvordan en robot bliver lavet :).
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,63 +16,55 @@ robot_t* create_robot() {
     return robot1;
 }
 
-void print_robot1_id(robot_t robot1) { // for testing purposes
-    printf("%d",robot1.robot_id);
-}
-
-void move_robot(robot_t* robot, int dx, int dy, int* warehouse, int rows, int columns, direction_e direction) {
-    int new_x = robot->coordinate_x + dx;
-    int new_y = robot->coordinate_y + dy;
-
-    //Bounds
-    if (new_x >= columns || new_y >= rows)
-        return;
-
-    if (warehouse[new_y * columns + new_x] == shelf) //Can't move into a shelf
-        return;
-
-    robot->coordinate_x = new_x;
-    robot->coordinate_y = new_y;
+void move_robot(robot_t* robot, int* warehouse, int rows, int columns, direction_e direction) {
 
     switch (direction) {
-        case 'north':
-            if ( new_x >= columns || new_y >= rows)
+        case north:
+            if (warehouse[columns * (robot->coordinate_y-1)  + robot->coordinate_x] == shelf
+                || robot->coordinate_y < 0) {
+                // checks if next move is into a shelf, or if movement is out of bounds
+                //Can't move into a shelf
+                printf("Error: Invalid movement");
                 return;
-
-            if (warehouse[new_y * columns + new_x] == shelf) //Can't move into a shelf
-                return;
-
+                }
             robot->coordinate_y --;
             break;
-        case 'south':
-            if (new_x >= columns || new_y >= rows)
+        case south:
+            if (warehouse[columns * (robot->coordinate_y+1)  + robot->coordinate_x] == shelf
+                || robot->coordinate_y > columns) {
+                // checks if next move is into a shelf, or if movement is out of bounds
+                //Can't move into a shelf
+                printf("Error: Invalid movement");
                 return;
-
-            if (warehouse[new_y * columns + new_x] == shelf) //Can't move into a shelf
-                return;
-
+                }
             robot->coordinate_y ++;
             break;
-        case 'east':
-            if (new_x >= columns || new_y >= rows)
+        case east:
+            if (warehouse[columns * robot->coordinate_y  + robot->coordinate_x+1] == shelf
+                || robot->coordinate_x+1 > rows) {
+                // checks if next move is into a shelf, or if movement is out of bounds
+                //Can't move into a shelf
+                printf("Error: Invalid movement");
                 return;
-
-            if (warehouse[new_y * columns + new_x] == shelf) //Can't move into a shelf
-                return;
-
+                }
             robot->coordinate_x ++;
             break;
-        case 'west':
-            if (new_x >= columns || new_y >= rows)
+        case west:
+            if (warehouse[columns * robot->coordinate_y  + robot->coordinate_x-1] == shelf
+                || robot->coordinate_x-1 < 0) {
+                // checks if next move is into a shelf, or if movement is out of bounds
+                //Can't move into a shelf
+                printf("Error: Invalid movement");
                 return;
-
-            if (warehouse[new_y * columns + new_x] == shelf) //Can't move into a shelf
-                return;
-
+            }
             robot->coordinate_x --;
             break;
         default:
             printf("Error: Invalid input");
             break;
     }
+}
+
+void print_robot1_id(robot_t robot1) { // for testing purposes
+    printf("%d",robot1.robot_id);
 }
