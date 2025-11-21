@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "warehouse.h"
+#include "robot.h"
 
 robot_t* create_robot() {
 

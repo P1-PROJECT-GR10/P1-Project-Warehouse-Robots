@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "warehouse.h"
+#include "robot.h"
 
 #define MAIN_AISLE_WIDTH 2
 #define AISLE_WIDTH 1
@@ -18,7 +19,7 @@ int main(void) {
     print_warehouse(warehouse, rows, columns);
 
     robot_t* robot1 = create_robot();
-    //print_robot1_id(*robot1);
+    print_robot1_id(*robot1);
 
 
     free(warehouse);
