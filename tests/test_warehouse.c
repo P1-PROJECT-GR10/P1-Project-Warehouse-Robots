@@ -20,16 +20,15 @@ void test_warehouse(void)
     const int columns =
         main_aisle_width * 3 + shelf_length * 2;
 
-    FILE* items_file = fopen("items.txt", "r");
+    FILE* items_file = fopen("test-items.txt", "r");
     if (items_file == NULL) {
         printf("Failed to open file.\n");
-        printf("Remember to set working directory.\n");
         exit(EXIT_FAILURE);
     }
 
     item_t items[n_shelves];
 
-    int item_count = file_read_items(items, n_shelves, items_file);
+    // int item_count = file_read_items(items, n_shelves, items_file);
     fclose(items_file);
 
     shelf_t* shelves[n_shelves];
