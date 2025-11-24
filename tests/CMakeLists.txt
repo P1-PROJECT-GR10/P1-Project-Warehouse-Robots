@@ -1,6 +1,6 @@
 
 add_executable(test_warehouse test_warehouse.c ../src/warehouse.c)
-target_link_libraries(test_warehouse)
+target_link_libraries(test_warehouse mtest)
 
 # Copy test data file (test-items.txt) into the test's build directory
 configure_file(
@@ -9,4 +9,4 @@ configure_file(
         COPYONLY
 )
 
-add_test(NAME r_warehouse_test COMMAND test_warehouse)
+discover_tests(test_warehouse)

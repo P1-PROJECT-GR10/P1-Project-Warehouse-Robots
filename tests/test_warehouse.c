@@ -1,5 +1,5 @@
 #include "../src/warehouse.h"
-#include "assert.h"
+#include "mtest.h"
 #include "test_warehouse.h"
 
 #include <stdio.h>
@@ -84,3 +84,6 @@ int main(void)
     test_warehouse();
     return 0;
 }
+
+// Erstatter main funktion ift. mtest
+// MAIN_RUN_TESTS();
