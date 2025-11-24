@@ -9,7 +9,7 @@
 #define SHELF_AMOUNT 3
 
 // Header enums
-typedef enum cell {empty, shelf} cell_e;
+typedef enum cell {empty, shelf, robot} cell_e;
 
 // Types
 typedef struct item {
