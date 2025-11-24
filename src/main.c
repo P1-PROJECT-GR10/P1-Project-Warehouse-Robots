@@ -26,7 +26,7 @@ int main(void) {
 
 
 
-    
+
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, SHELF_AMOUNT, rows, columns);
 
     robot_t* robot1 = create_robot();
