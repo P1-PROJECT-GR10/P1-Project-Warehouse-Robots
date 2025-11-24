@@ -1,4 +1,5 @@
 #include "warehouse.h"
+#include "robot.h"
 
 int main(void) {
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
@@ -27,7 +28,17 @@ int main(void) {
         free(shelves[i]);
     }
 
+    robot_t* robot1 = create_robot();
+    //print_robot1_id(*robot1);
+
+    warehouse[columns * robot1->y + robot1->x] = robot;
+
+    print_warehouse(warehouse, rows, columns);
+
+    manual_movement(robot1, warehouse, rows, columns);
+
     free(warehouse);
+    free(robot1);
 
     return 0;
 }
