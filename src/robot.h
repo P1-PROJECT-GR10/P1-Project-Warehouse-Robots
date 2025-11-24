@@ -1,3 +1,5 @@
+#pragma once
+
 typedef enum direction {north, south, east, west} direction_e;
 
 typedef struct { // the structure for the robot(s)
