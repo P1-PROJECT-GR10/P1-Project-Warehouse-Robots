@@ -19,7 +19,7 @@ int main(void) {
     robot_t* robot1 = create_robot();
     //print_robot1_id(*robot1);
 
-    warehouse[columns * robot1->coordinate_y + robot1->coordinate_x] = robot;
+    warehouse[columns * robot1->y + robot1->x] = robot;
 
     print_warehouse(warehouse, rows, columns);
 
