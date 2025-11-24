@@ -83,3 +83,41 @@ void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, directio
 void print_robot1_id(robot_t robot1) { // for testing purposes
     printf("%d",robot1.robot_id);
 }
+
+void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns) {
+    int i = 1;
+    char word;
+    while (i == 1) {
+        //printf("try moving the robot :), use: n, s, e, w or b (stop / break)\n");
+        //the printf somehow breaks the scanf :(
+        scanf("%c",&word);
+        switch (word) {
+            case 'n':
+                move_robot(robot1, warehouse, rows, columns, north);
+                print_warehouse(warehouse, rows, columns);
+                break;
+            case 's':
+                move_robot(robot1, warehouse, rows, columns, south);
+                print_warehouse(warehouse, rows, columns);
+                break;
+            case 'e':
+                move_robot(robot1, warehouse, rows, columns, east);
+                print_warehouse(warehouse, rows, columns);
+                break;
+            case 'w':
+                move_robot(robot1, warehouse, rows, columns, west);
+                print_warehouse(warehouse, rows, columns);
+                break;
+            case 'p':
+                print_robot1_id(*robot1);
+                break;
+            case 'b':
+                i = 0;
+                break;
+            default:
+                printf("unreadable expression, try: n, s, e, w, p or b (stop / break)\n");
+                break;
+
+        }
+    }
+}

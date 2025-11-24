@@ -13,3 +13,4 @@ typedef struct { // the structure for the robot(s)
 robot_t* create_robot();
 void print_robot1_id(robot_t robot1);
 void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, direction_e direction);
+void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns);
