@@ -1,5 +1,6 @@
 #include "warehouse.h"
 #include "robot.h"
+#include "a_star.h"
 
 int main(void) {
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;

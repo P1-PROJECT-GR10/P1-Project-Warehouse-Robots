@@ -1,8 +1,13 @@
-//
-// Created by magnu on 24-11-2025.
-//
+#pragma once
 
-#ifndef P1_PROJECT_A_STAR_H
-#define P1_PROJECT_A_STAR_H
+typedef struct node {
+    int x, y;
+    float g, h ,f;
+    struct node* parent;
+} node_t;
 
-#endif //P1_PROJECT_A_STAR_H
+typedef struct point {
+    int x, y;
+} point_t;
+
+int manhatten_h(node_t current, int goal_x, int goal_y);
