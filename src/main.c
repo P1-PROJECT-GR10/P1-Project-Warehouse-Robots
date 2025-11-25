@@ -27,17 +27,17 @@ int main(void) {
         printf("[%d] %s %s\n", i, shelves[i]->item.color, shelves[i]->item.name);
     }
 
-    char search_input_color[7];
-    char search_input_name[10];
-    shelf_t* shelve_id_target;
+    //char search_input_color[7];
+    //char search_input_name[10];
 
-    printf("Shelve [0] = Color: %s, Name: %s\n", shelves[0]->item.color, shelves[0]->item.name);
-    printf("\nWrite your search input>");
-    scanf(" %6s %9s", search_input_color, search_input_name);
-    shelve_id_target = search_item(search_input_color, search_input_name, shelves, n_shelves);
-    printf("The item with color %s and title %s was found in shelve id %d", search_input_color, search_input_name,shelve_id_target);
+    //printf("\nWrite your search input>");
+    //scanf(" %6s %9s", search_input_color, search_input_name);
 
-    printf("%s %s", shelve_id_target->item.color, shelve_id_target->item.name);
+    //printf("Shelf [0] = Color: %s, Name: %s\n", shelves[0]->item.color, shelves[0]->item.name);
+
+    shelf_t shelf_target = *manual_search_item(shelves, n_shelves);
+    printf("the item in the shelf is %s %s\n", shelf_target.item.color, shelf_target.item.name);
+    printf("The specified item was found in shelf at \nx: %d  y: %d\n", shelf_target.x, shelf_target.y);
 
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
