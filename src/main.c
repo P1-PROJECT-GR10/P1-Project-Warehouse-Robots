@@ -23,19 +23,21 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
+    for (int i = 0; i < n_shelves; i++) {
+        printf("[%d] %s %s\n", i, shelves[i]->item.color, shelves[i]->item.name);
+    }
+
     char search_input_color[7];
     char search_input_name[10];
-    int shelve_id_target;
+    shelf_t* shelve_id_target;
 
     printf("Shelve [0] = Color: %s, Name: %s\n", shelves[0]->item.color, shelves[0]->item.name);
     printf("\nWrite your search input>");
     scanf(" %6s %9s", search_input_color, search_input_name);
-    shelve_id_target = search_item(search_input_color,
-                                   search_input_name,
-                                   shelves,
-                                   n_shelves);
+    shelve_id_target = search_item(search_input_color, search_input_name, shelves, n_shelves);
     printf("The item with color %s and title %s was found in shelve id %d", search_input_color, search_input_name,shelve_id_target);
 
+    printf("%s %s", shelve_id_target->item.color, shelve_id_target->item.name);
 
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
