@@ -23,21 +23,26 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
+    /*
+
+    // Below is code for testing search functionality. Uncomment above to test.
+
     for (int i = 0; i < n_shelves; i++) {
         printf("[%d] %s %s\n", i, shelves[i]->item.color, shelves[i]->item.name);
     }
 
-    //char search_input_color[7];
-    //char search_input_name[10];
+    char search_input_color[10] = "purple";
+    char search_input_title[10] = "tv";
 
-    //printf("\nWrite your search input>");
-    //scanf(" %6s %9s", search_input_color, search_input_name);
+    shelf_t shelf_target_auto = *search_item(search_input_color, search_input_title, shelves, n_shelves);
 
-    //printf("Shelf [0] = Color: %s, Name: %s\n", shelves[0]->item.color, shelves[0]->item.name);
+    printf("\nAuto search found: %s %s, at x: %d y: %d\n", shelf_target_auto.item.color, shelf_target_auto.item.name, shelf_target_auto.x, shelf_target_auto.y);
 
-    shelf_t shelf_target = *manual_search_item(shelves, n_shelves);
-    printf("the item in the shelf is %s %s\n", shelf_target.item.color, shelf_target.item.name);
-    printf("The specified item was found in shelf at \nx: %d  y: %d\n", shelf_target.x, shelf_target.y);
+    shelf_t shelf_target_manual = *manual_search_item(shelves, n_shelves);
+    printf("the item in the shelf is %s %s\n", shelf_target_manual.item.color, shelf_target_manual.item.name);
+    printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
+
+    */
 
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
