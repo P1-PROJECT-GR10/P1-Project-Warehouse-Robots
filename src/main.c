@@ -15,7 +15,6 @@ int main(void) {
 
     item_t items[n_shelves];
 
-    int item_count = file_read_items(items, n_shelves, items_file);
     fclose(items_file);
 
     shelf_t* shelves[n_shelves];
@@ -31,7 +30,7 @@ int main(void) {
     robot_t* robot1 = create_robot();
     //print_robot1_id(*robot1);
 
-    warehouse[columns * robot1->y + robot1->x] = robot;
+    warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
 
     print_warehouse(warehouse, rows, columns);
 

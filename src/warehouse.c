@@ -60,11 +60,8 @@ void print_warehouse(int* warehouse, int rows, int columns) {
         for (int j = 0; j < columns; j++) {
             int* cell = get_cell(warehouse, columns, j, i);
             print_cell(*cell);
-            if (j == columns-1) {
-                printf("|"); // Print '|' at end of row
-            }
         }
-        printf("\n");
+        printf("|\n"); // Prints | at the end of each row and skips to new line
     }
 }
 
