@@ -1,5 +1,10 @@
-//
-// Created by victo on 26-11-2025.
-//
-
 #include "bruteforce.h"
+
+void bruteforce(int* warehouse, robot_t* robot, int x, int y) {
+
+
+
+
+
+
+}

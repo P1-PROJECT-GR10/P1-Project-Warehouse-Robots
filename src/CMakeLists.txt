@@ -4,8 +4,6 @@ add_library(warehouse warehouse.c
         bruteforce.c
         bruteforce.h)
 
-add_executable(P1_Project main.c
-        bruteforce.c
-        bruteforce.h)
+add_executable(P1_Project main.c)
 
 target_link_libraries(P1_Project warehouse)
