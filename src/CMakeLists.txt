@@ -1,6 +1,4 @@
-add_library(warehouse warehouse.c
-        Robot.c
-        robot.h)
+add_library(warehouse warehouse.c Robot.c robot.h generate_picking_list.c)
 
 add_executable(P1_Project main.c)
 

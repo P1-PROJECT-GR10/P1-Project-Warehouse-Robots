@@ -1,3 +1,4 @@
+#pragma once // Det kan ske at libraries bliver inkluderet flere gange
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
