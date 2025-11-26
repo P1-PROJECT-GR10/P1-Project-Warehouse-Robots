@@ -15,13 +15,13 @@ int main(void) {
 
     item_t items[n_shelves];
 
+    file_read_items(items, n_shelves, items_file);
+
     fclose(items_file);
 
     shelf_t* shelves[n_shelves];
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
-
-    print_warehouse(warehouse, rows, columns);
 
     /*
 
