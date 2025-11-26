@@ -21,7 +21,7 @@ int main(void) {
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
 
-    print_warehouse(warehouse, rows, columns);
+    //print_warehouse(warehouse, rows, columns);
 
     /*
 
@@ -55,7 +55,7 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
-    manual_movement(robot1, warehouse, rows, columns);
+    //manual_movement(robot1, warehouse, rows, columns);
 
     free(warehouse);
     free(robot1);

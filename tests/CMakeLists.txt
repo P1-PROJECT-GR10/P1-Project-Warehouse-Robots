@@ -1,5 +1,7 @@
 
-add_executable(test_warehouse test_warehouse.c ../src/warehouse.c)
+add_executable(test_warehouse test_warehouse.c ../src/warehouse.c
+        ../src/bruteforce.c
+        ../src/bruteforce.h)
 target_link_libraries(test_warehouse)
 
 # Copy test data file (test-items.txt) into the test's build directory
