@@ -13,10 +13,10 @@ typedef enum direction {north, south, east, west} direction_e;
  * Contains the ID, number of items, and x/y-coordinates of the robot.
  */
 typedef struct robot_t {
-    int robot_id; ///< The ID of the robot
-    int number_of_items; ///< The number of items the robot is carrying
-    int x; ///< The x-coordinate of the robot
-    int y; ///< The y-coordinate of the robot
+    int robot_id;           ///< The ID of the robot
+    int number_of_items;    ///< The number of items the robot is carrying
+    int x;                  ///< The x-coordinate of the robot
+    int y;                  ///< The y-coordinate of the robot
 } robot_t;
 
 
