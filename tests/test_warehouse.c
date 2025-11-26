@@ -1,4 +1,4 @@
-#include "../src/warehouse.h"
+#include "warehouse.h"
 #include "mtest.h"
 
 #include <stdio.h>
