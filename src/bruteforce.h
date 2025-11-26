@@ -1,4 +1,12 @@
 #include "warehouse.h"
 #include "robot.h"
+#include "math.h"
 
-void bruteforce(int* warehouse, robot_t* robot, int x, int y);
+
+// Types
+typedef struct neighbour {
+    int distance;
+    direction_e direction;
+} neighbour_t;
+
+void bruteforce(int* warehouse, robot_t* robot, int x, int y, int columns, int rows, direction_e prev);
