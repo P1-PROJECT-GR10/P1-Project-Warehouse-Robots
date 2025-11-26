@@ -1,3 +1,5 @@
+#include <time.h>
+#include "generate_picking_list.h"
 #include "warehouse.h"
 #include "robot.h"
 
@@ -5,6 +7,10 @@ int main(void) {
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
     const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
+
+    int seed = time(NULL);
+    srand(seed);
+    int amount_of_picking_items = 5;
 
     FILE* items_file = fopen("items.txt", "r");
     if (items_file == NULL) {
@@ -43,6 +49,9 @@ int main(void) {
     printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
 
     */
+    item_t pickingItems[amount_of_picking_items];
+    generate_picking_list(pickingItems, items, amount_of_picking_items, seed, n_shelves);
+    display_picking_list(pickingItems, amount_of_picking_items);
 
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
