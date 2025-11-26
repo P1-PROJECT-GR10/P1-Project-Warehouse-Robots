@@ -6,7 +6,6 @@
 #include "robot.h"
 
 robot_t* create_robot() {
-
     robot_t* robot1 = (robot_t*)(malloc(sizeof(robot_t)));
 
     robot1->robot_id = 1;
@@ -81,7 +80,7 @@ void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, directio
 
 }
 
-void print_robot1_xy(robot_t robot1) { // for testing purposes
+void print_robot_xy(robot_t robot1) { // for testing purposes
     printf("%d, %d\n",robot1.x, robot1.y);
 }
 
@@ -109,7 +108,7 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns) {
                 print_warehouse(warehouse, rows, columns);
                 break;
             case 'p':
-                print_robot1_xy(*robot1);
+                print_robot_xy(*robot1);
                 break;
             case 'b':
                 i = 0;
