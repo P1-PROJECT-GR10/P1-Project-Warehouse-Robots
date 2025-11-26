@@ -1,6 +1,6 @@
 orange bike 10
 orange phone 10
-orange test 10
+orange tablet 10
 orange tv 10
 orange chair 10
 orange slots 10
