@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items) {
+int* generate_layout(const int main_aisle_width, const int aisle_width, const int shelf_length, const int rows, const int columns, shelf_t* shelves[], item_t* items) {
     int* warehouse = (int*)malloc(sizeof(*warehouse)*columns*rows);
 
     int shelf_count = 0;
@@ -65,7 +65,7 @@ void print_warehouse(int* warehouse, int rows, int columns) {
     }
 }
 
-int file_read_items(item_t* items, int n_items, FILE* file) {
+void file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
     int i;
     for (i = 0; i < n_items; i++) {
@@ -78,7 +78,6 @@ int file_read_items(item_t* items, int n_items, FILE* file) {
     if (i < n_items) {
         printf("Failed to generate %d items, only read %d items from file.\n", n_items, i);
     }
-    return i;
 }
 
 struct shelf* generate_shelf(item_t item, int stock, int x, int y) {

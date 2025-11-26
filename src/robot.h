@@ -1,6 +1,12 @@
 #pragma once
 
+
+//---------------------------------------ENUMERATIONS---------------------------------------
+
 typedef enum direction {north, south, east, west} direction_e;
+
+
+//---------------------------------------STRUCTURES---------------------------------------
 
 /**
  * @brief A structure for a robot with relevant variables and parameters.\n
@@ -13,9 +19,12 @@ typedef struct robot_t {
     int y; ///< The y-coordinate of the robot
 } robot_t;
 
+
+//---------------------------------------FUNCTIONS---------------------------------------
+
 /**
  * A function for creating a robot with the correct starting parameters.
- * @attention Free memory before returning.
+ * @attention Free memory before returning!
  * @return A pointer to a heap allocated robot structure.
  */
 robot_t* create_robot();
