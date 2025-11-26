@@ -30,6 +30,8 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
 void print_cell(cell_e cell);
 void print_warehouse(int* warehouse, int rows, int columns);
 int* get_cell(int* warehouse, int columns, int x, int y);
+shelf_t* search_item(char search_input_color[20], char search_input_title[20], shelf_t* shelves[], int n_shelves);
+shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves);
 
 int file_read_items(item_t* items, int number_of_items, FILE* file);
 struct shelf* generate_shelf(item_t item, int stock, int x, int y);

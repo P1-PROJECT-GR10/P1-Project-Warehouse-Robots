@@ -89,3 +89,42 @@ struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
     shelf->y = y;
     return shelf;
 }
+
+shelf_t* search_item(char search_input_color[20], char search_input_title[20], shelf_t* shelves[], int n_shelves) {
+    for (int i = 0; i < n_shelves; i++) {
+        if (strcmp(shelves[i]->item.color, search_input_color) == 0 &&
+            strcmp(shelves[i]->item.name, search_input_title) == 0) {
+            return shelves[i];
+        }
+    }
+    return 0;
+}
+
+shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
+
+    char search_input_color[20];
+    char search_input_name[20];
+
+    printf("\nWrite your search input>");
+    scanf(" %6s %9s", search_input_color, search_input_name);
+
+    for (int i = 0; i < n_shelves; i++) {
+        if (strcmp(shelves[i]->item.color, search_input_color) == 0 &&
+            strcmp(shelves[i]->item.name, search_input_name) == 0) {
+            return shelves[i];
+            }
+    }
+    return 0;
+}
+
+/*
+int search_item(char search_input_color[7], char search_input_name[10], shelf_t shelves[], int n_shelves){
+    for (int i = 0; i < n_shelves; i++){
+        if (strcmp(shelves[i].item.color, search_input_color) == 0 || strcmp(shelves[i].item.name, search_input_name) == 0) {
+            return i;
+        }
+    }
+
+return -1;
+}
+ */
