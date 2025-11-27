@@ -55,10 +55,12 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
-    manual_movement(robot1, warehouse, rows, columns);
+    manual_movement(robot1, warehouse, rows, columns, shelves, n_shelves);
+
 
     free(warehouse);
     free(robot1);
+
 
     return 0;
 }
