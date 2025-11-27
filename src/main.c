@@ -44,9 +44,6 @@ int main(void) {
 
     */
 
-    for (int i = 0; i < n_shelves; i++) {
-        free(shelves[i]);
-    }
 
     robot_t* robot1 = create_robot();
     //print_robot1_id(*robot1);
@@ -58,9 +55,13 @@ int main(void) {
     manual_movement(robot1, warehouse, rows, columns, shelves, n_shelves);
 
 
-    free(warehouse);
-    free(robot1);
-
+    //free(warehouse);
+    //free(robot1);
+    /*
+    for (int i = 0; i < n_shelves; i++) {
+        free(shelves[i]);
+    }
+    */
 
     return 0;
 }
