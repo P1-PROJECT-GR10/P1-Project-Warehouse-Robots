@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items) {
+int* generate_layout(const int main_aisle_width, const int aisle_width, const int shelf_length, const int rows, const int columns, shelf_t* shelves[], item_t* items) {
     int* warehouse = (int*)malloc(sizeof(*warehouse)*columns*rows);
 
     int shelf_count = 0;
@@ -60,15 +60,12 @@ void print_warehouse(int* warehouse, int rows, int columns) {
         for (int j = 0; j < columns; j++) {
             int* cell = get_cell(warehouse, columns, j, i);
             print_cell(*cell);
-            if (j == columns-1) {
-                printf("|"); // Print '|' at end of row
-            }
         }
-        printf("\n");
+        printf("|\n"); // Prints | at the end of each row and skips to new line
     }
 }
 
-int file_read_items(item_t* items, int n_items, FILE* file) {
+void file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
     int i;
     for (i = 0; i < n_items; i++) {
@@ -81,7 +78,6 @@ int file_read_items(item_t* items, int n_items, FILE* file) {
     if (i < n_items) {
         printf("Failed to generate %d items, only read %d items from file.\n", n_items, i);
     }
-    return i;
 }
 
 struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
@@ -92,3 +88,42 @@ struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
     shelf->y = y;
     return shelf;
 }
+
+shelf_t* search_item(char search_input_color[20], char search_input_title[20], shelf_t* shelves[], int n_shelves) {
+    for (int i = 0; i < n_shelves; i++) {
+        if (strcmp(shelves[i]->item.color, search_input_color) == 0 &&
+            strcmp(shelves[i]->item.name, search_input_title) == 0) {
+            return shelves[i];
+        }
+    }
+    return 0;
+}
+
+shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
+
+    char search_input_color[20];
+    char search_input_name[20];
+
+    printf("\nWrite your search input>");
+    scanf(" %6s %9s", search_input_color, search_input_name);
+
+    for (int i = 0; i < n_shelves; i++) {
+        if (strcmp(shelves[i]->item.color, search_input_color) == 0 &&
+            strcmp(shelves[i]->item.name, search_input_name) == 0) {
+            return shelves[i];
+            }
+    }
+    return 0;
+}
+
+/*
+int search_item(char search_input_color[7], char search_input_name[10], shelf_t shelves[], int n_shelves){
+    for (int i = 0; i < n_shelves; i++){
+        if (strcmp(shelves[i].item.color, search_input_color) == 0 || strcmp(shelves[i].item.name, search_input_name) == 0) {
+            return i;
+        }
+    }
+
+return -1;
+}
+ */
