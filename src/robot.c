@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -76,7 +75,6 @@ void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, directio
             printf("Error: Invalid input\n");
             break;
     }
-
 
 }
 
