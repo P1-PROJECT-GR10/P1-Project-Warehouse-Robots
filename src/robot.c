@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "warehouse.h"
 #include "robot.h"
 
@@ -85,7 +84,7 @@ void print_robot_xy(robot_t robot1) { // for testing purposes
     printf("%d, %d\n",robot1.x, robot1.y);
 }
 
-void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves) {
+void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t* pickingItems[]) {
     int i = 1;
     char word;
     printf("try moving the robot :), use: n, s, e, w, t, p or b (stop / break)\n");
@@ -116,7 +115,7 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
                 break;
             case 't':
                 //robot_item_pickup(robot1, shelves[6], 1);
-                check_nearby_shelves(robot1, shelves, n_shelves);
+                check_nearby_shelves(robot1, shelves, n_shelves, pickingItems);
                 break;
             default:
                 printf("unreadable expression, try: n, s, e, w, t,, p or b (stop / break)\n");
@@ -127,21 +126,25 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
 }
 
 
-void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves){ //Der skal updateres funktionalitet i form input fra listen
-    shelf_t* nearby_shelf = NULL;
+void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, item_t* pickingItems[]){ //Der skal updateres funktionalitet i form input fra listen
+    shelf_t* nearby_shelf[] = {NULL,NULL};
 
     printf("Robot is on x:%d, y:%d\n", robot->x, robot->y);
 
-    for (int i = 0; i < n_shelves; i++){
+    for (int i = 0, index = 0; i < n_shelves && index < 1; i++){
         if (shelves[i]->x == robot->x && (shelves[i]->y == robot->y-1 || shelves[i]->y == robot->y+1)){
-            nearby_shelf = shelves[i];
-            break;
+            nearby_shelf[index] = shelves[i];
+            index++;
         }
     }
 
-    if (nearby_shelf == NULL){
+    if (nearby_shelf[0] == NULL){
         printf("Nearby shelf wasn't found):\n");
         return;
+    }
+
+    for (int shelfID = 0; shelfID < 2; shelfID++){
+
     }
 
     robot_item_pickup(robot, nearby_shelf, 1); //1 tallet skal nok skiftes ud med en variabel på et tidspunkt.

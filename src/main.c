@@ -19,13 +19,13 @@ int main(void) {
         exit(EXIT_FAILURE);
     }
 
-    item_t items[n_shelves];
+    item_t* items[n_shelves];
 
     file_read_items(items, n_shelves, items_file);
 
     fclose(items_file);
 
-    shelf_t* shelves[n_shelves];
+    shelf_t shelves[n_shelves];
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
 
@@ -61,16 +61,11 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
-    manual_movement(robot1, warehouse, rows, columns, shelves, n_shelves);
+    manual_movement(robot1, warehouse, rows, columns, shelves, n_shelves, pickingItems);
 
     free_warehouse(warehouse);
     free_robot(robot1);
     free_shelves(shelves, n_shelves);
 
     return 0;
-}
-void free_shelves(shelf_t* shelves[], int n_shelves){
-    for (int i = 0; i < n_shelves; i++) {
-        free(shelves[i]);
-    }
 }

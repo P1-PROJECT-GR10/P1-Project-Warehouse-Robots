@@ -131,3 +131,9 @@ return -1;
 void free_warehouse(int *warehouse){
     free(warehouse);
 }
+
+void free_shelves(shelf_t* shelves[], int n_shelves){
+    for (int i = 0; i < n_shelves; i++) {
+        free(shelves[i]);
+    }
+}
