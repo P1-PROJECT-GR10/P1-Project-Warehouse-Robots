@@ -9,7 +9,10 @@ int main(void) {
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
     const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
-    int seed = time(NULL);
+    // Time Parameters and functionality
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    int seed = 123456789;
     srand(seed);
     int amount_of_picking_items = 5;
 
@@ -49,7 +52,6 @@ int main(void) {
     printf("the item in the shelf is %s %s\n", shelf_target_manual.item.color, shelf_target_manual.item.name);
     printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
 
-    */
     item_t pickingItems[amount_of_picking_items];
     generate_picking_list(pickingItems, items, amount_of_picking_items, seed, n_shelves);
     display_picking_list(pickingItems, amount_of_picking_items);
@@ -58,6 +60,8 @@ int main(void) {
         free(shelves[i]);
     }
 
+    */
+
     robot_t* robot1 = create_robot();
     //print_robot1_id(*robot1);
 
@@ -65,10 +69,33 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
-    manual_movement(robot1, warehouse, rows, columns);
+    // manual_movement(robot1, warehouse, rows, columns);
 
+    // Create node map for A* algorithm
+    node_t* node_map = create_node_map(rows, columns);
+
+    // Find path to {0,0}
+    node_t* result = a_star(warehouse, node_map, rows, columns, robot1->x, robot1->y, 0, 0);
+
+    if (result != NULL) {
+        printf("Path found! Backtracking:\n");
+        node_t* step = result;
+        while (step != NULL) {
+            printf("(%d,%d) <-", step->x, step->y);
+            step = step->parent;
+        }
+        printf("Start\n");
+    }
+
+    free(node_map);
     free(warehouse);
     free(robot1);
+
+    // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Runtime: %.9f seconds\n", runtime);
+    printf("Seed: %d\n", seed);
 
     return 0;
 }
