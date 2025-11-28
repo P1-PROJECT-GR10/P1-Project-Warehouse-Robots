@@ -122,7 +122,7 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
                 check_nearby_shelves(robot1, shelves, n_shelves);
                 break;
             default:
-                printf("unreadable expression, try: n, s, e, w, t, p or b (stop / break)\n");
+                printf("unreadable expression, try: n, s, e, w, t,, p or b (stop / break)\n");
                 break;
 
         }
@@ -130,7 +130,7 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
 }
 
 
-void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves){
+void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves){ //Der skal updateres funktionalitet i form input fra listen
     shelf_t* nearby_shelf = NULL;
 
     printf("Robot is on x:%d, y:%d\n", robot->x, robot->y);
@@ -147,42 +147,42 @@ void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves){
         return;
     }
 
-    robot_item_pickup(robot, nearby_shelf, 2); //1 tallet skal nok skiftes ud med en variabel på et tidspunkt.
+    robot_item_pickup(robot, nearby_shelf, 1); //1 tallet skal nok skiftes ud med en variabel på et tidspunkt.
 
-    printf("The shelf had: '%s %s', the robot is now carrying:\n", nearby_shelf->item.color, nearby_shelf->item.name);
-    for (int j = 0; j <= ROBOT_MAX_CAPACITY; j++){
-        if (robot->item[j].name[0]){
-            printf(" '%s %s'\n",robot->item[j].color, robot->item[j].name);
-        } else{
-            break;
-        }
-
-    }
 }
 
 void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
-    if (amount <= 0) {
-        printf("Error: the amount needs to be higher than 0 to pick something up.\n");
-        return;
-    }
-
-    if (shelf->stock >= amount) { //Checks if there is enough of the items needed on the shelf
-        shelf->stock -= amount;
-        robot->number_of_items += amount; //The robot gets the item amount transferred
-        printf("Robot %d picked %d item(s) from the shelve with the coordinats x: %d, y: %d. The robot is now carrying %d items.\n", robot->robot_id, amount, shelf->x, shelf->y, robot->number_of_items);
-
-        //Checks the robot's items from 0 to ROBOT_MAX_CAPACITY.
-        for (int k = 0; k < amount; k++){
-            for (int i = 0; i < ROBOT_MAX_CAPACITY; i++) {
-                if (!robot->item[i].name[0]) {
-                    robot->item[i] = shelf->item; //Inserts the item struct from shelf to the robot
-                    break;
-                }
-            }
+    if (amount + robot->number_of_items <= ROBOT_MAX_CAPACITY){
+        if (amount <= 0) {
+            printf("Error: the amount needs to be higher than 0 to pick something up.\n");
+            return;
         }
 
-    } else {
-        printf("Error: There were only %d items on the shelve and not the requested amount: %d\n", shelf->stock, amount);
-    }
+        if (shelf->stock >= amount) { //Checks if there is enough of the items needed on the shelf
+            shelf->stock -= amount;
+            robot->number_of_items += amount; //The robot gets the item amount transferred
+            printf("Robot %d picked %d item(s) from the shelve with the coordinats x: %d, y: %d. The robot is now carrying %d items.\n", robot->robot_id, amount, shelf->x, shelf->y, robot->number_of_items);
 
+            //Checks the robot's items from 0 to ROBOT_MAX_CAPACITY.
+            for (int k = 0; k < amount; k++){
+                for (int i = 0; i < ROBOT_MAX_CAPACITY; i++) {
+                    if (!robot->item[i].name[0]) {
+                        robot->item[i] = shelf->item; //Inserts the item struct from shelf to the robot
+                        break;
+                    }
+                }
+            }
+
+            printf("The shelf had: '%s %s', the robot is now carrying:\n", shelf->item.color, shelf->item.name);
+            for (int j = 0; j <= ROBOT_MAX_CAPACITY; j++){
+                if (robot->item[j].name[0]){
+                    printf(" '%s %s'\n",robot->item[j].color, robot->item[j].name);
+                }
+            }
+        } else {
+            printf("Error: There were only %d items on the shelve and not the requested amount: %d\n", shelf->stock, amount);
+        }
+    } else{
+        printf("The robot can only carry %d! The robot was requested to pick up %d items but it carried %d before", ROBOT_MAX_CAPACITY, amount, robot->number_of_items);
+    }
 }
