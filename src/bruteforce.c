@@ -1,25 +1,27 @@
 #include "bruteforce.h"
 
-void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev) {
+void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows) {
 
     if (*get_cell(warehouse, columns, goal_x, goal_y) == shelf) {
         printf("can't reach target, as it is a shelf! :(\n");
         return;
     }
 
-    if (goal_x < 0 || goal_x > rows || goal_y < 0 || goal_y > columns) {
+    if (goal_x < 0 || goal_x > columns || goal_y < 0 || goal_y > rows) {
         printf("can't reach target, as it is out of bounds! :(\n");
         return;
     }
-    bruteforce_recoursive(warehouse, robot, goal_x, goal_y, columns, rows, prev);
+    printf("\n");
+    int distance = bruteforce_recoursive(warehouse, robot, goal_x, goal_y, columns, rows, -1, 0);
+    printf("robot moved: %d tiles\n", distance);
 }
 
-void bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev) {
+int bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev, int distance) {
 
     if (goal_x == robot->x && goal_y == robot->y) {
         print_warehouse(warehouse, rows, columns);
         printf("arived at destination :)\n");
-        return;
+        return distance;
     }
 
     neighbour_t neighbour[4];
@@ -71,6 +73,6 @@ void bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_
 
     move_robot(robot, warehouse, rows, columns, heading);
     // print_warehouse(warehouse, rows, columns);
-    // printf("\n");
-    bruteforce(warehouse, robot, goal_x, goal_y, columns, rows, prev);
+    // printf("%d \n moves \n", distance);
+    bruteforce_recoursive(warehouse, robot, goal_x, goal_y, columns, rows, prev, distance + 1);
 }
