@@ -44,7 +44,7 @@ void heapify_up(minheap* h, int index) {
             // Swap child and parent
             heap_swap(h, index, parent);
         } else {
-            break;;
+            break;
         }
         // Set index to parent index and repeat
         index = parent;
