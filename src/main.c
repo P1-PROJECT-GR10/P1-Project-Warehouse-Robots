@@ -56,7 +56,7 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
-    bruteforce(warehouse, robot1, 9, 9, columns, rows, -1);
+    bruteforce(warehouse, robot1, 10, 9, columns, rows, -1);
 
     //manual_movement(robot1, warehouse, rows, columns);
 
