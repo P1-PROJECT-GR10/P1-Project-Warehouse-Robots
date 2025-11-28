@@ -121,3 +121,7 @@ void file_read_items(item_t* items, int number_of_items, FILE* file);
  * @return A pointer to the generated shelf
  */
 struct shelf* generate_shelf(item_t item, int stock, int x, int y);
+
+void free_warehouse(int *warehouse);
+
+void free_shelves(shelf_t* shelves[], int n_shelves);

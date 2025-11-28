@@ -127,3 +127,7 @@ int search_item(char search_input_color[7], char search_input_name[10], shelf_t 
 return -1;
 }
  */
+
+void free_warehouse(int *warehouse){
+    free(warehouse);
+}

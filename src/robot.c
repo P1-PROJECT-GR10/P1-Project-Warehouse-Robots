@@ -183,3 +183,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
         printf("The robot can only carry %d! The robot was requested to pick up %d items but it carried %d before", ROBOT_MAX_CAPACITY, amount, robot->number_of_items);
     }
 }
+
+void free_robot(robot_t* robot1){
+    free(robot1);
+}

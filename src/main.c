@@ -63,14 +63,14 @@ int main(void) {
 
     manual_movement(robot1, warehouse, rows, columns, shelves, n_shelves);
 
+    free_warehouse(warehouse);
+    free_robot(robot1);
+    free_shelves(shelves, n_shelves);
 
-    //free(warehouse);
-    //free(robot1);
-    /*
+    return 0;
+}
+void free_shelves(shelf_t* shelves[], int n_shelves){
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
     }
-    */
-
-    return 0;
 }
