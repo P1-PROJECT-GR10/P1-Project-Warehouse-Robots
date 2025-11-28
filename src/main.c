@@ -8,7 +8,8 @@ int main(void) {
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
     const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
-    int seed = time(NULL);
+    int run_time = time(NULL);
+    int seed = 123456789;
     srand(seed);
     int amount_of_picking_items = 5;
 
@@ -65,6 +66,9 @@ int main(void) {
     print_warehouse(warehouse, rows, columns);
 
     manual_movement(robot1, warehouse, rows, columns);
+
+    printf("Runtime: %lld\n seconds", time(NULL) - run_time);
+    printf("Seed: %d\n", seed);
 
     free(warehouse);
     free(robot1);
