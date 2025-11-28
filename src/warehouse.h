@@ -15,6 +15,8 @@
 #define SHELF_LENGTH 6
 /// How many shelves are generated when generating a warehouse layout
 #define SHELF_AMOUNT 3
+/// The number of items that gets generated on the picking list
+#define AMOUNT_OF_PICKING_ITEMS 5
 
 
 //---------------------------------------ENUMERATIONS---------------------------------------

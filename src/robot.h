@@ -57,7 +57,7 @@ void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, directio
  * @param shelves Pointer to array of shelves structs
  * @param n_shelves Number of shelves
  */
-void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t* pickingItems[]);
+void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t pickingItems[]);
 
 /**
  * A function that checks for nearby shelves y+1 / y-1 from the robot
@@ -65,7 +65,7 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
  * @param shelves Pointer to array of shelves structs
  * @param n_shelves Number of shelves
  */
-void check_nearby_shelves(robot_t* robot, shelf_t* shelves[], int n_shelves, item_t* pickingItems[]);
+void check_nearby_shelves(robot_t* robot, shelf_t* shelves[], int n_shelves, item_t pickingItems[]);
 
 /**
  * A function that can pickup items from a shelf

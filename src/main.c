@@ -10,7 +10,6 @@ int main(void) {
 
     int seed = time(NULL);
     srand(seed);
-    int amount_of_picking_items = 5;
 
     FILE* items_file = fopen("items.txt", "r");
     if (items_file == NULL) {
@@ -49,9 +48,9 @@ int main(void) {
     printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
 
     */
-    item_t pickingItems[amount_of_picking_items];
-    generate_picking_list(pickingItems, items, amount_of_picking_items, seed, n_shelves);
-    display_picking_list(pickingItems, amount_of_picking_items);
+    item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
+    generate_picking_list(pickingItems, items, AMOUNT_OF_PICKING_ITEMS, seed, n_shelves);
+    display_picking_list(pickingItems, AMOUNT_OF_PICKING_ITEMS);
 
 
     robot_t* robot1 = create_robot();
@@ -63,9 +62,11 @@ int main(void) {
 
     manual_movement(robot1, warehouse, rows, columns, shelves, n_shelves, pickingItems);
 
+    /*
     free_warehouse(warehouse);
     free_robot(robot1);
     free_shelves(shelves, n_shelves);
+     */
 
     return 0;
 }

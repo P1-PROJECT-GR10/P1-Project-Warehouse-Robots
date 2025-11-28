@@ -84,7 +84,7 @@ void print_robot_xy(robot_t robot1) { // for testing purposes
     printf("%d, %d\n",robot1.x, robot1.y);
 }
 
-void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t* pickingItems[]) {
+void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t pickingItems[]) {
     int i = 1;
     char word;
     printf("try moving the robot :), use: n, s, e, w, t, p or b (stop / break)\n");
@@ -126,30 +126,41 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
 }
 
 
-void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, item_t* pickingItems[]){ //Der skal updateres funktionalitet i form input fra listen
+void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, item_t pickingItems[]){ //Der skal updateres funktionalitet i form input fra listen
     shelf_t* nearby_shelf[] = {NULL,NULL};
 
     printf("Robot is on x:%d, y:%d\n", robot->x, robot->y);
 
-    for (int i = 0, index = 0; i < n_shelves && index < 1; i++){
+    for (int i = 0, index = 0; i < n_shelves && index < 2; i++){
         if (shelves[i]->x == robot->x && (shelves[i]->y == robot->y-1 || shelves[i]->y == robot->y+1)){
             nearby_shelf[index] = shelves[i];
             index++;
         }
     }
 
-    if (nearby_shelf[0] == NULL){
+    if (nearby_shelf[0] == NULL && nearby_shelf[1] == NULL){
         printf("Nearby shelf wasn't found):\n");
         return;
     }
+    for (int n = 0; n < AMOUNT_OF_PICKING_ITEMS; n++){
+        for (int shelfID = 0; shelfID <= 1; shelfID++){
+            if (!nearby_shelf[shelfID] == NULL){
+                if (strcmp(pickingItems[n].name, nearby_shelf[shelfID]->item.name) == 0 &&
+                    strcmp(pickingItems[n].color, nearby_shelf[shelfID]->item.color) == 0){
+                    pickingItems[n] = (item_t){0};
+                    printf("The picking list is: ");
+                    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
+                        printf("%s %s %.2lf ", pickingItems[i].color, pickingItems[i].name, pickingItems[i].weight);
+                    }
+                    printf("\n \n");
 
-    for (int shelfID = 0; shelfID < 2; shelfID++){
-
+                    robot_item_pickup(robot, nearby_shelf[shelfID], 1); //1 tallet skal nok skiftes ud med en variabel på et tidspunkt.
+                }
+            }
+        }
     }
-
-    robot_item_pickup(robot, nearby_shelf, 1); //1 tallet skal nok skiftes ud med en variabel på et tidspunkt.
-
 }
+
 
 void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
     if (amount + robot->number_of_items <= ROBOT_MAX_CAPACITY){
@@ -172,7 +183,6 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
                     }
                 }
             }
-
             printf("The shelf had: '%s %s', the robot is now carrying:\n", shelf->item.color, shelf->item.name);
             for (int j = 0; j <= ROBOT_MAX_CAPACITY; j++){
                 if (robot->item[j].name[0]){
@@ -183,7 +193,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
             printf("Error: There were only %d items on the shelve and not the requested amount: %d\n", shelf->stock, amount);
         }
     } else{
-        printf("The robot can only carry %d! The robot was requested to pick up %d items but it carried %d before", ROBOT_MAX_CAPACITY, amount, robot->number_of_items);
+        printf("The robot can only carry %d! The robot was requested to pick up %d items but it carried %d before!\n", ROBOT_MAX_CAPACITY, amount, robot->number_of_items);
     }
 }
 
