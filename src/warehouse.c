@@ -71,7 +71,8 @@ void file_read_items(item_t* items, int n_items, FILE* file) {
     for (i = 0; i < n_items; i++) {
         int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
         if(success != 3){
-            break; // Add printf for error handling
+            printf("Failed to read enough fields for item %d, only read %d field(s).", i, success);
+            exit(EXIT_FAILURE);
         }
         items[i] = item;
     }
