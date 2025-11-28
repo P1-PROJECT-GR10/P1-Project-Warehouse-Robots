@@ -8,7 +8,9 @@ int main(void) {
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
     const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
-    int run_time = time(NULL);
+    // Time Parameters and functionality
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
     int seed = 123456789;
     srand(seed);
     int amount_of_picking_items = 5;
@@ -67,11 +69,14 @@ int main(void) {
 
     manual_movement(robot1, warehouse, rows, columns);
 
-    printf("Runtime: %lld\n seconds", time(NULL) - run_time);
-    printf("Seed: %d\n", seed);
-
     free(warehouse);
     free(robot1);
+
+    // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Runtime: %.9f seconds\n", runtime);
+    printf("Seed: %d\n", seed);
 
     return 0;
 }
