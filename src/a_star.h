@@ -120,6 +120,6 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns);
  * @param start_y y-coordinate of the start point
  * @param goal_x x-coordinate of the goal point
  * @param goal_y y-coordinate of the goal point
- * @return a pointer to the goal node with the apropriate back pointers for reconstructiong the optimal path
+ * @return a pointer to the goal node with the appropriate back pointers for reconstructing the optimal path
  */
 node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int start_x, int start_y, int goal_x, int goal_y);

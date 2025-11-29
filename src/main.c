@@ -75,7 +75,7 @@ int main(void) {
     node_t* node_map = create_node_map(rows, columns);
 
     // Find path to {0,0}
-    node_t* result = a_star(warehouse, node_map, rows, columns, robot1->x, robot1->y, 0, 0);
+    node_t* result = a_star(warehouse, node_map, rows, columns, robot1->x, robot1->y, 16, 7);
 
     if (result != NULL) {
         printf("Path found! Backtracking:\n");

@@ -97,8 +97,8 @@ node_t* heap_pop(minheap* h) {
     }
 
     node_t* root = h->array[0];
-    root->heap_index = -1;     // No longer in heap
-    h->size--;              // Heap is smaller
+    root->heap_index = -1;      // No longer in heap
+    h->size--;                  // Heap is smaller
 
     // Move last node to the top
     h->array[0] = h->array[h->size];    // Doesnt use heap_swap for efficiency
