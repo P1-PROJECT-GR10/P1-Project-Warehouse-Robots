@@ -71,23 +71,8 @@ int main(void) {
 
     // manual_movement(robot1, warehouse, rows, columns);
 
-    // Create node map for A* algorithm
-    node_t* node_map = create_node_map(rows, columns);
+    move_robot_to_point(robot1, warehouse, rows, columns, 0, 4);
 
-    // Find path to {0,0}
-    node_t* result = a_star(warehouse, node_map, rows, columns, robot1->x, robot1->y, 16, 7);
-
-    if (result != NULL) {
-        printf("Path found! Backtracking:\n");
-        node_t* step = result;
-        while (step != NULL) {
-            printf("(%d,%d) <-", step->x, step->y);
-            step = step->parent;
-        }
-        printf("Start\n");
-    }
-
-    free(node_map);
     free(warehouse);
     free(robot1);
 

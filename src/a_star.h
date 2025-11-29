@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "robot.h"
+
 
 //---------------------------------------STRUCTURES---------------------------------------
 
@@ -123,3 +125,7 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns);
  * @return a pointer to the goal node with the appropriate back pointers for reconstructing the optimal path
  */
 node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int start_x, int start_y, int goal_x, int goal_y);
+
+direction_e* reconstruct_path(node_t* goal_node, int* path_length);
+
+void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y);

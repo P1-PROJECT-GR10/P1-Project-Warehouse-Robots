@@ -245,4 +245,82 @@ node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int star
     free(open_set);
     return NULL;
 }
-// Damn that was stressful
+
+direction_e* reconstruct_path(node_t* goal_node, int* path_length) {
+    if (goal_node == NULL) {
+        *path_length = 0;
+        return NULL;
+    }
+
+    // Since g-cost is 1 pr step we assume the length of the path is the goal node's g-cost
+    int steps = (int)goal_node->g;
+    *path_length = steps;
+
+    // Allocate memory for path
+    direction_e* path = (direction_e*)malloc(sizeof(direction_e)*steps);
+
+    node_t* current = goal_node;
+
+    // Fill the path "from behind"
+    int index = steps - 1;
+
+    while (current->parent != NULL) {
+        node_t* parent = current->parent;
+
+        int dx = current->x - parent->x;
+        int dy = current->y - parent->y;
+
+        // Decide direction
+        if (dx == 1) {
+            path[index] = east;
+        } else if (dx == -1) {
+            path[index] = west;
+        } else if (dy == 1) {
+            path[index] = south;
+        } else if (dy == -1) {
+            path[index] = north;
+        }
+
+        // Step back in path
+        current = parent;
+        index--;
+    }
+    return path;
+}
+
+void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y) {
+    // Create node map for A* algorithm
+    node_t* node_map = create_node_map(rows, columns);
+
+    // Find path to point
+    node_t* result = a_star(warehouse, node_map, rows, columns, robot->x, robot->y, goal_x, goal_y);
+
+    if (result != NULL) {
+        printf("Path found! Backtracking:\n");
+        node_t* step = result;
+        while (step != NULL) {
+            printf("(%d,%d) <-", step->x, step->y);
+            step = step->parent;
+        }
+        printf("Start\n");
+    }
+
+    if (result != NULL) {
+        int length = 0;
+
+        // Reconstruct Path
+        direction_e* path = reconstruct_path(result, &length);
+
+        printf("Path length is: %d\n", length);
+
+        // Move robot
+        for (int i = 0; i< length; i++) {
+            printf("Robot moves %s\n", direction_to_string(path[i]));
+
+            move_robot(robot, warehouse, rows, columns, path[i]);
+            print_warehouse(warehouse, rows, columns);
+        }
+        free(path);
+    }
+    free(node_map);
+}
