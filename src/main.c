@@ -58,7 +58,6 @@ int main(void) {
     // move the robot using the bruteforce algorithm:
     // bruteforce(warehouse, robot1, 14, 0, columns, rows);
 
-    // This function prints the warehouse each time for testing - this can be removed
     move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
     free_warehouse(warehouse);
     free_robot(robot1);
