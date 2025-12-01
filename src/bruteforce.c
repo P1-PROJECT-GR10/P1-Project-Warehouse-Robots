@@ -1,23 +1,56 @@
 #include "bruteforce.h"
+#include "a_star.h"
+
+int manhat_dist(int x, int y, int goal_x, int goal_y) {
+    int i = abs(goal_x - x) + abs(goal_y - y);
+    return i;
+}
+
+int get_mirror_direction(neighbour_t neighbour) {
+    switch (neighbour.direction) {
+        case north:
+            return south;
+        case south:
+            return north;
+        case east:
+            return west;
+        case west:
+            return east;
+        default:
+            printf("wrong input in funktion: get_mirror_direction");
+            return -1;
+    }
+}
+
+bool is_valid(int x, int y, int rows, int columns) {
+    if (x >= 0 && x < columns && y >= 0 && y < rows) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows) {
 
+    // checks if goal point is a shelf, i.e. impassible.
     if (*get_cell(warehouse, columns, goal_x, goal_y) == shelf) {
         printf("can't reach target, as it is a shelf! :(\n");
         return;
-    } // checks if goal point is a shelf, i.e. impassible.
+    }
 
+    // checks if goal point is out of bounds, i.e. impassible.
     if (goal_x < 0 || goal_x > columns || goal_y < 0 || goal_y > rows) {
         printf("can't reach target, as it is out of bounds! :(\n");
         return;
-    } // checks if goal point is out of bounds, i.e. impassible.
+    }
 
+    // calls the recoursive algorithm, and prints the amount of recoursive calls.
     printf("\n");
-    int amount_of_moves = bruteforce_recoursive(warehouse, robot, goal_x, goal_y, columns, rows, -1, 0);
+    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, columns, rows, -1, 0);
     printf("robot moved: %d tiles\n", amount_of_moves);
-} // calls the recoursive algorithm, and prints the amount of recoursive calls.
+}
 
-int bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev, int moves) {
+int bruteforce_recursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev, int moves) {
 
     if (goal_x == robot->x && goal_y == robot->y) {
         print_warehouse(warehouse, rows, columns);
@@ -25,61 +58,63 @@ int bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_y
         return moves;
     } // checks if the robot has arrived at the goal point.
 
-    neighbour_t neighbour[4]; // initializes the four possible moves.
+    neighbour_t neighbour[4]; // initializes the neighbours for the robot.
+    //Their directions:
     neighbour[0].direction = east;
     neighbour[1].direction = west;
     neighbour[2].direction = south;
     neighbour[3].direction = north;
 
+    //and their positions compared to the robots position:
+    //east:
+    neighbour[0].x = robot->x+1;
+    neighbour[0].y = robot->y;
+    // west:
+    neighbour[1].x = robot->x-1;
+    neighbour[1].y = robot->y;
+    // south:
+    neighbour[2].x = robot->x;
+    neighbour[2].y = robot->y+1;
+    // north:
+    neighbour[3].x = robot->x;
+    neighbour[3].y = robot->y-1;
+
+
     // Evaluates the manhattan distance to the goal point from each neighbouring points individually.
     // If the point is unreachable, then its distance is set to infinity, so that it never is the closest point.
-    if (robot->x+1 >! rows
-        && *get_cell(warehouse, columns, robot->x+1, robot->y) == empty
-        && prev != west) {
-        neighbour[0].distance = abs(goal_x - (robot->x+1)) + abs(goal_y - robot->y);
-    } else {
-        neighbour[0].distance = INFINITY;
-    }
-    if (robot->x-1 != -1
-        && *get_cell(warehouse, columns, robot->x-1, robot->y) == empty
-        && prev != east) {
-        neighbour[1].distance = abs(goal_x - (robot->x-1)) + abs(goal_y - robot->y);
-    } else {
-        neighbour[1].distance = INFINITY;
-    }
-    if (robot->y+1 >! columns
-        && *get_cell(warehouse, columns, robot->x, robot->y+1) == empty
-        && prev != north) {
-        neighbour[2].distance = abs(goal_x - robot->x) + abs(goal_y - (robot->y+1));
-    } else {
-        neighbour[2].distance = INFINITY;
-    }
-    if (robot->y-1 != -1
-        && *get_cell(warehouse, columns, robot->x, robot->y-1) == empty
-        && prev != south) {
-        neighbour[3].distance = abs(goal_x - robot->x) + abs(goal_y - (robot->y-1));
-    } else {
-        neighbour[3].distance = INFINITY;
+    for (int i = 0; i < 4; i++) {
+        // initializes the status of the neighbouring cell.
+        neighbour[i].cell = *get_cell(warehouse, columns, neighbour[i].x, neighbour[i].y);
+        if (is_valid(neighbour[i].x, neighbour[i].y, rows, columns) == true // is neighbour within bounds?
+            && neighbour[i].cell == empty // is the neighbour an empty cell?
+            // to prevent the robot from moving back to were it just came from.
+            && prev != get_mirror_direction(neighbour[i])) {
+            //calculates manhattan distance to goal point.
+            neighbour[i].distance = manhat_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
+        } else {
+            neighbour[i].distance = INFINITY; // if not reachable, make distance infinite. >:)
+        }
     }
 
-    direction_e heading = neighbour[0].direction; // The 0'th direction (east) is base case,
-                                                  // and all others are evaluated from there.
+    // The 0'th direction (east) is base case and all others are evaluated from there.
+    direction_e heading = neighbour[0].direction;
 
+    // j = current used direction. i = Next direction to compare to, to see if it is closer to the goal.
     int j = 0;
     for (int i = 1; i < 4; i++) {
         if (neighbour[j].distance > neighbour[i].distance) {
             heading = neighbour[i].direction;
             j = i;
         }
-    } // j = current used direction. i = Next direction to compare to, to see if it is closer to the goal.
+    }
+    // moves robot in the direction that has been chosen.
+    move_robot(robot, warehouse, rows, columns, heading);
 
-    move_robot(robot, warehouse, rows, columns, heading); // moves robot in the direction that has been chosen.
-
-    // print_warehouse(warehouse, rows, columns); // Can print each individual step,
-    // printf("%d \n moves \n", distance);        // nice for testing purposes.
+    print_warehouse(warehouse, rows, columns); // Can print each individual step,
+    printf("%d moves \n  \n", moves);        // nice for testing purposes.
 
     prev = heading; // prepares the function for the next iteration.
 
-    return bruteforce_recoursive(warehouse, robot, goal_x, goal_y, columns, rows, prev, moves + 1);
     // executes the next step.
+    return bruteforce_recursive(warehouse, robot, goal_x, goal_y, columns, rows, prev, moves + 1);
 }

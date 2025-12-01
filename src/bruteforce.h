@@ -1,7 +1,7 @@
-#include "warehouse.h"
 #include "robot.h"
 #include "math.h"
-
+#include "warehouse.h"
+#include <stdbool.h>
 
 /** Struct for the neighbours of the robot.
  *  There are four used in the code, one for each cardinal direction.
@@ -14,7 +14,12 @@
 typedef struct neighbour {
     int distance;
     direction_e direction;
+    int x;
+    int y;
+    cell_e cell;
 } neighbour_t;
+
+int manhat_dist(int x, int y, int goal_x, int goal_y);
 
 /** The main function for the bruteforce algorithm, here lies the conditions for the function.
  *  It also prints the total number of steps (amount of recursive calls) it uses.
@@ -42,4 +47,6 @@ void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int colu
  *                  -   Used to keep track of the algorithms efficiency.
  * @return
  */
-int bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev, int moves);
+int bruteforce_recursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev, int moves);
+
+bool is_valid(int x, int y, int rows, int columns);
