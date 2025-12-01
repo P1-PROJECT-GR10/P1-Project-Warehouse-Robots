@@ -55,8 +55,7 @@ int main(void) {
 
     shelf_t picking_shelves[AMOUNT_OF_PICKING_ITEMS];
     for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
-        picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves);
-
+        picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves); //Sets picking_shelve to the corresponding shelf that contains a item from the picking list
     }
 
     //shelf_t shelf_target_auto = *search_item(search_input_color, search_input_title, shelves, n_shelves);

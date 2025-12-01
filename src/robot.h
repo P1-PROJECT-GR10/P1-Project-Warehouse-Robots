@@ -75,4 +75,8 @@ void check_nearby_shelves(robot_t* robot, shelf_t* shelves[], int n_shelves, ite
  */
 void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount);
 
+/**
+ * A function that free the robot
+ * @param robot1 Pointer to the struct robot_t that is being freed
+ */
 void free_robot(robot_t* robot1);
