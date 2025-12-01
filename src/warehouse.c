@@ -159,9 +159,6 @@ void free_warehouse(int *warehouse){
 
 void free_shelves(shelf_t* shelves[], int n_shelves){
     for (int i = 0; i < n_shelves; i++) {
-        printf("[%d] %s %s\n",i, shelves[i]->item.color, shelves[i]->item.name);
-        printf("Freeing shelf %d",i);
-        free(shelves[i]); //Free all the shelves from memory
-        printf(" | SUCCESS\n");
+        free(shelves[i]);
     }
 }

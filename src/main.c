@@ -57,11 +57,8 @@ int main(void) {
     move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
     free_warehouse(warehouse);
     free_robot(robot1);
-    printf("Freeing shelves\n");
     free_shelves(shelves, n_shelves);
-    printf("Freeing drop zones\n");
     free(drop_zones);
-    printf("Freed all!\n");
 
     // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
     clock_gettime(CLOCK_MONOTONIC, &end);
