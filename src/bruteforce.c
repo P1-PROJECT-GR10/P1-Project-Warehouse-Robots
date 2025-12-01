@@ -99,12 +99,12 @@ int bruteforce_recursive(int* warehouse, robot_t* robot, int goal_x, int goal_y,
     // The 0'th direction (east) is base case and all others are evaluated from there.
     direction_e heading = neighbour[0].direction;
 
-    // j = current used direction. i = Next direction to compare to, to see if it is closer to the goal.
-    int j = 0;
+    // current = currently used direction. i = Next direction to compare to, to see if it is closer to the goal.
+    int current = 0;
     for (int i = 1; i < 4; i++) {
-        if (neighbour[j].distance > neighbour[i].distance) {
+        if (neighbour[current].distance > neighbour[i].distance) {
             heading = neighbour[i].direction;
-            j = i;
+            current = i;
         }
     }
     // moves robot in the direction that has been chosen.
