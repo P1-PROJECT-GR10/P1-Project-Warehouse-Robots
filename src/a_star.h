@@ -50,39 +50,39 @@ minheap* create_minheap(int capacity);
 
 /**
  * Swaps two nodes in the MinHeap
- * @param h A valid MinHeap
+ * @param heap A valid MinHeap
  * @param i Index of first node
  * @param j Index of second node
  */
-void heap_swap(minheap* h, int i, int j);
+void heap_swap(minheap* heap, int i, int j);
 
 /**
  * Function for reordering MinHeap from a node and up through its parents by "bubbling up"
- * @param h A valid MinHeap
+ * @param heap A valid MinHeap
  * @param index Index of the starting node
  */
-void heapify_up(minheap* h, int index);
+void heapify_up(minheap* heap, int index);
 
 /**
  * Recursively reordering MinHeap from a root and down through its children
- * @param h A valid MinHeap
+ * @param heap A valid MinHeap
  * @param index Index of the starting root
  */
-void heapify_down(minheap* h, int index);
+void heapify_down(minheap* heap, int index);
 
 /**
  * Pushes a node to the MinHeap
- * @param h A valid MinHeap
+ * @param heap A valid MinHeap
  * @param np A pointer to the node that will be pushed
  */
-void heap_push(minheap* h, node_t* np);
+void heap_push(minheap* heap, node_t* np);
 
 /**
  * Deletes the root of the MinHeap aka the node with the lowest f-cost in the tree and returns a pointer to said node
- * @param h A valid MinHeap
+ * @param heap A valid MinHeap
  * @return A pointer to the former root of the MinHeap
  */
-node_t* heap_pop(minheap* h);
+node_t* heap_pop(minheap* heap);
 
 /**
  * Helper function for getting the index of a point in a 1D array
