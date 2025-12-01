@@ -320,14 +320,13 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
     }
     print_node_map(node_map, rows, columns);
     free(node_map);
+    print_warehouse(warehouse, rows, columns);
 }
 
 void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves) {
     for (int i = 0; i < amount_of_picking_items; i++) {
 
-        shelf_t* goal_shelf = search_item(picking_list[i].color, picking_list[i].name, shelves, n_shelves);
-
-
+        shelf_t* goal_shelf = search_item(picking_list[i].name, picking_list[i].color, shelves, n_shelves);
         int goal_x = goal_shelf->x;
         int goal_y;
 
@@ -378,7 +377,7 @@ char* node_came_from_to_string(node_t node) {
             case west:
                 return "|<";
             case no_direction:
-                return "|G";
+                return "|S";
         }
     }
     return "| ";

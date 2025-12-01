@@ -32,31 +32,36 @@ int main(void) {
     // Create shelves and generate warehouse
     shelf_t* shelves[n_shelves];
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
-    drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
 
+    // Sets the drop zones in the warehouse.
+    drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
     set_drop_zone_cell(warehouse, drop_zones, 4, 17);
     set_drop_zone_cell(warehouse, drop_zones, 5, 17);
 
+    // Generate the picking list
     item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(pickingItems, items, AMOUNT_OF_PICKING_ITEMS, seed, n_shelves);
     display_picking_list(pickingItems, AMOUNT_OF_PICKING_ITEMS);
 
+
     shelf_t picking_shelves[AMOUNT_OF_PICKING_ITEMS];
     for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
-        picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves); //Sets picking_shelve to the corresponding shelf that contains a item from the picking list
+        picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves); // Sets picking_shelve to the corresponding shelf that contains an item from the picking list
     }
 
+    // Create a robot
     robot_t* robot1 = create_robot();
-    warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
+    warehouse[columns * robot1->y + robot1->x] = robot; // Sets the robot in the warehouse
 
     // Print the warehouse to the console
     print_warehouse(warehouse, rows, columns);
 
-    // The robot finds the items in the picking list, then gets them and returns them to a point.
-    robot_get_picking_list(robot1, warehouse, rows, columns, picking_list, amount_of_picking_items, shelves, n_shelves);
+    // move the robot to a point
+    move_robot_to_point(robot1, warehouse, rows, columns, 9, 9);
 
-    // move the robot using the bruteforce algorithm:
-    // bruteforce(warehouse, robot1, 14, 0, columns, rows);
+    // The robot finds the items in the picking list, then gets them and returns them to a point.
+    robot_get_picking_list(robot1, warehouse, rows, columns, pickingItems, AMOUNT_OF_PICKING_ITEMS, shelves, n_shelves);
+
 
     free_warehouse(warehouse);
     free_robot(robot1);
