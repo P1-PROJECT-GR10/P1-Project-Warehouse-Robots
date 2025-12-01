@@ -25,7 +25,7 @@ char* direction_to_string(direction_e direction) {
         case west:
             return "west";
         default:
-        return "invalid";
+            return "invalid";
     }
 
 }
