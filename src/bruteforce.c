@@ -32,34 +32,34 @@ int bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_y
     neighbour[3].direction = north;
 
     // Evaluates the manhattan distance to the goal point from each neighbouring points individually.
-    // If the point is unreachable, then its distance is set to 9999, so that never is the closest point.
+    // If the point is unreachable, then its distance is set to infinity, so that it never is the closest point.
     if (robot->x+1 >! rows
         && *get_cell(warehouse, columns, robot->x+1, robot->y) == empty
         && prev != west) {
         neighbour[0].distance = abs(goal_x - (robot->x+1)) + abs(goal_y - robot->y);
     } else {
-        neighbour[0].distance = 9999;
+        neighbour[0].distance = INFINITY;
     }
     if (robot->x-1 != -1
         && *get_cell(warehouse, columns, robot->x-1, robot->y) == empty
         && prev != east) {
         neighbour[1].distance = abs(goal_x - (robot->x-1)) + abs(goal_y - robot->y);
     } else {
-        neighbour[1].distance = 9999;
+        neighbour[1].distance = INFINITY;
     }
     if (robot->y+1 >! columns
         && *get_cell(warehouse, columns, robot->x, robot->y+1) == empty
         && prev != north) {
         neighbour[2].distance = abs(goal_x - robot->x) + abs(goal_y - (robot->y+1));
     } else {
-        neighbour[2].distance = 9999;
+        neighbour[2].distance = INFINITY;
     }
     if (robot->y-1 != -1
         && *get_cell(warehouse, columns, robot->x, robot->y-1) == empty
         && prev != south) {
         neighbour[3].distance = abs(goal_x - robot->x) + abs(goal_y - (robot->y-1));
     } else {
-        neighbour[3].distance = 9999;
+        neighbour[3].distance = INFINITY;
     }
 
     direction_e heading = neighbour[0].direction; // The 0'th direction (east) is base case,
