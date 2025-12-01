@@ -9,7 +9,10 @@ int main(void) {
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
     const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
-    int seed = time(NULL);
+    // Time Parameters and functionality
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    int seed = 123456789;
     srand(seed);
 
     FILE* items_file = fopen("items.txt", "r");
@@ -28,33 +31,11 @@ int main(void) {
     shelf_t* shelves[n_shelves];
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
+    drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
 
-    drop_zone_t drop_zones[AMOUNT_OF_DROP_ZONES]; // 10 should be a global definition, so out of bounds handling can be included in the set_drop_zone_cell func
-    int drop_zone_amount = 0;
+    set_drop_zone_cell(warehouse, drop_zones, 4, 17);
+    set_drop_zone_cell(warehouse, drop_zones, 5, 17);
 
-    set_drop_zone_cell(warehouse, drop_zones, &drop_zone_amount, 4, 17);
-    set_drop_zone_cell(warehouse, drop_zones, &drop_zone_amount, 5, 17);
-
-    /*
-
-    // Below is code for testing search functionality. Uncomment above to test.
-
-    for (int i = 0; i < n_shelves; i++) {
-        printf("[%d] %s %s\n", i, shelves[i]->item.color, shelves[i]->item.name);
-    }
-
-    char search_input_color[10] = "purple";
-    char search_input_title[10] = "tv";
-
-    shelf_t shelf_target_auto = *search_item(search_input_color, search_input_title, shelves, n_shelves);
-
-    printf("\nAuto search found: %s %s, at x: %d y: %d\n", shelf_target_auto.item.color, shelf_target_auto.item.name, shelf_target_auto.x, shelf_target_auto.y);
-
-    shelf_t shelf_target_manual = *manual_search_item(shelves, n_shelves);
-    printf("the item in the shelf is %s %s\n", shelf_target_manual.item.color, shelf_target_manual.item.name);
-    printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
-
-    */
     item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(pickingItems, items, AMOUNT_OF_PICKING_ITEMS, seed, n_shelves);
     display_picking_list(pickingItems, AMOUNT_OF_PICKING_ITEMS);
@@ -64,14 +45,7 @@ int main(void) {
         picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves); //Sets picking_shelve to the corresponding shelf that contains a item from the picking list
     }
 
-    //shelf_t shelf_target_auto = *search_item(search_input_color, search_input_title, shelves, n_shelves);
-
-    //printf("\nAuto search found: %s %s, at x: %d y: %d\n", shelf_target_auto.item.color, shelf_target_auto.item.name, shelf_target_auto.x, shelf_target_auto.y);
-
-
     robot_t* robot1 = create_robot();
-
-    //print_robot1_id(*robot1);
 
     warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
 
@@ -81,12 +55,19 @@ int main(void) {
 
     // This function prints the warehouse each time for testing - this can be removed
     move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
-
-    /*
     free_warehouse(warehouse);
     free_robot(robot1);
+    printf("Freeing shelves\n");
     free_shelves(shelves, n_shelves);
-     */
+    printf("Freeing drop zones\n");
+    free(drop_zones);
+    printf("Freed all!\n");
+
+    // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Runtime: %.9f seconds\n", runtime);
+    printf("Seed: %d\n", seed);
 
     return 0;
 }

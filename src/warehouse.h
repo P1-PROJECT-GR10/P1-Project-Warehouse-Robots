@@ -24,7 +24,7 @@
 //---------------------------------------ENUMERATIONS---------------------------------------
 
 /// Defines the state of a cell in a warehouse
-typedef enum cell {empty, shelf, drop_zone, robot} cell_e;
+typedef enum cell {empty, shelf, robot, drop_zone} cell_e;
 
 
 //---------------------------------------STRUCTURES---------------------------------------
@@ -46,9 +46,16 @@ typedef struct shelf {
 
 /// A structure for storing coordinates and dropzone activity.
 typedef struct drop_zone {
-    int x;
-    int y;
+    int x; ///< The x-coordinate of this drop zone
+    int y; ///< The x-coordinate of this drop zone
 } drop_zone_t;
+
+/// A structure for storing coordinates and dropzone activity.
+typedef struct {
+    drop_zone_t** zones;
+    int amount;
+    int capacity;
+} drop_zones;
 
 
 //---------------------------------------FUNCTIONS---------------------------------------
@@ -87,7 +94,7 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
  * @param x x-coordinate of the shelf
  * @param y y-coordinate of the shelf
  */
-void set_drop_zone_cell(int* warehouse, drop_zone_t* drop_zones,  int* drop_zone_amount, int x, int y);
+void set_drop_zone_cell(int* warehouse, drop_zones* drop_zones, int x, int y);
 
 /**
  * Helper function for printing warehouse\n
@@ -141,6 +148,14 @@ void file_read_items(item_t* items, int number_of_items, FILE* file);
  * @return A pointer to the generated shelf
  */
 struct shelf* generate_shelf(item_t item, int stock, int x, int y);
+
+/**
+ * A helper function for generating a struct to store the drop zones in
+ * @attention Remember to free allocated memory!
+ * @param capacity The maximum allowed amount of drop zones
+ * @return A pointer to the generated drop zones struct
+ */
+drop_zones* generate_drop_zones(int capacity);
 
 /**
  * Frees warehouse

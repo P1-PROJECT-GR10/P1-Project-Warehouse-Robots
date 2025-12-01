@@ -84,7 +84,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount);
  * @param drop_zones Array with the drop zones
  * @param drop_zone_amount Number of drop zones
  */
-int robot_drop_all(robot_t* robot, drop_zone_t* drop_zones, int drop_zone_amount);
+int robot_drop_all(robot_t* robot, drop_zones* drop_zones);
 
 /**
  * A function that returns 1 if the robot is in a valid drop zone
@@ -92,10 +92,10 @@ int robot_drop_all(robot_t* robot, drop_zone_t* drop_zones, int drop_zone_amount
  * @param drop_zones Array with the drop zones
  * @param drop_zone_amount Number of drop zones
  */
-int is_robot_in_drop_zone(robot_t* robot, drop_zone_t* drop_zones, int drop_zone_amount);
+int is_robot_in_drop_zone(robot_t* robot, drop_zones* drop_zones);
 
 /**
- * A function that free the robot
+ * A function that frees the robot memory allocation
  * @param robot1 Pointer to the struct robot_t that is being freed
  */
 void free_robot(robot_t* robot1);
