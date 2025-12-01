@@ -124,6 +124,8 @@ shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
     return 0;
 }
 
+
+
 /*
 int search_item(char search_input_color[7], char search_input_name[10], shelf_t shelves[], int n_shelves){
     for (int i = 0; i < n_shelves; i++){

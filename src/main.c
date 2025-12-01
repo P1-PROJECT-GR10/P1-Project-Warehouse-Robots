@@ -52,15 +52,11 @@ int main(void) {
     printf("the item in the shelf is %s %s\n", shelf_target_manual.item.color, shelf_target_manual.item.name);
     printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
 
-    item_t pickingItems[amount_of_picking_items];
-    generate_picking_list(pickingItems, items, amount_of_picking_items, seed, n_shelves);
-    display_picking_list(pickingItems, amount_of_picking_items);
-
-    for (int i = 0; i < n_shelves; i++) {
-        free(shelves[i]);
-    }
-
     */
+
+    item_t picking_list[amount_of_picking_items];
+    generate_picking_list(picking_list, items, amount_of_picking_items, seed, n_shelves);
+    display_picking_list(picking_list, amount_of_picking_items);
 
     robot_t* robot1 = create_robot();
 
@@ -72,9 +68,36 @@ int main(void) {
 
     // manual_movement(robot1, warehouse, rows, columns);
 
-    // This function prints the warehouse each time for testing - this can be removed
-    move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
 
+    for (int i = 0; i < amount_of_picking_items; i++) {
+
+        shelf_t* goal_shelf = search_item(picking_list[i].color, picking_list[i].name, shelves, n_shelves);
+
+
+        int goal_x = goal_shelf->x;
+        int goal_y;
+
+        int index = get_index(goal_shelf->x, goal_shelf->y+1, columns);
+        if (warehouse[index] == empty) {
+            goal_y = goal_shelf->y + 1;
+        } else {
+            goal_y = goal_shelf->y - 1;
+        }
+
+        printf("Item %d found at shelf x: %d, y: %d\n"
+               "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
+
+        move_robot_to_point(robot1, warehouse, rows, columns, goal_x, goal_y);
+         printf("Robot picks up item %d\n\n", i+1);
+    }
+
+    // This function prints the warehouse each time for testing - this can be removed
+    move_robot_to_point(robot1, warehouse, rows, columns, 9, 9); // Move robot back to (9, 9)
+
+
+    for (int i = 0; i < n_shelves; i++) {
+        free(shelves[i]);
+    }
     free(warehouse);
     free(robot1);
 
