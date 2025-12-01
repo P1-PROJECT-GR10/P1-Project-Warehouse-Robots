@@ -17,6 +17,8 @@
 #define SHELF_AMOUNT 3
 /// The number of items that gets generated on the picking list
 #define AMOUNT_OF_PICKING_ITEMS 5
+/// The maximum amount of drop zones
+#define AMOUNT_OF_DROP_ZONES 2
 
 
 //---------------------------------------ENUMERATIONS---------------------------------------

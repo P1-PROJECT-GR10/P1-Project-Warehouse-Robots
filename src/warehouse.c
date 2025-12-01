@@ -39,6 +39,12 @@ int* generate_layout(const int main_aisle_width, const int aisle_width, const in
 
 void set_drop_zone_cell(int* warehouse, drop_zone_t* drop_zones, int* drop_zone_amount, const int x, const int y) {
     int* cell = get_cell(warehouse, 17, x, y); // Remove magic number, once columns is made global definition
+
+    if (*drop_zone_amount >= AMOUNT_OF_DROP_ZONES) {
+        printf("Maximum amount of drop zones already reached\n");
+        return;
+    }
+
     if (*cell != shelf && *cell != drop_zone) {
         *cell = drop_zone;
         drop_zone_t drop_zone;
@@ -127,18 +133,6 @@ shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
     }
     return 0;
 }
-
-/*
-int search_item(char search_input_color[7], char search_input_name[10], shelf_t shelves[], int n_shelves){
-    for (int i = 0; i < n_shelves; i++){
-        if (strcmp(shelves[i].item.color, search_input_color) == 0 || strcmp(shelves[i].item.name, search_input_name) == 0) {
-            return i;
-        }
-    }
-
-return -1;
-}
- */
 
 void free_warehouse(int *warehouse){
     free(warehouse); //Free the warehouse
