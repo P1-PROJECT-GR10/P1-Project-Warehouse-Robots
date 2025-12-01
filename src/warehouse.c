@@ -26,6 +26,7 @@ int* generate_layout(const int main_aisle_width, const int aisle_width, const in
                     if (l <= 2) { // If l <= shelf_width, place shelf
                         warehouse[j]= shelf;
                         shelves[shelf_count] = generate_shelf(items[shelf_count], 10, k, i);
+                        printf("[%d] %s %s\n",shelf_count, shelves[shelf_count]->item.color, shelves[shelf_count]->item.name);
                         shelf_count++;
                     } else { // Else row must be aisle
                         warehouse[j] = empty;
@@ -35,6 +36,33 @@ int* generate_layout(const int main_aisle_width, const int aisle_width, const in
         }
     }
     return warehouse;
+}
+
+drop_zones* generate_drop_zones(int capacity) {
+    drop_zones* zones = (drop_zones*)malloc(sizeof(drop_zones));
+    zones->amount = 0;
+    zones->capacity = capacity;
+    zones->zones = (drop_zone_t**)malloc(sizeof(drop_zone_t*) * capacity);
+
+    return zones;
+}
+
+void set_drop_zone_cell(int* warehouse, drop_zones* drop_zones, const int x, const int y) {
+    int* cell = get_cell(warehouse, 17, x, y); // Remove magic number, once columns is made global definition
+
+    if (drop_zones->amount >= drop_zones->capacity) {
+        printf("Maximum amount of drop zones already reached\n");
+        return;
+    }
+
+    if (*cell != shelf && *cell != drop_zone) {
+        *cell = drop_zone;
+        drop_zone_t drop_zone;
+        drop_zone.x = x;
+        drop_zone.y = y;
+        drop_zones->zones[drop_zones->amount] = &drop_zone;
+        drop_zones->amount++;
+    }
 }
 
 void print_cell(cell_e cell) {
@@ -98,9 +126,9 @@ struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
     return shelf;
 }
 
-shelf_t* search_item(char search_input_color[20], char search_input_title[20], shelf_t* shelves[], int n_shelves) {
+shelf_t* search_item(char search_input_title[20], char search_input_color[20], shelf_t* shelves[], int n_shelves) {
     for (int i = 0; i < n_shelves; i++) {
-        if (strcmp(shelves[i]->item.color, search_input_color) == 0 &&
+        if (strcmp(shelves[i]->item.color, search_input_color) == 0 && //Using string compare to find the shelf where the item is located.
             strcmp(shelves[i]->item.name, search_input_title) == 0) {
             return shelves[i];
         }
@@ -109,15 +137,15 @@ shelf_t* search_item(char search_input_color[20], char search_input_title[20], s
 }
 
 shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
-
     char search_input_color[20];
     char search_input_name[20];
 
     printf("\nWrite your search input>");
-    scanf(" %6s %9s", search_input_color, search_input_name);
+    scanf(" %6s %9s", search_input_color, search_input_name); //input from user, assigns the string values to search_input_color and search_input_name
+
 
     for (int i = 0; i < n_shelves; i++) {
-        if (strcmp(shelves[i]->item.color, search_input_color) == 0 &&
+        if (strcmp(shelves[i]->item.color, search_input_color) == 0 && //String compare to find the correct shelf that holds the searched item.
             strcmp(shelves[i]->item.name, search_input_name) == 0) {
             return shelves[i];
             }
@@ -125,14 +153,12 @@ shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
     return 0;
 }
 
-/*
-int search_item(char search_input_color[7], char search_input_name[10], shelf_t shelves[], int n_shelves){
-    for (int i = 0; i < n_shelves; i++){
-        if (strcmp(shelves[i].item.color, search_input_color) == 0 || strcmp(shelves[i].item.name, search_input_name) == 0) {
-            return i;
-        }
-    }
-
-return -1;
+void free_warehouse(int *warehouse){
+    free(warehouse); //Free the warehouse
 }
- */
+
+void free_shelves(shelf_t* shelves[], int n_shelves){
+    for (int i = 0; i < n_shelves; i++) {
+        free(shelves[i]);
+    }
+}
