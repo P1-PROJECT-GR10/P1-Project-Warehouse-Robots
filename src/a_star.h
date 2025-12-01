@@ -181,3 +181,5 @@ char* node_came_from_to_string(node_t node);
  * @param columns The amount of columns in the map.
  */
 void print_node_map(node_t* node_map, int rows, int columns);
+
+bool is_valid(int x, int y, int rows, int columns);
