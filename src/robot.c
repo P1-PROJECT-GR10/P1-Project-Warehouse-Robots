@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "warehouse.h"
 #include "robot.h"
 
@@ -9,8 +8,8 @@ robot_t* create_robot() {
 
     robot1->robot_id = 1;
     robot1->number_of_items = 0;
-    robot1->x = 9;
-    robot1->y = 9;
+    robot1->x = 0;
+    robot1->y = 0;
 
     return robot1;
 }
@@ -97,10 +96,10 @@ void print_robot_xy(robot_t robot1) { // for testing purposes
     printf("%d, %d\n",robot1.x, robot1.y);
 }
 
-void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns) {
+void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t pickingItems[]) {
     int i = 1;
     char word;
-    printf("try moving the robot :), use: n, s, e, w, p or b (stop / break)\n");
+    printf("try moving the robot :), use: n, s, e, w, t, p or b (stop / break)\n");
     while (i == 1) {
         scanf("%c",&word);
         switch (word) {
@@ -126,11 +125,127 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns) {
             case 'b':
                 i = 0;
                 break;
+            case 't':
+                //robot_item_pickup(robot1, shelves[6], 1);
+                check_nearby_shelves(robot1, shelves, n_shelves, pickingItems);
+                break;
             default:
-                printf("unreadable expression, try: n, s, e, w, p or b (stop / break)\n");
+                printf("unreadable expression, try: n, s, e, w, t, p or b (stop / break)\n");
                 break;
 
         }
     }
 }
 
+
+void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, item_t pickingItems[]){
+    shelf_t* nearby_shelf[] = {NULL,NULL}; //Since there is only maximum 2 nearby_shelf
+
+    printf("Robot is on x:%d, y:%d\n", robot->x, robot->y);
+
+    for (int i = 0, index = 0; i < n_shelves && index < 2; i++){
+        if (shelves[i]->x == robot->x && (shelves[i]->y == robot->y-1 || shelves[i]->y == robot->y+1)){ //Finds the nearby shelves around the robot
+            nearby_shelf[index] = shelves[i];
+            index++;
+        }
+    }
+
+    if (nearby_shelf[0] == NULL && nearby_shelf[1] == NULL){
+        printf("Nearby shelf wasn't found):\n"); //Prints if there weren't found at least one shelf
+        return;
+    }
+    for (int n = 0; n < AMOUNT_OF_PICKING_ITEMS; n++){ //Runs the for loop AMOUNT_OF_PICKING_ITEMS times
+        for (int shelfID = 0; shelfID <= 1; shelfID++){ //Checks both nearby_shelves pr. AMOUNT_OF_PICKING_ITEMS
+            if (nearby_shelf[shelfID] != NULL){ //Checks the nearby_shelf is valid and has being assigned
+                if (strcmp(pickingItems[n].name, nearby_shelf[shelfID]->item.name) == 0 &&
+                    strcmp(pickingItems[n].color, nearby_shelf[shelfID]->item.color) == 0){ //Now checks if the nearby_shelves has an item in the picking list
+                    pickingItems[n] = (item_t){0}; //Sets the pickingItems to 0, therefore the item gets removed since it is being picked up.
+                    printf("The picking list is: ");
+                    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
+                        printf("%s %s %.2lf ", pickingItems[i].color, pickingItems[i].name, pickingItems[i].weight);
+                    }
+                    printf("\n \n");
+
+                    robot_item_pickup(robot, nearby_shelf[shelfID], 1); //Runs pickup function
+                }
+            }
+        }
+    }
+}
+
+
+void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
+    if (abs(robot->x - shelf->x) != 0 || abs(robot->y - shelf->y) != 1) {
+        printf("Error: Shelf isn't close enough.\n");
+        return;
+    }
+
+    if (amount + robot->number_of_items <= ROBOT_MAX_CAPACITY){
+        if (amount <= 0) {
+            printf("Error: the amount needs to be higher than 0 to pick something up.\n");
+            return;
+        }
+
+        if (shelf->stock >= amount) { //Checks if there is enough of the items needed on the shelf
+            shelf->stock -= amount;
+            robot->number_of_items += amount; //The robot gets the item amount transferred
+            printf("Robot %d picked %d item(s) from the shelve with the coordinats x: %d, y: %d. The robot is now carrying %d items.\n", robot->robot_id, amount, shelf->x, shelf->y, robot->number_of_items);
+
+            //Checks the robot's items from 0 to ROBOT_MAX_CAPACITY.
+            for (int k = 0; k < amount; k++){
+                for (int i = 0; i < ROBOT_MAX_CAPACITY; i++) {
+                    if (!robot->item[i].name[0]) {
+                        robot->item[i] = shelf->item; //Inserts the item struct from shelf to the robot
+                        break;
+                    }
+                }
+            }
+            printf("The shelf had: '%s %s', the robot is now carrying:\n", shelf->item.color, shelf->item.name);
+            for (int j = 0; j < ROBOT_MAX_CAPACITY; j++){
+                if (robot->item[j].name[0]){
+                    printf(" '%s %s'\n",robot->item[j].color, robot->item[j].name);
+                }
+            }
+        } else {
+            printf("Error: There were only %d items on the shelve and not the requested amount: %d\n", shelf->stock, amount);
+        }
+    } else{
+        printf("The robot can only carry %d! The robot was requested to pick up %d items but it carried %d before!\n", ROBOT_MAX_CAPACITY, amount, robot->number_of_items);
+    }
+}
+
+int is_robot_in_drop_zone(robot_t* robot, drop_zones* drop_zones) {
+    for (int i = 0; i < drop_zones->capacity; i++) {
+        if (robot->x != drop_zones->zones[i]->x || robot->y != drop_zones->zones[i]->y)
+            continue; // x or y isn't corresponding to drop zone i
+        return 1; // Robot is in a drop zone
+    }
+    return 0; // Robot isn't in a drop zone
+}
+
+int robot_drop_all(robot_t* robot, drop_zones* drop_zones) {
+    if (robot->number_of_items == 0) {
+        printf("Robot inventory is already empty\n");
+        return 0;
+    }
+
+    if (!is_robot_in_drop_zone(robot, drop_zones)) {
+        printf("Robot isn't in a dropzone\n");
+        return 0;
+    }
+
+    int steps = 0;
+    for (int i = 0; i < ROBOT_MAX_CAPACITY; i++) {
+        if (robot->item[i].weight != 0 && !strlen(robot->item[i].name) && !strlen(robot->item[i].color)) {
+            robot->item[i] = (item_t){0};
+            steps++;
+        }
+    }
+    robot->number_of_items = 0;
+    printf("Robot dropped %d items off in a drop zone\n",steps);
+    return steps;
+}
+
+void free_robot(robot_t* robot1){
+    free(robot1);
+}

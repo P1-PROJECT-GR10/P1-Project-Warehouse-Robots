@@ -181,3 +181,13 @@ char* node_came_from_to_string(node_t node);
  * @param columns The amount of columns in the map.
  */
 void print_node_map(node_t* node_map, int rows, int columns);
+
+/**
+ * Return whether a point is inside the width and height of a grid
+ * @param x x-coordinate of a point
+ * @param y y-coordinate of a point
+ * @param rows amount of rows in grid
+ * @param columns amount of columns in grid
+ * @return a boolean value representing whether the point is in bounds
+ */
+bool is_in_bounds(int x, int y, int rows, int columns);

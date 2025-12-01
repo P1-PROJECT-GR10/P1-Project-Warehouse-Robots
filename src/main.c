@@ -3,6 +3,7 @@
 #include "warehouse.h"
 #include "robot.h"
 #include "a_star.h"
+#include "bruteforce.h"
 
 int main(void) {
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
@@ -31,14 +32,20 @@ int main(void) {
     // Create shelves and generate warehouse
     shelf_t* shelves[n_shelves];
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
+    drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
 
-    // Create and display picking list
-    int amount_of_picking_items = 5;
-    item_t picking_list[amount_of_picking_items];
-    generate_picking_list(picking_list, items, amount_of_picking_items, seed, n_shelves);
-    display_picking_list(picking_list, amount_of_picking_items);
+    set_drop_zone_cell(warehouse, drop_zones, 4, 17);
+    set_drop_zone_cell(warehouse, drop_zones, 5, 17);
 
-    // Create robot
+    item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
+    generate_picking_list(pickingItems, items, AMOUNT_OF_PICKING_ITEMS, seed, n_shelves);
+    display_picking_list(pickingItems, AMOUNT_OF_PICKING_ITEMS);
+
+    shelf_t picking_shelves[AMOUNT_OF_PICKING_ITEMS];
+    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
+        picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves); //Sets picking_shelve to the corresponding shelf that contains a item from the picking list
+    }
+
     robot_t* robot1 = create_robot();
     warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
 
@@ -48,12 +55,13 @@ int main(void) {
     // The robot finds the items in the picking list, then gets them and returns them to a point.
     robot_get_picking_list(robot1, warehouse, rows, columns, picking_list, amount_of_picking_items, shelves, n_shelves);
 
-    // Free allocated memory
-    for (int i = 0; i < n_shelves; i++) {
-        free(shelves[i]);
-    }
-    free(warehouse);
-    free(robot1);
+    // move the robot using the bruteforce algorithm:
+    // bruteforce(warehouse, robot1, 14, 0, columns, rows);
+
+    free_warehouse(warehouse);
+    free_robot(robot1);
+    free_shelves(shelves, n_shelves);
+    free(drop_zones);
 
     // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
     clock_gettime(CLOCK_MONOTONIC, &end);

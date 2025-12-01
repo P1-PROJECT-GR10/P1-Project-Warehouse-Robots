@@ -119,7 +119,7 @@ int get_index(int x, int y, int columns) {
     return y * columns + x;
 }
 
-bool is_valid(int x, int y, int rows, int columns) {
+bool is_in_bounds(int x, int y, int rows, int columns) {
     if (x >= 0 && x < columns && y >= 0 && y < rows) {
         return true;
     } else {
@@ -207,7 +207,7 @@ node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int star
             int ny = current->y + directions[i][1];
 
             // Check is neighbour is inside warehouse
-            if (is_valid(nx, ny, rows, columns)) {
+            if (is_in_bounds(nx, ny, rows, columns)) {
                 // Get neighbour node from map
                 int n_index = get_index(nx, ny, columns);
                 node_t* neighbour = &node_map[n_index];
