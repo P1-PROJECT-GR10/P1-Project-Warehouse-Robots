@@ -123,35 +123,35 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
 }
 
 
-void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, item_t pickingItems[]){ //Der skal updateres funktionalitet i form input fra listen
-    shelf_t* nearby_shelf[] = {NULL,NULL};
+void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, item_t pickingItems[]){
+    shelf_t* nearby_shelf[] = {NULL,NULL}; //Since there is only maximum 2 nearby_shelf
 
     printf("Robot is on x:%d, y:%d\n", robot->x, robot->y);
 
     for (int i = 0, index = 0; i < n_shelves && index < 2; i++){
-        if (shelves[i]->x == robot->x && (shelves[i]->y == robot->y-1 || shelves[i]->y == robot->y+1)){
+        if (shelves[i]->x == robot->x && (shelves[i]->y == robot->y-1 || shelves[i]->y == robot->y+1)){ //Finds the nearby shelves around the robot
             nearby_shelf[index] = shelves[i];
             index++;
         }
     }
 
     if (nearby_shelf[0] == NULL && nearby_shelf[1] == NULL){
-        printf("Nearby shelf wasn't found):\n");
+        printf("Nearby shelf wasn't found):\n"); //Prints if there weren't found at least one shelf
         return;
     }
-    for (int n = 0; n < AMOUNT_OF_PICKING_ITEMS; n++){
-        for (int shelfID = 0; shelfID <= 1; shelfID++){
-            if (!nearby_shelf[shelfID] == NULL){
+    for (int n = 0; n < AMOUNT_OF_PICKING_ITEMS; n++){ //Runs the for loop AMOUNT_OF_PICKING_ITEMS times
+        for (int shelfID = 0; shelfID <= 1; shelfID++){ //Checks both nearby_shelves pr. AMOUNT_OF_PICKING_ITEMS
+            if (!nearby_shelf[shelfID] == NULL){ //Checks the nearby_shelf is valid and has being assigned
                 if (strcmp(pickingItems[n].name, nearby_shelf[shelfID]->item.name) == 0 &&
-                    strcmp(pickingItems[n].color, nearby_shelf[shelfID]->item.color) == 0){
-                    pickingItems[n] = (item_t){0};
+                    strcmp(pickingItems[n].color, nearby_shelf[shelfID]->item.color) == 0){ //Now checks if the nearby_shelves has an item in the picking list
+                    pickingItems[n] = (item_t){0}; //Sets the pickingItems to 0, therefore the item gets removed since it is being picked up.
                     printf("The picking list is: ");
                     for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
                         printf("%s %s %.2lf ", pickingItems[i].color, pickingItems[i].name, pickingItems[i].weight);
                     }
                     printf("\n \n");
 
-                    robot_item_pickup(robot, nearby_shelf[shelfID], 1); //1 tallet skal nok skiftes ud med en variabel på et tidspunkt.
+                    robot_item_pickup(robot, nearby_shelf[shelfID], 1); //Runs pickup function
                 }
             }
         }
@@ -195,5 +195,5 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
 }
 
 void free_robot(robot_t* robot1){
-    free(robot1);
+    free(robot1); //Frees the robot
 }

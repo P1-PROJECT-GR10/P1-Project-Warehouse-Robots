@@ -124,6 +124,15 @@ void file_read_items(item_t* items, int number_of_items, FILE* file);
  */
 struct shelf* generate_shelf(item_t item, int stock, int x, int y);
 
+/**
+ * Frees warehouse
+ * @param warehouse The warehouse
+ */
 void free_warehouse(int *warehouse);
 
+/**
+ * Frees shelves
+ * @param shelves An array of pointers to shelf_t structs
+ * @param n_shelves Number of shelves in the warehouse
+ */
 void free_shelves(shelf_t* shelves[], int n_shelves);
