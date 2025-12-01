@@ -9,8 +9,8 @@ robot_t* create_robot() {
 
     robot1->robot_id = 1;
     robot1->number_of_items = 0;
-    robot1->x = 9;
-    robot1->y = 9;
+    robot1->x = 0;
+    robot1->y = 0;
 
     return robot1;
 }
