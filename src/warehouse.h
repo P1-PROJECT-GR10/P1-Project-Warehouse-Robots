@@ -15,20 +15,24 @@
 #define SHELF_LENGTH 6
 /// How many shelves are generated when generating a warehouse layout
 #define SHELF_AMOUNT 3
+/// The number of items that gets generated on the picking list
+#define AMOUNT_OF_PICKING_ITEMS 5
+/// The maximum amount of drop zones
+#define AMOUNT_OF_DROP_ZONES 2
 
 
 //---------------------------------------ENUMERATIONS---------------------------------------
 
 /// Defines the state of a cell in a warehouse
-typedef enum cell {empty, shelf, robot} cell_e;
+typedef enum cell {empty, shelf, robot, drop_zone} cell_e;
 
 
 //---------------------------------------STRUCTURES---------------------------------------
 
 /// A structure for storing the color, name, and weight of an item.
 typedef struct item {
-    char color[7];  ///< String describing an items color
-    char name[10];  ///< String describing an items name
+    char color[32];  ///< String describing an items color
+    char name[32];  ///< String describing an items name
     double weight;  ///< The wight of an item
 } item_t;
 
@@ -39,6 +43,19 @@ typedef struct shelf {
     int x;          ///< The x-coordinate of this shelf
     int y;          ///< The y-coordinate of this shelf
 } shelf_t;
+
+/// A structure for storing coordinates and dropzone activity.
+typedef struct drop_zone {
+    int x; ///< The x-coordinate of this drop zone
+    int y; ///< The x-coordinate of this drop zone
+} drop_zone_t;
+
+/// A structure for storing coordinates and dropzone activity.
+typedef struct {
+    drop_zone_t** zones;
+    int amount;
+    int capacity;
+} drop_zones;
 
 
 //---------------------------------------FUNCTIONS---------------------------------------
@@ -68,6 +85,16 @@ int* get_cell(int* warehouse, int columns, int x, int y);
  * @return An array corresponding to a warehouse layout defined by input parameters
  */
 int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items);
+
+/**
+ * Set a cell to be of cell type drop zone
+ * @param warehouse The warehouse that should be printed
+ * @param drop_zones Array with the drop zones
+ * @param drop_zone_amount Number of drop zones
+ * @param x x-coordinate of the shelf
+ * @param y y-coordinate of the shelf
+ */
+void set_drop_zone_cell(int* warehouse, drop_zones* drop_zones, int x, int y);
 
 /**
  * Helper function for printing warehouse\n
@@ -121,3 +148,24 @@ void file_read_items(item_t* items, int number_of_items, FILE* file);
  * @return A pointer to the generated shelf
  */
 struct shelf* generate_shelf(item_t item, int stock, int x, int y);
+
+/**
+ * A helper function for generating a struct to store the drop zones in
+ * @attention Remember to free allocated memory!
+ * @param capacity The maximum allowed amount of drop zones
+ * @return A pointer to the generated drop zones struct
+ */
+drop_zones* generate_drop_zones(int capacity);
+
+/**
+ * Frees warehouse
+ * @param warehouse The warehouse
+ */
+void free_warehouse(int *warehouse);
+
+/**
+ * Frees shelves
+ * @param shelves An array of pointers to shelf_t structs
+ * @param n_shelves Number of shelves in the warehouse
+ */
+void free_shelves(shelf_t* shelves[], int n_shelves);

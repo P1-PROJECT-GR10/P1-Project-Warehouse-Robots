@@ -19,8 +19,7 @@ TEST_CASE(robot_moves_north,
         empty, robot, empty,
         empty, empty, empty,
     };
-
-    robot_t robot = {robot_id, n_items, x, y};
+    robot_t robot = {robot_id, n_items, {0}, x, y};
 /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, rows, columns, direction);
 /*--------------- Assert ---------------*/
@@ -47,7 +46,7 @@ TEST_CASE(robot_moves_south,
         empty, empty, empty,
     };
 
-    robot_t robot = {robot_id, n_items, x, y};
+    robot_t robot = {robot_id, n_items, {0}, x, y};
 /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, rows, columns, direction);
 /*--------------- Assert ---------------*/
@@ -74,7 +73,7 @@ TEST_CASE(robot_moves_west,
         empty, empty, empty,
     };
 
-    robot_t robot = {robot_id, n_items, x, y};
+    robot_t robot = {robot_id, n_items, {0}, x, y};
 /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, rows, columns, direction);
 /*--------------- Assert ---------------*/
@@ -101,7 +100,7 @@ TEST_CASE(robot_moves_east,
         empty, empty, empty,
     };
 
-    robot_t robot = {robot_id, n_items, x, y};
+    robot_t robot = {robot_id, n_items, {0}, x, y};
 /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, rows, columns, direction);
 /*--------------- Assert ---------------*/
@@ -128,7 +127,7 @@ TEST_CASE(move_robot_updates_arena,
         empty, empty, empty,
     };
 
-    robot_t robot1 = {robot_id, n_items, x, y};
+    robot_t robot1 = {robot_id, n_items, {0}, x, y};
 /*--------------- Act ---------------*/
     move_robot(&robot1, warehouse, rows, columns, direction);
 /*--------------- Assert ---------------*/
