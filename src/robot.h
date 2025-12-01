@@ -3,7 +3,7 @@
 
 //---------------------------------------ENUMERATIONS---------------------------------------
 
-typedef enum direction {north, south, east, west} direction_e;
+typedef enum direction {north, south, east, west, no_direction} direction_e;
 
 
 //---------------------------------------STRUCTURES---------------------------------------

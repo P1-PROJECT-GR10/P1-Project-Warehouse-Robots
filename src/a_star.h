@@ -148,3 +148,8 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length);
 void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y);
 
 void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves);
+
+char direction_to_char(direction_e direction);
+direction_e parent_direction(node_t node);
+char* node_to_string(node_t node);
+void print_node_map(node_t* node_map, int rows, int columns);

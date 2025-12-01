@@ -310,14 +310,15 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
         for (int i = 0; i< length; i++) {
             move_robot(robot, warehouse, rows, columns, path[i]);
             printf("Robot moves %s to x: %d, y: %d\n", direction_to_string(path[i]), robot->x, robot->y);
-            print_warehouse(warehouse, rows, columns);
-            printf("\n"); // For readability
+            //print_warehouse(warehouse, rows, columns);
+            //printf("\n"); // For readability
 
         }
         free(path);
     } else {
         printf("\nNo path found\n");
     }
+    print_node_map(node_map, rows, columns);
     free(node_map);
 }
 
@@ -345,4 +346,64 @@ void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int colum
     }
 
     move_robot_to_point(robot1, warehouse, rows, columns, 9, 9); // Move robot back to (9, 9) or a dropzone
+}
+
+char direction_to_char(direction_e direction) {
+    switch (direction) {
+        case north:
+            return '^';
+        case south:
+            return 'v';
+        case east:
+            return '>';
+        case west:
+            return '<';
+        default:
+            return '0';
+    }
+}
+
+direction_e parent_direction(node_t node) {
+    if (node.parent == NULL) return no_direction;
+
+    int dx = node.x - node.parent->x;
+    int dy = node.y - node.parent->y;
+
+    if (dx == -1) return west;
+    if (dx == 1) return east;
+    if (dy == -1) return north;
+    if (dy == 1) return south;
+
+    return EXIT_FAILURE;
+}
+
+char* node_to_string(node_t node) {
+    if (node.obstacle) return "|X";
+
+    if (node.visited) {
+        direction_e camefrom = parent_direction(node);
+        switch (camefrom) {
+            case north:
+                return "|^";
+            case south:
+                return "|v";
+            case east:
+                return "|>";
+            case west:
+                return "|<";
+            case no_direction:
+                return "|S";
+        }
+    }
+    return "| ";
+}
+
+void print_node_map(node_t* node_map, int rows, int columns) {
+    for (int y = 0; y < rows; y++) {
+        for (int x = 0; x < columns; x++) {
+            int index = get_index(x, y, columns);
+            printf("%s", node_to_string(node_map[index]));
+        }
+        printf("|\n");
+    }
 }
