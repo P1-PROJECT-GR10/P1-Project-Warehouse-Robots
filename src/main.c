@@ -28,6 +28,11 @@ int main(void) {
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
 
+    drop_zone_t drop_zones[10]; // Should be a global definition, so out of bounds handling can be included in the set_drop_zone_cell func
+    int drop_zone_amount = 0;
+
+    set_drop_zone_cell(warehouse, drop_zones, &drop_zone_amount, 4, 17);
+    set_drop_zone_cell(warehouse, drop_zones, &drop_zone_amount, 5, 17);
 
     /*
 

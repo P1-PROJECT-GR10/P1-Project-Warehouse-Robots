@@ -37,6 +37,18 @@ int* generate_layout(const int main_aisle_width, const int aisle_width, const in
     return warehouse;
 }
 
+void set_drop_zone_cell(int* warehouse, drop_zone_t* drop_zones, int* drop_zone_amount, const int x, const int y) {
+    int* cell = get_cell(warehouse, 17, x, y); // Remove magic number, once columns is made global definition
+    if (*cell != shelf && *cell != drop_zone) {
+        *cell = drop_zone;
+        drop_zone_t drop_zone;
+        drop_zone.x = x;
+        drop_zone.y = y;
+        drop_zones[*drop_zone_amount] = drop_zone;
+        (*drop_zone_amount)++;
+    }
+}
+
 void print_cell(cell_e cell) {
     switch (cell) {
         case empty:
@@ -100,7 +112,6 @@ shelf_t* search_item(char search_input_title[20], char search_input_color[20], s
 }
 
 shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
-
     char search_input_color[20];
     char search_input_name[20];
 

@@ -181,7 +181,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
                 }
             }
             printf("The shelf had: '%s %s', the robot is now carrying:\n", shelf->item.color, shelf->item.name);
-            for (int j = 0; j <= ROBOT_MAX_CAPACITY; j++){
+            for (int j = 0; j < ROBOT_MAX_CAPACITY; j++){
                 if (robot->item[j].name[0]){
                     printf(" '%s %s'\n",robot->item[j].color, robot->item[j].name);
                 }
@@ -192,6 +192,38 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
     } else{
         printf("The robot can only carry %d! The robot was requested to pick up %d items but it carried %d before!\n", ROBOT_MAX_CAPACITY, amount, robot->number_of_items);
     }
+}
+
+int is_robot_in_drop_zone(robot_t* robot, drop_zone_t* drop_zones, int drop_zone_amount) {
+    for (int i = 0; i < drop_zone_amount; i++) {
+        if (robot->x != drop_zones[i].x || robot->x != drop_zones[i].y)
+            continue; // x or y isn't corresponding to drop zone i
+        return 1; // Robot is in a drop zone
+    }
+    return 0; // Robot isn't in a drop zone
+}
+
+int robot_drop_all(robot_t* robot, drop_zone_t* drop_zones, int drop_zone_amount) {
+    if (robot->number_of_items == 0) {
+        printf("Robot inventory is already empty\n");
+        return 0;
+    }
+
+    if (!is_robot_in_drop_zone(robot, drop_zones, drop_zone_amount)) {
+        printf("Robot isn't in a dropzone\n");
+        return 0;
+    }
+
+    int steps = 0;
+    for (int i = 0; i < ROBOT_MAX_CAPACITY; i++) {
+        if (robot->item[i].weight != 0 && !strlen(robot->item[i].name) && !strlen(robot->item[i].color)) {
+            robot->item[i] = (item_t){0};
+            steps++;
+        }
+    }
+    robot->number_of_items = 0;
+    printf("Robot dropped %d items off in a drop zone\n",steps);
+    return steps;
 }
 
 void free_robot(robot_t* robot1){
