@@ -1,8 +1,10 @@
 
-add_executable(test_warehouse test_warehouse.c ../src/warehouse.c
-        ../src/bruteforce.c
-        ../src/bruteforce.h)
-target_link_libraries(test_warehouse)
+add_executable(test_warehouse test_warehouse.c)
+target_link_libraries(test_warehouse mtest warehouse)
+
+add_executable(test_robot test_robot.c)
+target_link_libraries(test_robot mtest robot)
+
 
 # Copy test data file (test-items.txt) into the test's build directory
 configure_file(
@@ -11,4 +13,4 @@ configure_file(
         COPYONLY
 )
 
-add_test(NAME r_warehouse_test COMMAND test_warehouse)
+discover_tests(test_warehouse test_robot)

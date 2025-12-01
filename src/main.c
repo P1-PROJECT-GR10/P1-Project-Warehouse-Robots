@@ -1,11 +1,21 @@
+#include <time.h>
+#include "generate_picking_list.h"
+#include "warehouse.h"
+#include "robot.h"
+#include "a_star.h"
 #include "bruteforce.h"
-
-
 
 int main(void) {
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
     const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
     const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
+
+    // Time Parameters and functionality
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    int seed = 123456789;
+    srand(seed);
+    int amount_of_picking_items = 5;
 
     FILE* items_file = fopen("items.txt", "r");
     if (items_file == NULL) {
@@ -16,13 +26,13 @@ int main(void) {
 
     item_t items[n_shelves];
 
+    file_read_items(items, n_shelves, items_file);
+
     fclose(items_file);
 
     shelf_t* shelves[n_shelves];
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
-
-    //print_warehouse(warehouse, rows, columns);
 
     /*
 
@@ -43,27 +53,43 @@ int main(void) {
     printf("the item in the shelf is %s %s\n", shelf_target_manual.item.color, shelf_target_manual.item.name);
     printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
 
-    */
+    item_t pickingItems[amount_of_picking_items];
+    generate_picking_list(pickingItems, items, amount_of_picking_items, seed, n_shelves);
+    display_picking_list(pickingItems, amount_of_picking_items);
 
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
     }
 
+    */
+
     robot_t* robot1 = create_robot();
+
     //print_robot1_id(*robot1);
 
     warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
 
     print_warehouse(warehouse, rows, columns);
+    
+    // manually move the robot:
+    // manual_movement(robot1, warehouse, rows, columns);
 
-    bruteforce(warehouse, robot1, 10, 9, columns, rows);
+    // move the robot using the bruteforce algorithm:
+    //bruteforce(warehouse, robot1, 14, 0, columns, rows);
+
+    // This function prints the warehouse each time for testing - this can be removed
+    move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
 
 
-
-    //manual_movement(robot1, warehouse, rows, columns);
 
     free(warehouse);
     free(robot1);
+
+    // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Runtime: %.9f seconds\n", runtime);
+    printf("Seed: %d\n", seed);
 
     return 0;
 }

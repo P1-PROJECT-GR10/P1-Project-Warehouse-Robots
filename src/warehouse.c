@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items) {
+int* generate_layout(const int main_aisle_width, const int aisle_width, const int shelf_length, const int rows, const int columns, shelf_t* shelves[], item_t* items) {
     int* warehouse = (int*)malloc(sizeof(*warehouse)*columns*rows);
 
     int shelf_count = 0;
@@ -56,7 +56,15 @@ int* get_cell(int* warehouse, int columns, int x, int y) {
 }
 
 void print_warehouse(int* warehouse, int rows, int columns) {
+    // Print row of x-coords
+    printf("Y: X:");
+    for (int i = 0; i < columns; i++) {
+        printf("%d ", i % 10);
+    }
+    printf("\n");
+
     for (int i = 0; i < rows; i++) {
+        printf("%d - ", i % 10);    // Prints y-coords
         for (int j = 0; j < columns; j++) {
             int* cell = get_cell(warehouse, columns, j, i);
             print_cell(*cell);
@@ -65,20 +73,20 @@ void print_warehouse(int* warehouse, int rows, int columns) {
     }
 }
 
-int file_read_items(item_t* items, int n_items, FILE* file) {
+void file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
     int i;
     for (i = 0; i < n_items; i++) {
         int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
         if(success != 3){
-            break; // Add printf for error handling
+            printf("Failed to read enough fields for item %d, only read %d field(s).", i, success);
+            exit(EXIT_FAILURE);
         }
         items[i] = item;
     }
     if (i < n_items) {
         printf("Failed to generate %d items, only read %d items from file.\n", n_items, i);
     }
-    return i;
 }
 
 struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
