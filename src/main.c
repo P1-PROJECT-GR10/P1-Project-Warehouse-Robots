@@ -18,15 +18,16 @@ int main(void) {
         exit(EXIT_FAILURE);
     }
 
-    item_t* items[n_shelves];
+    item_t items[n_shelves];
 
     file_read_items(items, n_shelves, items_file);
 
     fclose(items_file);
 
-    shelf_t shelves[n_shelves];
+    shelf_t* shelves[n_shelves];
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
+
 
     /*
 
@@ -51,6 +52,17 @@ int main(void) {
     item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(pickingItems, items, AMOUNT_OF_PICKING_ITEMS, seed, n_shelves);
     display_picking_list(pickingItems, AMOUNT_OF_PICKING_ITEMS);
+
+    shelf_t picking_shelves[AMOUNT_OF_PICKING_ITEMS];
+    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
+        printf("%d\n",i);
+        picking_shelves[i] = *search_item(pickingItems[i].name, pickingItems[i].color, shelves, n_shelves);
+
+    }
+
+    //shelf_t shelf_target_auto = *search_item(search_input_color, search_input_title, shelves, n_shelves);
+
+    //printf("\nAuto search found: %s %s, at x: %d y: %d\n", shelf_target_auto.item.color, shelf_target_auto.item.name, shelf_target_auto.x, shelf_target_auto.y);
 
 
     robot_t* robot1 = create_robot();
