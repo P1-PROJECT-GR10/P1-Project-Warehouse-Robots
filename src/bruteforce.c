@@ -17,7 +17,7 @@ int get_mirror_direction(neighbour_t neighbour) {
         case west:
             return east;
         default:
-            printf("wrong input in funktion: get_mirror_direction");
+            printf("wrong input in function: get_mirror_direction");
             return -1;
     }
 }
@@ -39,7 +39,7 @@ void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int colu
     }
 
     // checks if goal point is out of bounds, i.e. impassible.
-    if (goal_x < 0 || goal_x > columns || goal_y < 0 || goal_y > rows) {
+    if (is_valid(goal_x, goal_y, rows, columns) == false) {
         printf("can't reach target, as it is out of bounds! :(\n");
         return;
     }
