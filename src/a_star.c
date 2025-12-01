@@ -1,8 +1,5 @@
 #include "a_star.h"
 
-#include <math.h>
-#include "warehouse.h"
-
 int manhattan_h(node_t current, node_t goal) {
     return abs(current.x - goal.x) + abs(current.y - goal.y);
 }
@@ -122,7 +119,7 @@ int get_index(int x, int y, int columns) {
     return y * columns + x;
 }
 
-bool is_valid(int x, int y, int rows, int columns) {
+bool is_in_bounds(int x, int y, int rows, int columns) {
     if (x >= 0 && x < columns && y >= 0 && y < rows) {
         return true;
     } else {
@@ -210,7 +207,7 @@ node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int star
             int ny = current->y + directions[i][1];
 
             // Check is neighbour is inside warehouse
-            if (is_valid(nx, ny, rows, columns)) {
+            if (is_in_bounds(nx, ny, rows, columns)) {
                 // Get neighbour node from map
                 int n_index = get_index(nx, ny, columns);
                 node_t* neighbour = &node_map[n_index];
@@ -313,13 +310,93 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
         for (int i = 0; i< length; i++) {
             move_robot(robot, warehouse, rows, columns, path[i]);
             printf("Robot moves %s to x: %d, y: %d\n", direction_to_string(path[i]), robot->x, robot->y);
-            print_warehouse(warehouse, rows, columns);
-            printf("\n"); // For readability
+            //print_warehouse(warehouse, rows, columns);
+            //printf("\n"); // For readability
 
         }
         free(path);
     } else {
         printf("\nNo path found\n");
     }
+    print_node_map(node_map, rows, columns);
     free(node_map);
+    print_warehouse(warehouse, rows, columns);
+}
+
+void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves) {
+    for (int i = 0; i < amount_of_picking_items; i++) {
+
+        shelf_t* goal_shelf = search_item(picking_list[i].name, picking_list[i].color, shelves, n_shelves);
+        int goal_x = goal_shelf->x;
+        int goal_y;
+
+        int index = get_index(goal_shelf->x, goal_shelf->y+1, columns);
+        if (warehouse[index] == empty) {
+            goal_y = goal_shelf->y + 1;
+        } else {
+            goal_y = goal_shelf->y - 1;
+        }
+
+        printf("Item %d found at shelf x: %d, y: %d\n"
+               "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
+
+        move_robot_to_point(robot1, warehouse, rows, columns, goal_x, goal_y);
+        printf("Robot picks up item %d\n\n", i+1);
+    }
+
+    move_robot_to_point(robot1, warehouse, rows, columns, 9, 9); // Move robot back to (9, 9) or a dropzone
+}
+
+direction_e parent_direction(node_t node) {
+
+    if (node.parent == NULL) return no_direction;
+
+    int dx = node.x - node.parent->x;
+    int dy = node.y - node.parent->y;
+
+    if (dx == -1) return west;
+    if (dx == 1) return east;
+    if (dy == -1) return north;
+    if (dy == 1) return south;
+
+    return EXIT_FAILURE;
+}
+
+char* node_came_from_to_string(node_t node) {
+    if (node.obstacle) return "|X";
+
+    if (node.visited) {
+        direction_e camefrom = parent_direction(node);
+        switch (camefrom) {
+            case north:
+                return "|^";
+            case south:
+                return "|v";
+            case east:
+                return "|>";
+            case west:
+                return "|<";
+            case no_direction:
+                return "|S";
+        }
+    }
+    return "| ";
+}
+
+void print_node_map(node_t* node_map, int rows, int columns) {
+    // Print row of x-coords
+    printf("\nY: X:");
+    for (int x = 0; x < columns; x++) {
+        printf("%d ", x % 10);
+    }
+    printf("\n");
+
+    for (int y = 0; y < rows; y++) {
+        printf("%d - ", y % 10);    // Prints y-coords
+        for (int x = 0; x < columns; x++) {
+            int index = get_index(x, y, columns);
+            printf("%s", node_came_from_to_string(node_map[index]));
+        }
+        printf("|\n");
+    }
 }

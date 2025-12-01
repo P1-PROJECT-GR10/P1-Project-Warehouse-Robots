@@ -1,6 +1,5 @@
 #include "warehouse.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 
 int* generate_layout(const int main_aisle_width, const int aisle_width, const int shelf_length, const int rows, const int columns, shelf_t* shelves[], item_t* items) {
     int* warehouse = (int*)malloc(sizeof(*warehouse)*columns*rows);
@@ -26,7 +25,7 @@ int* generate_layout(const int main_aisle_width, const int aisle_width, const in
                     if (l <= 2) { // If l <= shelf_width, place shelf
                         warehouse[j]= shelf;
                         shelves[shelf_count] = generate_shelf(items[shelf_count], 10, k, i);
-                        printf("[%d] %s %s\n",shelf_count, shelves[shelf_count]->item.color, shelves[shelf_count]->item.name);
+                        //printf("[%d] %s %s\n",shelf_count, shelves[shelf_count]->item.color, shelves[shelf_count]->item.name);
                         shelf_count++;
                     } else { // Else row must be aisle
                         warehouse[j] = empty;
@@ -85,7 +84,7 @@ int* get_cell(int* warehouse, int columns, int x, int y) {
 
 void print_warehouse(int* warehouse, int rows, int columns) {
     // Print row of x-coords
-    printf("Y: X:");
+    printf("\nY: X:");
     for (int i = 0; i < columns; i++) {
         printf("%d ", i % 10);
     }
@@ -126,7 +125,7 @@ struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
     return shelf;
 }
 
-shelf_t* search_item(char search_input_title[20], char search_input_color[20], shelf_t* shelves[], int n_shelves) {
+shelf_t* search_item(char search_input_title[32], char search_input_color[32], shelf_t* shelves[], int n_shelves) {
     for (int i = 0; i < n_shelves; i++) {
         if (strcmp(shelves[i]->item.color, search_input_color) == 0 && //Using string compare to find the shelf where the item is located.
             strcmp(shelves[i]->item.name, search_input_title) == 0) {
@@ -152,6 +151,8 @@ shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves) {
     }
     return 0;
 }
+
+
 
 void free_warehouse(int *warehouse){
     free(warehouse); //Free the warehouse

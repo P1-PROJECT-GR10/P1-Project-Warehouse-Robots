@@ -49,4 +49,4 @@ void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int colu
  */
 int bruteforce_recursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev, int moves);
 
-bool is_valid(int x, int y, int rows, int columns);
+bool is_in_bounds(int x, int y, int rows, int columns);
