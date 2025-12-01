@@ -3,6 +3,7 @@
 #include "warehouse.h"
 #include "robot.h"
 #include "a_star.h"
+#include "bruteforce.h"
 
 int main(void) {
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
@@ -50,8 +51,12 @@ int main(void) {
     warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
 
     print_warehouse(warehouse, rows, columns);
-
+    
+    // manually move the robot:
     // manual_movement(robot1, warehouse, rows, columns);
+
+    // move the robot using the bruteforce algorithm:
+    // bruteforce(warehouse, robot1, 14, 0, columns, rows);
 
     // This function prints the warehouse each time for testing - this can be removed
     move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
