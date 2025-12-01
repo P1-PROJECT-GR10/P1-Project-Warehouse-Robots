@@ -144,3 +144,5 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length);
  * @param goal_y y-coordinate of the goal point
  */
 void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y);
+
+bool is_valid(int x, int y, int rows, int columns);
