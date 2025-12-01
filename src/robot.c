@@ -10,9 +10,6 @@ robot_t* create_robot() {
     robot1->number_of_items = 0;
     robot1->x = 9;
     robot1->y = 9;
-    for (int i = 0; i < ROBOT_MAX_CAPACITY; i++){
-        robot1->item[i] = (item_t){0}; //Sets every space in the robot to 0
-    }
 
     return robot1;
 }
