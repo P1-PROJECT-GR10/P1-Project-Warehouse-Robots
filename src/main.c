@@ -2,6 +2,7 @@
 #include "generate_picking_list.h"
 #include "warehouse.h"
 #include "robot.h"
+#include "a_star.h"
 
 int main(void) {
     const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
@@ -69,13 +70,17 @@ int main(void) {
 
 
     robot_t* robot1 = create_robot();
+
     //print_robot1_id(*robot1);
 
     warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
 
     print_warehouse(warehouse, rows, columns);
 
-    manual_movement(robot1, warehouse, rows, columns, shelves, n_shelves, pickingItems);
+    // manual_movement(robot1, warehouse, rows, columns);
+
+    // This function prints the warehouse each time for testing - this can be removed
+    move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
 
     /*
     free_warehouse(warehouse);
