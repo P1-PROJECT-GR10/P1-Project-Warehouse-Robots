@@ -1,10 +1,24 @@
 name: Simulations
 
 on:
-  workflow_dispatch: # run manually from GitHub UI
-  # If you want automatic runs too:
-  # push:
-  #   branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      picking_items:
+        description: "How many items should the robot pickup?"
+        required: false
+        default: "5"
+      runs:
+        description: "How many simulation runs?"
+        required: false
+        default: "1"
+      heuristic_weight:
+        description: "A* heuristic weight"
+        required: false
+        default: "2.0"
+      seed:
+        description: "Which seed would you like to use?"
+        required: false
+        default: "123456789"
 
 env:
   BUILD_TYPE: Release
@@ -31,11 +45,16 @@ jobs:
             --parallel \
             --target Simulation
 
-      - name: Run Simulation
+      - name: Run Simulation with parameters
         working-directory: ${{ github.workspace }}/build
         run: |
-          ./Simulation   # results.txt is created automatically
-          echo "Simulation finished."
+          ./Simulation \
+            ${{ github.event.inputs.picking_items }} \
+            ${{ github.event.inputs.runs }} \
+            ${{ github.event.inputs.heuristic_weight }} \
+            ${{ github.event.inputs.seed }}
+
+          echo "Simulation finished with custom parameters."
 
       - name: Upload results.txt Artifact
         uses: actions/upload-artifact@v4
