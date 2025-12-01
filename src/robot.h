@@ -22,6 +22,8 @@ typedef struct robot_t {
 
 //---------------------------------------FUNCTIONS---------------------------------------
 
+char* direction_to_string(direction_e direction);
+
 /**
  * A function for creating a robot with the correct starting parameters.
  * @attention Free memory before returning!
