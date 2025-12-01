@@ -14,8 +14,8 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &start);
     int seed = 123456789;
     srand(seed);
-    int amount_of_picking_items = 5;
 
+    // Open item file
     FILE* items_file = fopen("items.txt", "r");
     if (items_file == NULL) {
         printf("Failed to open file.\n");
@@ -23,30 +23,32 @@ int main(void) {
         exit(EXIT_FAILURE);
     }
 
+    // Read item file to items array
     item_t items[n_shelves];
-
     file_read_items(items, n_shelves, items_file);
-
     fclose(items_file);
 
+    // Create shelves and generate warehouse
     shelf_t* shelves[n_shelves];
-
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
 
+    // Create and display picking list
+    int amount_of_picking_items = 5;
     item_t picking_list[amount_of_picking_items];
     generate_picking_list(picking_list, items, amount_of_picking_items, seed, n_shelves);
     display_picking_list(picking_list, amount_of_picking_items);
 
+    // Create robot
     robot_t* robot1 = create_robot();
-
-    //print_robot1_id(*robot1);
-
     warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
 
+    // Print the warehouse to the console
     print_warehouse(warehouse, rows, columns);
 
+    // The robot finds the items in the picking list, then gets them and returns them to a point.
     robot_get_picking_list(robot1, warehouse, rows, columns, picking_list, amount_of_picking_items, shelves, n_shelves);
 
+    // Free allocated memory
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
     }

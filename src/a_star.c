@@ -348,22 +348,8 @@ void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int colum
     move_robot_to_point(robot1, warehouse, rows, columns, 9, 9); // Move robot back to (9, 9) or a dropzone
 }
 
-char direction_to_char(direction_e direction) {
-    switch (direction) {
-        case north:
-            return '^';
-        case south:
-            return 'v';
-        case east:
-            return '>';
-        case west:
-            return '<';
-        default:
-            return '0';
-    }
-}
-
 direction_e parent_direction(node_t node) {
+
     if (node.parent == NULL) return no_direction;
 
     int dx = node.x - node.parent->x;
@@ -377,7 +363,7 @@ direction_e parent_direction(node_t node) {
     return EXIT_FAILURE;
 }
 
-char* node_to_string(node_t node) {
+char* node_came_from_to_string(node_t node) {
     if (node.obstacle) return "|X";
 
     if (node.visited) {
@@ -392,7 +378,7 @@ char* node_to_string(node_t node) {
             case west:
                 return "|<";
             case no_direction:
-                return "|S";
+                return "|G";
         }
     }
     return "| ";
@@ -410,7 +396,7 @@ void print_node_map(node_t* node_map, int rows, int columns) {
         printf("%d - ", y % 10);    // Prints y-coords
         for (int x = 0; x < columns; x++) {
             int index = get_index(x, y, columns);
-            printf("%s", node_to_string(node_map[index]));
+            printf("%s", node_came_from_to_string(node_map[index]));
         }
         printf("|\n");
     }
