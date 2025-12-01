@@ -63,6 +63,7 @@ int main(void) {
     */
 
     robot_t* robot1 = create_robot();
+
     //print_robot1_id(*robot1);
 
     warehouse[columns * robot1->y + robot1->x] = robot; //Sets the robot in the warehouse
@@ -71,7 +72,8 @@ int main(void) {
 
     // manual_movement(robot1, warehouse, rows, columns);
 
-    move_robot_to_point(robot1, warehouse, rows, columns, 0, 4);
+    // This function prints the warehouse each time for testing - this can be removed
+    move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
 
     free(warehouse);
     free(robot1);

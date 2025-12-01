@@ -126,6 +126,21 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns);
  */
 node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int start_x, int start_y, int goal_x, int goal_y);
 
+/**
+ * Reconstructs a path from a goal node through identifying parent nodes
+ * @param goal_node The resulting goal_node from an A* pathfinding algorithm
+ * @param path_length Total length of the path (usually the g-cost)
+ * @return An array of directions indicating as a "move list" resulting in the correct path
+ */
 direction_e* reconstruct_path(node_t* goal_node, int* path_length);
 
+/**
+ * A function that uses A* pathfinding and path reconstruction for moving a robot to a point
+ * @param robot The robot that should move
+ * @param warehouse An array representing the map of a warehouse
+ * @param rows the amount of rows in the warehouse
+ * @param columns the amount of columns in the warehouse
+ * @param goal_x x-coordinate of the goal point
+ * @param goal_y y-coordinate of the goal point
+ */
 void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y);

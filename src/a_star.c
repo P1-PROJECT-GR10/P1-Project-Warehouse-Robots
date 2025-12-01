@@ -296,31 +296,30 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
     node_t* result = a_star(warehouse, node_map, rows, columns, robot->x, robot->y, goal_x, goal_y);
 
     if (result != NULL) {
-        printf("Path found! Backtracking:\n");
-        node_t* step = result;
-        while (step != NULL) {
-            printf("(%d,%d) <-", step->x, step->y);
-            step = step->parent;
-        }
-        printf("Start\n");
-    }
-
-    if (result != NULL) {
+        printf("\nPath found!\n");
         int length = 0;
 
         // Reconstruct Path
         direction_e* path = reconstruct_path(result, &length);
 
-        printf("Path length is: %d\n", length);
+        printf("Path length is: %d\n\n", length);
+
+        // Print current robot position
+        printf("Robot starts at x: %d, y: %d\n", robot->x, robot->y);
+        print_warehouse(warehouse, rows, columns);
+        printf("\n");
 
         // Move robot
         for (int i = 0; i< length; i++) {
-            printf("Robot moves %s\n", direction_to_string(path[i]));
-
             move_robot(robot, warehouse, rows, columns, path[i]);
+            printf("Robot moves %s to x: %d, y: %d\n", direction_to_string(path[i]), robot->x, robot->y);
             print_warehouse(warehouse, rows, columns);
+            printf("\n"); // For readability
+
         }
         free(path);
+    } else {
+        printf("\nNo path found\n");
     }
     free(node_map);
 }
