@@ -1,7 +1,7 @@
 name: Simulations
 
 on:
-  workflow_dispatch:  # run manually from GitHub UI
+  workflow_dispatch: # run manually from GitHub UI
   # If you want automatic runs too:
   # push:
   #   branches: [ "main" ]
@@ -25,13 +25,17 @@ jobs:
         run: cmake -B ${{ github.workspace }}/build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
       - name: Build Simulation target
-        run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --parallel --target Simulation
+        run: |
+          cmake --build ${{ github.workspace }}/build \
+            --config ${{ env.BUILD_TYPE }} \
+            --parallel \
+            --target Simulation
 
       - name: Run Simulation
         working-directory: ${{ github.workspace }}/build
         run: |
-          ./Simulation > results.txt
-          echo "Simulation finished. Output saved to results.txt."
+          ./Simulation   # results.txt is created automatically
+          echo "Simulation finished."
 
       - name: Upload results.txt Artifact
         uses: actions/upload-artifact@v4
