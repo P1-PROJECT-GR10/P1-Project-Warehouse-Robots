@@ -80,6 +80,6 @@ int bruteforce_recoursive(int* warehouse, robot_t* robot, int goal_x, int goal_y
 
     prev = heading; // prepares the function for the next iteration.
 
-    bruteforce_recoursive(warehouse, robot, goal_x, goal_y, columns, rows, prev, moves + 1);
+    return bruteforce_recoursive(warehouse, robot, goal_x, goal_y, columns, rows, prev, moves + 1);
     // executes the next step.
 }
