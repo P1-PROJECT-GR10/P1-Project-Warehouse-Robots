@@ -14,6 +14,22 @@ robot_t* create_robot() {
     return robot1;
 }
 
+char* direction_to_string(direction_e direction) {
+    switch (direction) {
+        case north:
+            return "north";
+        case south:
+            return "south";
+        case east:
+            return "east";
+        case west:
+            return "west";
+        default:
+        return "invalid";
+    }
+
+}
+
 void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, direction_e direction) {
 
     switch (direction) {
@@ -74,7 +90,6 @@ void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, directio
             printf("Error: Invalid input\n");
             break;
     }
-
 }
 
 void print_robot_xy(robot_t robot1) { // for testing purposes

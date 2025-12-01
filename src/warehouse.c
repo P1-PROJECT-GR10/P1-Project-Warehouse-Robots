@@ -74,7 +74,15 @@ int* get_cell(int* warehouse, int columns, int x, int y) {
 }
 
 void print_warehouse(int* warehouse, int rows, int columns) {
+    // Print row of x-coords
+    printf("Y: X:");
+    for (int i = 0; i < columns; i++) {
+        printf("%d ", i % 10);
+    }
+    printf("\n");
+
     for (int i = 0; i < rows; i++) {
+        printf("%d - ", i % 10);    // Prints y-coords
         for (int j = 0; j < columns; j++) {
             int* cell = get_cell(warehouse, columns, j, i);
             print_cell(*cell);
@@ -89,7 +97,8 @@ void file_read_items(item_t* items, int n_items, FILE* file) {
     for (i = 0; i < n_items; i++) {
         int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
         if(success != 3){
-            break; // Add printf for error handling
+            printf("Failed to read enough fields for item %d, only read %d field(s).", i, success);
+            exit(EXIT_FAILURE);
         }
         items[i] = item;
     }
