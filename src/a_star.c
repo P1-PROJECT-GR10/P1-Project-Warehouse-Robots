@@ -399,7 +399,15 @@ char* node_to_string(node_t node) {
 }
 
 void print_node_map(node_t* node_map, int rows, int columns) {
+    // Print row of x-coords
+    printf("\nY: X:");
+    for (int x = 0; x < columns; x++) {
+        printf("%d ", x % 10);
+    }
+    printf("\n");
+
     for (int y = 0; y < rows; y++) {
+        printf("%d - ", y % 10);    // Prints y-coords
         for (int x = 0; x < columns; x++) {
             int index = get_index(x, y, columns);
             printf("%s", node_to_string(node_map[index]));

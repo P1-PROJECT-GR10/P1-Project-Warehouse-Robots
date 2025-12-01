@@ -57,7 +57,7 @@ int* get_cell(int* warehouse, int columns, int x, int y) {
 
 void print_warehouse(int* warehouse, int rows, int columns) {
     // Print row of x-coords
-    printf("Y: X:");
+    printf("\nY: X:");
     for (int i = 0; i < columns; i++) {
         printf("%d ", i % 10);
     }
