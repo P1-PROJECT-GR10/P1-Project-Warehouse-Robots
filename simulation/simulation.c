@@ -5,7 +5,6 @@
 #include "generate_picking_list.h"
 #include "robot.h"
 #include "a_star.h"
-
 /*
  *#######################################################################
  *##                                                                   ##
@@ -22,10 +21,10 @@ const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 const int rows = shelves_amount * (2 + aisle_width) + aisle_width;
 const int columns = main_aisle_width * 3 + shelf_length * 2;
 // Cost-functions & time influential variables
-const int picking_item_amount;
-const int runs;
-const double heuristic_weight;
-const double total_path_cost;
+const int picking_item_amount = 5;
+const int runs = 5;
+const double heuristic_weight = 5;
+const double total_path_cost = 20;
 
 /*
  *#######################################################################
@@ -41,7 +40,7 @@ int main(void) {
     int seed = 123456789;
     srand(seed);
 
-    // Seems redundant for a simulation
+    // Seems redundant for a simulation -> filepath has to be selected here
     FILE* items_file = fopen("items.txt", "r");
     if (items_file == NULL) {
         printf("Failed to open file.\n");
@@ -62,22 +61,19 @@ int main(void) {
     item_t pickingItems[picking_item_amount];
     generate_picking_list(pickingItems, items, picking_item_amount, seed, n_shelves);
 
-    const robot_t* robot1 = create_robot(); // const for now only 1 robot
+    robot_t* robot1 = create_robot();
     warehouse[columns * robot1->y + robot1->x] = robot;
 
+    for (int i = 0; i < n_shelves; i++) {
+        free(shelves[i]);
+    }
 
+    move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
 
-    /* Some simulation outputs
-     *A* runtime
-     *Path cost
-     *Number of expansions
-     *Memory usage
-     *Runtime across different seeds
-     *Runtime across different warehouse sizes
-     *Runtime with different heuristic weights
-    */
+    free(warehouse);
+    free(robot1);
 
-
+    // Ends the clock and gets the time.
     clock_gettime(CLOCK_MONOTONIC, &end);
     double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
 
@@ -85,8 +81,8 @@ int main(void) {
     printf("runs=%d\n", runs);
     printf("seed=%d\n", seed);
     printf("warehouse_size=%dx%d\n", rows, columns);
-    printf("total_runtime: %.9f seconds\n", runtime);
-    printf("avg_time=%f\n", runtime / runs);
+    printf("total_runtime=%.9f seconds\n", runtime);
+    printf("avg_time=%f seconds\n", runtime / runs);
     printf("avg_path_cost=%ld\n", avg_path_cost);
     printf("heuristic_weight=%f\n", heuristic_weight);
     return 0;
