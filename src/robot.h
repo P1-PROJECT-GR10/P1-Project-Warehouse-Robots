@@ -1,9 +1,12 @@
 #pragma once
 
+#include "warehouse.h"
+
 
 //---------------------------------------ENUMERATIONS---------------------------------------
 
 #define ROBOT_MAX_CAPACITY 8
+
 typedef enum direction {north, south, east, west} direction_e;
 
 
@@ -74,5 +77,21 @@ void check_nearby_shelves(robot_t* robot, shelf_t* shelves[], int n_shelves, ite
  * @param amount
  */
 void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount);
+
+/**
+ * A function that empties the robot's inventory and returns the amount of items dropped as an integer
+ * @param robot Pointer to the robot struct
+ * @param drop_zones Array with the drop zones
+ * @param drop_zone_amount Number of drop zones
+ */
+int robot_drop_all(robot_t* robot, drop_zone_t* drop_zones, int drop_zone_amount);
+
+/**
+ * A function that returns 1 if the robot is in a valid drop zone
+ * @param robot Pointer to the robot struct
+ * @param drop_zones Array with the drop zones
+ * @param drop_zone_amount Number of drop zones
+ */
+int is_robot_in_drop_zone(robot_t* robot, drop_zone_t* drop_zones, int drop_zone_amount);
 
 void free_robot(robot_t* robot1);

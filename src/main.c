@@ -28,6 +28,11 @@ int main(void) {
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
 
+    drop_zone_t drop_zones[10]; // Should be a global definition, so out of bounds handling can be included in the set_drop_zone_cell func
+    int drop_zone_amount = 0;
+
+    set_drop_zone_cell(warehouse, drop_zones, &drop_zone_amount, 4, 17);
+    set_drop_zone_cell(warehouse, drop_zones, &drop_zone_amount, 5, 17);
 
     /*
 
@@ -56,7 +61,7 @@ int main(void) {
     shelf_t picking_shelves[AMOUNT_OF_PICKING_ITEMS];
     for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
         picking_shelves[i] = *search_item(pickingItems[i].color,pickingItems[i].name, shelves, n_shelves);
-
+        printf("%s %s found at x:%d y:%d with stock %d\n",picking_shelves[i].item.color,picking_shelves[i].item.name,picking_shelves[i].x,picking_shelves[i].y,picking_shelves[i].stock);
     }
 
     //shelf_t shelf_target_auto = *search_item(search_input_color, search_input_title, shelves, n_shelves);

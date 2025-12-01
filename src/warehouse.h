@@ -22,7 +22,7 @@
 //---------------------------------------ENUMERATIONS---------------------------------------
 
 /// Defines the state of a cell in a warehouse
-typedef enum cell {empty, shelf, robot} cell_e;
+typedef enum cell {empty, shelf, drop_zone, robot} cell_e;
 
 
 //---------------------------------------STRUCTURES---------------------------------------
@@ -41,6 +41,12 @@ typedef struct shelf {
     int x;          ///< The x-coordinate of this shelf
     int y;          ///< The y-coordinate of this shelf
 } shelf_t;
+
+/// A structure for storing coordinates and dropzone activity.
+typedef struct drop_zone {
+    int x;
+    int y;
+} drop_zone_t;
 
 
 //---------------------------------------FUNCTIONS---------------------------------------
@@ -70,6 +76,16 @@ int* get_cell(int* warehouse, int columns, int x, int y);
  * @return An array corresponding to a warehouse layout defined by input parameters
  */
 int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items);
+
+/**
+ * Set a cell to be of cell type drop zone
+ * @param warehouse The warehouse that should be printed
+ * @param drop_zones Array with the drop zones
+ * @param drop_zone_amount Number of drop zones
+ * @param x x-coordinate of the shelf
+ * @param y y-coordinate of the shelf
+ */
+void set_drop_zone_cell(int* warehouse, drop_zone_t* drop_zones,  int* drop_zone_amount, int x, int y);
 
 /**
  * Helper function for printing warehouse\n
