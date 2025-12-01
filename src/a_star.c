@@ -1,8 +1,5 @@
 #include "a_star.h"
 
-#include <math.h>
-#include "warehouse.h"
-
 int manhattan_h(node_t current, node_t goal) {
     return abs(current.x - goal.x) + abs(current.y - goal.y);
 }
@@ -322,4 +319,30 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
         printf("\nNo path found\n");
     }
     free(node_map);
+}
+
+void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves) {
+    for (int i = 0; i < amount_of_picking_items; i++) {
+
+        shelf_t* goal_shelf = search_item(picking_list[i].color, picking_list[i].name, shelves, n_shelves);
+
+
+        int goal_x = goal_shelf->x;
+        int goal_y;
+
+        int index = get_index(goal_shelf->x, goal_shelf->y+1, columns);
+        if (warehouse[index] == empty) {
+            goal_y = goal_shelf->y + 1;
+        } else {
+            goal_y = goal_shelf->y - 1;
+        }
+
+        printf("Item %d found at shelf x: %d, y: %d\n"
+               "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
+
+        move_robot_to_point(robot1, warehouse, rows, columns, goal_x, goal_y);
+        printf("Robot picks up item %d\n\n", i+1);
+    }
+
+    move_robot_to_point(robot1, warehouse, rows, columns, 9, 9); // Move robot back to (9, 9) or a dropzone
 }

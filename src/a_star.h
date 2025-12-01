@@ -1,8 +1,10 @@
 #pragma once
 #include <stdbool.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "robot.h"
+#include "warehouse.h"
 
 
 //---------------------------------------STRUCTURES---------------------------------------
@@ -144,3 +146,5 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length);
  * @param goal_y y-coordinate of the goal point
  */
 void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y);
+
+void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves);

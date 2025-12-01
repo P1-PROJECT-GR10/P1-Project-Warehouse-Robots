@@ -33,27 +33,6 @@ int main(void) {
 
     int* warehouse = generate_layout(MAIN_AISLE_WIDTH, AISLE_WIDTH, SHELF_LENGTH, rows, columns, shelves, items);
 
-    /*
-
-    // Below is code for testing search functionality. Uncomment above to test.
-
-    for (int i = 0; i < n_shelves; i++) {
-        printf("[%d] %s %s\n", i, shelves[i]->item.color, shelves[i]->item.name);
-    }
-
-    char search_input_color[10] = "purple";
-    char search_input_title[10] = "tv";
-
-    shelf_t shelf_target_auto = *search_item(search_input_color, search_input_title, shelves, n_shelves);
-
-    printf("\nAuto search found: %s %s, at x: %d y: %d\n", shelf_target_auto.item.color, shelf_target_auto.item.name, shelf_target_auto.x, shelf_target_auto.y);
-
-    shelf_t shelf_target_manual = *manual_search_item(shelves, n_shelves);
-    printf("the item in the shelf is %s %s\n", shelf_target_manual.item.color, shelf_target_manual.item.name);
-    printf("The specified item was found at x: %d  y: %d\n", shelf_target_manual.x, shelf_target_manual.y);
-
-    */
-
     item_t picking_list[amount_of_picking_items];
     generate_picking_list(picking_list, items, amount_of_picking_items, seed, n_shelves);
     display_picking_list(picking_list, amount_of_picking_items);
@@ -66,34 +45,7 @@ int main(void) {
 
     print_warehouse(warehouse, rows, columns);
 
-    // manual_movement(robot1, warehouse, rows, columns);
-
-
-    for (int i = 0; i < amount_of_picking_items; i++) {
-
-        shelf_t* goal_shelf = search_item(picking_list[i].color, picking_list[i].name, shelves, n_shelves);
-
-
-        int goal_x = goal_shelf->x;
-        int goal_y;
-
-        int index = get_index(goal_shelf->x, goal_shelf->y+1, columns);
-        if (warehouse[index] == empty) {
-            goal_y = goal_shelf->y + 1;
-        } else {
-            goal_y = goal_shelf->y - 1;
-        }
-
-        printf("Item %d found at shelf x: %d, y: %d\n"
-               "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
-
-        move_robot_to_point(robot1, warehouse, rows, columns, goal_x, goal_y);
-         printf("Robot picks up item %d\n\n", i+1);
-    }
-
-    // This function prints the warehouse each time for testing - this can be removed
-    move_robot_to_point(robot1, warehouse, rows, columns, 9, 9); // Move robot back to (9, 9)
-
+    robot_get_picking_list(robot1, warehouse, rows, columns, picking_list, amount_of_picking_items, shelves, n_shelves);
 
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);
