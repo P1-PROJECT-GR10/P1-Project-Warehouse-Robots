@@ -31,8 +31,8 @@ typedef enum cell {empty, shelf, robot, drop_zone} cell_e;
 
 /// A structure for storing the color, name, and weight of an item.
 typedef struct item {
-    char color[7];  ///< String describing an items color
-    char name[10];  ///< String describing an items name
+    char color[32];  ///< String describing an items color
+    char name[32];  ///< String describing an items name
     double weight;  ///< The wight of an item
 } item_t;
 
