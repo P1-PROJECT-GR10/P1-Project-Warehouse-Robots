@@ -55,8 +55,7 @@ int main(void) {
 
     shelf_t picking_shelves[AMOUNT_OF_PICKING_ITEMS];
     for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
-        printf("%d\n",i);
-        picking_shelves[i] = *search_item(pickingItems[i].name, pickingItems[i].color, shelves, n_shelves);
+        picking_shelves[i] = *search_item(pickingItems[i].color,pickingItems[i].name, shelves, n_shelves);
 
     }
 
