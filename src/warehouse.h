@@ -124,8 +124,6 @@ shelf_t** populate_shelves(const warehouse_t* warehouse);
 /**
  * Set a cell to be of cell type drop zone
  * @param warehouse The warehouse that should be printed
- * @param drop_zones Array with the drop zones
- * @param drop_zone_amount Number of drop zones
  * @param x x-coordinate of the shelf
  * @param y y-coordinate of the shelf
  */
@@ -141,8 +139,6 @@ void print_cell(cell_e cell);
 /**
  * Prints the entire warehouse to the terminal with visual representation of the content of the cells
  * @param warehouse The warehouse that should be printed
- * @param rows Number of rows in the warehouse
- * @param columns Number of columns in the warehouse
  */
 void print_warehouse(const warehouse_t* warehouse);
 
@@ -150,16 +146,14 @@ void print_warehouse(const warehouse_t* warehouse);
  * Search function that finds the shelf containing the desired item
  * @param search_input_color The color of the desired item
  * @param search_input_name The name/title of the desired item
- * @param shelves An array of pointers to the shelves you want to search through
- * @param n_shelves Number of shelves in the warehouse.
+ * @param warehouse The warehouse heap
  * @return A pointer to the shelf containing the desired item
  */
 shelf_t* search_item(char search_input_color[32], char search_input_name[32], const warehouse_t* warehouse);
 
 /**
  * A search function that prompts the user for the desired item
- * @param shelves Array of pointers to shelves in the warehouse
- * @param n_shelves Number of shelves in the warehouse
+ * @param warehouse The warehouse heap
  * @return A pointer to the shelf containing the desired item
  */
 shelf_t* manual_search_item(const warehouse_t* warehouse);
@@ -194,7 +188,7 @@ drop_zones* generate_drop_zones(int capacity);
 
 /**
  * Frees warehouse
- * @param warehouse The warehouse
+ * @param warehouse The warehouse heap
  */
 void free_warehouse(int *warehouse);
 
