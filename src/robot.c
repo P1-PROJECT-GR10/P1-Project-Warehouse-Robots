@@ -1,12 +1,17 @@
 #include "robot.h"
 
-robot_t* create_robot() {
+#include "a_star.h"
+
+robot_t* create_robot(const warehouse_t* warehouse) {
     robot_t* robot1 = (robot_t*)(safe_malloc(sizeof(robot_t)));
 
     robot1->robot_id = 1;
     robot1->number_of_items = 0;
     robot1->x = 0;
     robot1->y = 0;
+
+    int robot1_index = get_index(robot1->x, robot1->y, warehouse->columns);
+    warehouse->map[robot1_index] = robot; // Sets the robot in the warehouse
 
     return robot1;
 }

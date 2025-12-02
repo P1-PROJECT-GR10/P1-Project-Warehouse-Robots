@@ -33,7 +33,7 @@ char* direction_to_string(direction_e direction);
  * @attention Free memory before returning!
  * @return A pointer to a heap allocated robot structure.
  */
-robot_t* create_robot();
+robot_t* create_robot(const warehouse_t* warehouse);
 
 /**
  * Test function for printing the coordinates of a robot.
