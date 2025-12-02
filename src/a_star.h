@@ -158,7 +158,7 @@ void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_
  * @param shelves pointer to an array of shelf_t pointers
  * @param n_shelves the number of shelves
  */
-void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves);
+void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list);
 
 /**
  * Function for checking which direction a node came from

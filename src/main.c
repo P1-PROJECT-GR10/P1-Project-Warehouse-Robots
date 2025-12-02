@@ -28,7 +28,7 @@ int main(void) {
 
     for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
         // Sets picking_shelve to the corresponding shelf that contains an item from the picking list
-        // TODO: Rewrite function to incorporate warehouse handle
+        // TODO: Rewrite function to incorporate warehouse handle and figure out what the hell this does
         picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves);
     }
     */
@@ -45,7 +45,7 @@ int main(void) {
     // Move the robot to a specified point
     move_robot_to_point(robot1, warehouse, 0, 0);
     // The robot finds the items in the picking list, then gets them and returns them to a point.
-    robot_get_picking_list(robot1, warehouse, rows, columns, pickingItems, AMOUNT_OF_PICKING_ITEMS, shelves, n_shelves);
+    robot_get_picking_list(robot1, warehouse, pickingItems);
 
     // Free allocated memory
     free_robot(robot1);
@@ -53,7 +53,7 @@ int main(void) {
 
     // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
     clock_gettime(CLOCK_MONOTONIC, &end);
-    double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    const double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("Runtime: %.9f seconds\n", runtime);
     printf("Seed: %d\n", seed);
 
