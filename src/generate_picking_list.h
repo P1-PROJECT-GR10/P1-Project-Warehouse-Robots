@@ -10,7 +10,7 @@
  * @param seed starting point for pseudo-generated randomness -> reusable randomness.
  * @param n_items amount of items from fileread
  */
-void generate_picking_list(item_t pickingItems[], item_t* items, int item_amount_input, int seed, int n_items);
+void generate_picking_list(item_t pickingItems[], const warehouse_t* warehouse, int item_amount_input);
 /**
  * Displays the current generated picking list
  * @param pickingItems items for the picking list

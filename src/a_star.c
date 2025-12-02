@@ -122,7 +122,11 @@ int get_index(int x, int y, int columns) {
     return y * columns + x;
 }
 
-bool is_valid(int x, int y, int rows, int columns) {
+bool is_in_bounds(int x, int y, const warehouse_t* warehouse) {
+
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
+
     if (x >= 0 && x < columns && y >= 0 && y < rows) {
         return true;
     } else {
@@ -130,13 +134,16 @@ bool is_valid(int x, int y, int rows, int columns) {
     }
 }
 
-node_t* create_node_map(int rows, int columns) {
-    node_t* node_map = malloc(sizeof(node_t) * rows * columns);
+node_t* create_node_map(const warehouse_t* warehouse) {
+    node_t* node_map = malloc(sizeof(node_t) * warehouse->rows * warehouse->columns);
     return node_map;
 }
 
-void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns) {
-    int total_size = rows * columns;
+void reset_node_map(node_t* node_map, const warehouse_t* warehouse) {
+
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
+    const int total_size = rows * columns;
 
     for (int i = 0; i < total_size; i++) {
         // Calculate x and y values
@@ -152,7 +159,7 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns) {
         node_map[i].heap_index = -1;
 
         // Read from warehouse if nodes are obstacles
-        if (warehouse[i] == shelf) {
+        if (warehouse->map[i] == shelf) {
             node_map[i].obstacle = true;
         } else {
             node_map[i].obstacle = false;
@@ -160,10 +167,13 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns) {
     }
 }
 
-node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int start_x, int start_y, int goal_x, int goal_y) {
+node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x, const int start_y, const int goal_x, const int goal_y) {
+    // Set height and width (rows and columns)
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
 
     // Reset the node map
-    reset_node_map(node_map, warehouse, rows, columns);
+    reset_node_map(node_map, warehouse);
 
     // Setup start and goal points
     int start_index = get_index(start_x, start_y, columns);
@@ -210,7 +220,7 @@ node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int star
             int ny = current->y + directions[i][1];
 
             // Check is neighbour is inside warehouse
-            if (is_valid(nx, ny, rows, columns)) {
+            if (is_in_bounds(nx, ny, warehouse)) {
                 // Get neighbour node from map
                 int n_index = get_index(nx, ny, columns);
                 node_t* neighbour = &node_map[n_index];
@@ -288,12 +298,12 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length) {
     return path;
 }
 
-void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y) {
+void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_x, int goal_y) {
     // Create node map for A* algorithm
-    node_t* node_map = create_node_map(rows, columns);
+    node_t* node_map = create_node_map(warehouse);
 
     // Find path to point
-    node_t* result = a_star(warehouse, node_map, rows, columns, robot->x, robot->y, goal_x, goal_y);
+    node_t* result = a_star(warehouse, node_map, robot->x, robot->y, goal_x, goal_y);
 
     if (result != NULL) {
         printf("\nPath found!\n");
@@ -306,14 +316,14 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
 
         // Print current robot position
         printf("Robot starts at x: %d, y: %d\n", robot->x, robot->y);
-        print_warehouse(warehouse, rows, columns);
+        print_warehouse(warehouse);
         printf("\n");
 
         // Move robot
         for (int i = 0; i< length; i++) {
-            move_robot(robot, warehouse, rows, columns, path[i]);
+            move_robot(robot, warehouse, path[i]);
             printf("Robot moves %s to x: %d, y: %d\n", direction_to_string(path[i]), robot->x, robot->y);
-            print_warehouse(warehouse, rows, columns);
+            print_warehouse(warehouse);
             printf("\n"); // For readability
 
         }

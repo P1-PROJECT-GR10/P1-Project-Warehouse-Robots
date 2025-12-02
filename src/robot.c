@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "warehouse.h"
 #include "robot.h"
 
 robot_t* create_robot() {
@@ -30,61 +27,64 @@ char* direction_to_string(direction_e direction) {
 
 }
 
-void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, direction_e direction) {
+void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e direction) {
+
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
 
     switch (direction) {
         case north:
-            if (warehouse[columns * (robot1->y-1)  + robot1->x] == shelf
+            if (warehouse->map[columns * (robot1->y-1)  + robot1->x] == shelf
                 || robot1->y < 1) {
                 // checks if next move is into a shelf, or if movement is out of bounds
                 //Can't move into a shelf
                 printf("Error: Invalid movement\n");
                 return;
                 }
-            warehouse[columns * robot1->y + robot1->x] = empty;
+            warehouse->map[columns * robot1->y + robot1->x] = empty;
 
             robot1->y --;// moves the inbuilt coordinate of the robot,
                                     // and changes the robot position on the visuals
-            warehouse[columns * robot1->y + robot1->x] = robot;
+            warehouse->map[columns * robot1->y + robot1->x] = robot;
             break;
         case south:
-            if (warehouse[columns * (robot1->y+1)  + robot1->x] == shelf
+            if (warehouse->map[columns * (robot1->y+1)  + robot1->x] == shelf
                 || robot1->y >= rows - 1) {
                 // checks if next move is into a shelf, or if movement is out of bounds
                 //Can't move into a shelf
                 printf("Error: Invalid movement\n");
                 return;
                 }
-            warehouse[columns * robot1->y + robot1->x] = empty;
+            warehouse->map[columns * robot1->y + robot1->x] = empty;
             robot1->y ++;// moves the inbuilt coordinate of the robot,
                                     // and changes the robot position on the visuals
-            warehouse[columns * robot1->y + robot1->x] = robot;
+            warehouse->map[columns * robot1->y + robot1->x] = robot;
             break;
         case east:
-            if (warehouse[columns * robot1->y  + robot1->x+1] == shelf
+            if (warehouse->map[columns * robot1->y  + robot1->x+1] == shelf
                 || robot1->x+1 >= columns) {
                 // checks if next move is into a shelf, or if movement is out of bounds
                 //Can't move into a shelf
                 printf("Error: Invalid movement\n");
                 return;
                 }
-            warehouse[columns * robot1->y + robot1->x] = empty;
+            warehouse->map[columns * robot1->y + robot1->x] = empty;
             robot1->x ++; // moves the inbuilt coordinate of the robot,
                                      // and changes the robot position on the visuals
-            warehouse[columns * robot1->y + robot1->x] = robot;
+            warehouse->map[columns * robot1->y + robot1->x] = robot;
             break;
         case west:
-            if (warehouse[columns * robot1->y  + robot1->x-1] == shelf
+            if (warehouse->map[columns * robot1->y  + robot1->x-1] == shelf
                 || robot1->x-1 < 0) {
                 // checks if next move is into a shelf, or if movement is out of bounds
                 //Can't move into a shelf
                 printf("Error: Invalid movement\n");
                 return;
             }
-            warehouse[columns * robot1->y + robot1->x] = empty;
+            warehouse->map[columns * robot1->y + robot1->x] = empty;
             robot1->x --;// moves the inbuilt coordinate of the robot,
                                     // and changes the robot position on the visuals
-            warehouse[columns * robot1->y + robot1->x] = robot;
+            warehouse->map[columns * robot1->y + robot1->x] = robot;
             break;
         default:
             printf("Error: Invalid input\n");
@@ -92,60 +92,66 @@ void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, directio
     }
 }
 
-void print_robot_xy(robot_t robot1) { // for testing purposes
+void print_robot_xy(const robot_t robot1) { // for testing purposes
     printf("%d, %d\n",robot1.x, robot1.y);
 }
 
-void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t pickingItems[]) {
+void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t pickingItems[]) {
+
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
+
     int i = 1;
-    char word;
+    char input;
     printf("try moving the robot :), use: n, s, e, w, t, p or b (stop / break)\n");
-    while (i == 1) {
-        scanf("%c",&word);
-        switch (word) {
+    while (input != 'b') {
+        scanf("%c",&input);
+        switch (input) {
             case 'n':
-                move_robot(robot1, warehouse, rows, columns, north);
-                print_warehouse(warehouse, rows, columns);
+                move_robot(robot1, warehouse, north);
+                print_warehouse(warehouse);
                 break;
             case 's':
-                move_robot(robot1, warehouse, rows, columns, south);
-                print_warehouse(warehouse, rows, columns);
+                move_robot(robot1, warehouse, south);
+                print_warehouse(warehouse);
                 break;
             case 'e':
-                move_robot(robot1, warehouse, rows, columns, east);
-                print_warehouse(warehouse, rows, columns);
+                move_robot(robot1, warehouse, east);
+                print_warehouse(warehouse);
                 break;
             case 'w':
-                move_robot(robot1, warehouse, rows, columns, west);
-                print_warehouse(warehouse, rows, columns);
+                move_robot(robot1, warehouse, west);
+                print_warehouse(warehouse);
                 break;
             case 'p':
                 print_robot_xy(*robot1);
                 break;
             case 'b':
-                i = 0;
                 break;
             case 't':
                 //robot_item_pickup(robot1, shelves[6], 1);
-                check_nearby_shelves(robot1, shelves, n_shelves, pickingItems);
+                check_nearby_shelves(robot1, warehouse, pickingItems);
                 break;
             default:
                 printf("unreadable expression, try: n, s, e, w, t, p or b (stop / break)\n");
                 break;
-
         }
     }
 }
 
 
-void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, item_t pickingItems[]){
+void check_nearby_shelves (robot_t* robot, const warehouse_t* warehouse, item_t pickingItems[]){
     shelf_t* nearby_shelf[] = {NULL,NULL}; //Since there is only maximum 2 nearby_shelf
+
+    const int n_shelves = warehouse->number_of_shelves;
 
     printf("Robot is on x:%d, y:%d\n", robot->x, robot->y);
 
     for (int i = 0, index = 0; i < n_shelves && index < 2; i++){
-        if (shelves[i]->x == robot->x && (shelves[i]->y == robot->y-1 || shelves[i]->y == robot->y+1)){ //Finds the nearby shelves around the robot
-            nearby_shelf[index] = shelves[i];
+        if (warehouse->shelves[i]->x == robot->x &&
+           (warehouse->shelves[i]->y == robot->y-1 ||
+            warehouse->shelves[i]->y == robot->y+1)){ // Finds the nearby shelves around the robot
+            nearby_shelf[index] = warehouse->shelves[i];
             index++;
         }
     }
@@ -174,7 +180,8 @@ void check_nearby_shelves (robot_t* robot, shelf_t* shelves[], int n_shelves, it
 }
 
 
-void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
+void robot_item_pickup(robot_t* robot, shelf_t* shelf, const int amount) {
+
     if (abs(robot->x - shelf->x) != 0 || abs(robot->y - shelf->y) != 1) {
         printf("Error: Shelf isn't close enough.\n");
         return;
@@ -200,7 +207,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
                     }
                 }
             }
-            printf("The shelf had: '%s %s', the robot is now carrying:\n", shelf->item.color, shelf->item.name);
+            printf("The shelf had: '%s %s', the robot is now carrying:", shelf->item.color, shelf->item.name);
             for (int j = 0; j < ROBOT_MAX_CAPACITY; j++){
                 if (robot->item[j].name[0]){
                     printf(" '%s %s'\n",robot->item[j].color, robot->item[j].name);
@@ -214,22 +221,22 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount) {
     }
 }
 
-int is_robot_in_drop_zone(robot_t* robot, drop_zones* drop_zones) {
-    for (int i = 0; i < drop_zones->capacity; i++) {
-        if (robot->x != drop_zones->zones[i]->x || robot->y != drop_zones->zones[i]->y)
+bool is_robot_in_drop_zone(const robot_t* robot, const warehouse_t* warehouse) {
+    for (int i = 0; i < warehouse->drop_zones->capacity; i++) {
+        if (robot->x != warehouse->drop_zones->zones[i]->x || robot->y != warehouse->drop_zones->zones[i]->y)
             continue; // x or y isn't corresponding to drop zone i
-        return 1; // Robot is in a drop zone
+        return true; // Robot is in a drop zone
     }
-    return 0; // Robot isn't in a drop zone
+    return false; // Robot isn't in a drop zone
 }
 
-int robot_drop_all(robot_t* robot, drop_zones* drop_zones) {
+int robot_drop_all(robot_t* robot, const warehouse_t* warehouse) {
     if (robot->number_of_items == 0) {
         printf("Robot inventory is already empty\n");
         return 0;
     }
 
-    if (!is_robot_in_drop_zone(robot, drop_zones)) {
+    if (!is_robot_in_drop_zone(robot, warehouse)) {
         printf("Robot isn't in a dropzone\n");
         return 0;
     }

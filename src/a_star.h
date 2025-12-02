@@ -100,7 +100,7 @@ int get_index(int x, int y, int columns);
  * @param columns the amount of columns in the grid (width)
  * @return A pointer to an array of structs in a grid
  */
-node_t* create_node_map(int rows, int columns);
+node_t* create_node_map(const warehouse_t* warehouse);
 
 /**
  * Resets a map of nodes according to a map of a warehouse.
@@ -110,7 +110,7 @@ node_t* create_node_map(int rows, int columns);
  * @param rows Amount of rows in both the node map and warehouse map
  * @param columns Amount of columns in both the node map and warehouse map
  */
-void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns);
+void reset_node_map(node_t* node_map, const warehouse_t* warehouse);
 
 /**
  * A pathfinding algorithm for finding the shortest path from a start point to a goal point
@@ -124,7 +124,7 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns);
  * @param goal_y y-coordinate of the goal point
  * @return a pointer to the goal node with the appropriate back pointers for reconstructing the optimal path
  */
-node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int start_x, int start_y, int goal_x, int goal_y);
+node_t* a_star(const warehouse_t* warehouse, node_t* node_map, int start_x, int start_y, int goal_x, int goal_y);
 
 /**
  * Reconstructs a path from a goal node through identifying parent nodes
@@ -143,6 +143,6 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length);
  * @param goal_x x-coordinate of the goal point
  * @param goal_y y-coordinate of the goal point
  */
-void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y);
+void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_x, int goal_y);
 
-bool is_valid(int x, int y, int rows, int columns);
+bool is_in_bounds(int x, int y, const warehouse_t* warehouse);

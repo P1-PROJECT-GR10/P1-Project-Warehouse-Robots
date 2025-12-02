@@ -1,5 +1,7 @@
 #pragma once
-
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "warehouse.h"
 
 //---------------------------------------ENUMERATIONS---------------------------------------
@@ -48,7 +50,7 @@ void print_robot_xy(robot_t robot1);
  * @param columns Number of columns in the warehouse
  * @param direction Direction of movement
  */
-void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, direction_e direction);
+void move_robot(robot_t* robot1, const warehouse_t* warehouse, direction_e direction);
 
 /**
  * A test function for manually moving a robot in a warehouse.
@@ -59,7 +61,7 @@ void move_robot(robot_t* robot1, int* warehouse, int rows, int columns, directio
  * @param shelves Pointer to array of shelves structs
  * @param n_shelves Number of shelves
  */
-void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, shelf_t* shelves[], int n_shelves, item_t pickingItems[]);
+void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t pickingItems[]);
 
 /**
  * A function that checks for nearby shelves y+1 / y-1 from the robot
@@ -67,7 +69,7 @@ void manual_movement(robot_t* robot1, int* warehouse, int rows, int columns, she
  * @param shelves Pointer to array of shelves structs
  * @param n_shelves Number of shelves
  */
-void check_nearby_shelves(robot_t* robot, shelf_t* shelves[], int n_shelves, item_t pickingItems[]);
+void check_nearby_shelves(robot_t* robot, const warehouse_t* warehouse, item_t pickingItems[]);
 
 /**
  * A function that can pickup items from a shelf
@@ -84,7 +86,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount);
  * @param drop_zones Array with the drop zones
  * @param drop_zone_amount Number of drop zones
  */
-int robot_drop_all(robot_t* robot, drop_zones* drop_zones);
+int robot_drop_all(robot_t* robot, const warehouse_t* warehouse);
 
 /**
  * A function that returns 1 if the robot is in a valid drop zone
@@ -92,7 +94,7 @@ int robot_drop_all(robot_t* robot, drop_zones* drop_zones);
  * @param drop_zones Array with the drop zones
  * @param drop_zone_amount Number of drop zones
  */
-int is_robot_in_drop_zone(robot_t* robot, drop_zones* drop_zones);
+bool is_robot_in_drop_zone(const robot_t* robot, const warehouse_t* warehouse);
 
 /**
  * A function that frees the robot memory allocation

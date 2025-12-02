@@ -19,6 +19,8 @@
 #define AMOUNT_OF_PICKING_ITEMS 5
 /// The maximum amount of drop zones
 #define AMOUNT_OF_DROP_ZONES 2
+/// The name of the file containing items
+#define ITEM_FILE "items.txt"
 
 
 //---------------------------------------ENUMERATIONS---------------------------------------
@@ -57,8 +59,22 @@ typedef struct {
     int capacity;
 } drop_zones;
 
+typedef struct {
+    cell_e* map;
+    int rows;
+    int columns;
+    shelf_t** shelves;
+    item_t* items;
+    int number_of_shelves;
+    drop_zones* drop_zones;
+} warehouse_t;
+
 
 //---------------------------------------FUNCTIONS---------------------------------------
+
+warehouse_t* create_warehouse();
+
+void destroy_warehouse(warehouse_t* warehouse);
 
 /**
  * Gets stored data from a cell in a warehouse.
@@ -68,23 +84,23 @@ typedef struct {
  * @param y y-coordinate of the cell desired cell
  * @return Pointer to desired cell
  */
-int* get_cell(int* warehouse, int columns, int x, int y);
+cell_e* get_cell(const warehouse_t* warehouse, int x, int y);
 
 /**
  * Generates a heap allocated array representing a warehouse based on the given parameters,
  * with heap allocated structs for the shelves in the warehouse. \n
  * Use the get_cell() function for retrieving data from the warehouse.
  * @attention Free memory before returning!\n Both warehouse and shelves!
- * @param main_aisle_width Width of main aisles in the warehouse.
- * @param aisle_width Width of aisles in the warehouse
- * @param shelf_length Length of shelf blocks
+ * @param MAIN_AISLE_WIDTH Width of main aisles in the warehouse.
+ * @param AISLE_WIDTH Width of aisles in the warehouse
+ * @param SHELF_LENGTH Length of shelf blocks
  * @param rows Number of rows in the warehouse
  * @param columns Number of columns in the warehouse
  * @param shelves Pointer to an array of shelf pointers
  * @param items Array of items for putting in the shelves
  * @return An array corresponding to a warehouse layout defined by input parameters
  */
-int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, int rows, int columns, shelf_t* shelves[], item_t* items);
+cell_e* generate_layout(const warehouse_t* warehouse);
 
 /**
  * Set a cell to be of cell type drop zone
@@ -94,7 +110,7 @@ int* generate_layout(int main_aisle_width, int aisle_width, int shelf_length, in
  * @param x x-coordinate of the shelf
  * @param y y-coordinate of the shelf
  */
-void set_drop_zone_cell(int* warehouse, drop_zones* drop_zones, int x, int y);
+void set_drop_zone_cell(warehouse_t* warehouse, int x, int y);
 
 /**
  * Helper function for printing warehouse\n
@@ -109,7 +125,7 @@ void print_cell(cell_e cell);
  * @param rows Number of rows in the warehouse
  * @param columns Number of columns in the warehouse
  */
-void print_warehouse(int* warehouse, int rows, int columns);
+void print_warehouse(const warehouse_t* warehouse);
 
 /**
  * Search function that finds the shelf containing the desired item
@@ -119,7 +135,7 @@ void print_warehouse(int* warehouse, int rows, int columns);
  * @param n_shelves Number of shelves in the warehouse.
  * @return A pointer to the shelf containing the desired item
  */
-shelf_t* search_item(char search_input_color[20], char search_input_title[20], shelf_t* shelves[], int n_shelves);
+shelf_t* search_item(char search_input_color[20], char search_input_title[20], const warehouse_t* warehouse);
 
 /**
  * A search function that prompts the user for the desired item
@@ -127,7 +143,7 @@ shelf_t* search_item(char search_input_color[20], char search_input_title[20], s
  * @param n_shelves Number of shelves in the warehouse
  * @return A pointer to the shelf containing the desired item
  */
-shelf_t* manual_search_item(shelf_t* shelves[], int n_shelves);
+shelf_t* manual_search_item(const warehouse_t* warehouse);
 
 /**
  * Reads items from a file
@@ -168,4 +184,4 @@ void free_warehouse(int *warehouse);
  * @param shelves An array of pointers to shelf_t structs
  * @param n_shelves Number of shelves in the warehouse
  */
-void free_shelves(shelf_t* shelves[], int n_shelves);
+void free_shelves(shelf_t** shelves, int n_shelves);
