@@ -38,15 +38,10 @@ warehouse_t* create_warehouse() {
 void destroy_warehouse(warehouse_t* warehouse) {
 
     free(warehouse->items);
-    printf("FREED ITEMS\n");
     free(warehouse->map);
-    printf("FREED MAP\n");
     free_shelves(warehouse->shelves, warehouse->number_of_shelves);
-    printf("FREED SHELVES\n");
     free(warehouse->drop_zones);
-    printf("FREED DROP ZONES\n");
     free(warehouse);
-    printf("FREED WAREHOUSE\n");
 }
 
 cell_e* generate_layout(const warehouse_t* warehouse) {

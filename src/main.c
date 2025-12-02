@@ -6,12 +6,6 @@
 #include "bruteforce.h"
 
 int main(void) {
-    /*
-    const int rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
-    const int columns = (MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2);
-    const int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
-    */
-
     // Time Parameters and functionality
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
@@ -24,7 +18,6 @@ int main(void) {
     // TODO: Change these functions to accept new warehouse handle
     //set_drop_zone_cell(warehouse, drop_zones, 4, 17);
     //set_drop_zone_cell(warehouse, drop_zones, 5, 17);
-
 
     item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(pickingItems, warehouse, AMOUNT_OF_PICKING_ITEMS);
@@ -46,18 +39,10 @@ int main(void) {
     int robot1_index = get_index(robot1->x, robot1->y, warehouse->columns);
     warehouse->map[robot1_index] = robot; // Sets the robot in the warehouse
 
-    // TODO: Change print function to take a single input parameter
     print_warehouse(warehouse);
-    
-    // manually move the robot:
-    // manual_movement(robot1, warehouse, rows, columns);
 
-    // move the robot using the bruteforce algorithm:
-    // bruteforce(warehouse, robot1, 14, 0, columns, rows);
-
+    // Move the robot to a specified point
     move_robot_to_point(robot1, warehouse, 0, 0);
-
-
 
     // Free allocated memory
     free_robot(robot1);
