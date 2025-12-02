@@ -77,25 +77,30 @@ int main(int argc, char** argv) {
     clock_gettime(CLOCK_MONOTONIC, &start);
 
     shelf_t* shelves[n_shelves];
-    int* warehouse = generate_layout(main_aisle_width, aisle_width, shelf_length, rows, columns, shelves, items);
-    drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
+    warehouse_t* warehouse = create_warehouse();
+    //int* warehouse = generate_layout(main_aisle_width, aisle_width, shelf_length, rows, columns, shelves, items);
+    //drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
 
     item_t pickingItems[picking_item_amount];
-    generate_picking_list(pickingItems, items, picking_item_amount, seed, n_shelves);
+    //generate_picking_list(pickingItems, items, picking_item_amount, seed, n_shelves);
+    item_t picking_list[AMOUNT_OF_PICKING_ITEMS];
+    generate_picking_list(picking_list, warehouse, AMOUNT_OF_PICKING_ITEMS);
 
-    robot_t* robot1 = create_robot();
-    warehouse[columns * robot1->y + robot1->x] = robot;
+    robot_t* robot1 = create_robot(warehouse);
+    //warehouse[columns * robot1->y + robot1->x] = robot;
 
     // TEMP: Move robot to picking area (placeholder)
-    move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
+    //move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
+
+    move_robot_to_point(robot1, warehouse, 9, 0);
 
     //-------------------------------
     // Cleanup Heap Memory
     //-------------------------------
-    free_warehouse(warehouse);
+    destroy_warehouse(warehouse);
     free_robot(robot1);
-    free_shelves(shelves, n_shelves);
-    free(drop_zones);
+    //free_shelves(shelves, n_shelves);
+    //free(drop_zones);
 
     //-------------------------------
     // End time / clock
