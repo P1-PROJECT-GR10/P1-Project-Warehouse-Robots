@@ -1,7 +1,7 @@
 #include "robot.h"
 
 robot_t* create_robot() {
-    robot_t* robot1 = (robot_t*)(malloc(sizeof(robot_t)));
+    robot_t* robot1 = (robot_t*)(safe_malloc(sizeof(robot_t)));
 
     robot1->robot_id = 1;
     robot1->number_of_items = 0;

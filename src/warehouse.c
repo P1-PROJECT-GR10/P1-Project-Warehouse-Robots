@@ -1,5 +1,17 @@
 #include "warehouse.h"
 
+void* safe_malloc(size_t size) {
+    // Attempt to allocate memory
+    void* pointer = malloc(size);
+
+    // Check return value for NULL
+    if (pointer == NULL) {
+        printf("Error: Could not allocate memory!\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return pointer;
+}
 
 item_t* read_items_from_file(char* file_name) {
 
@@ -12,7 +24,7 @@ item_t* read_items_from_file(char* file_name) {
         exit(EXIT_FAILURE);
     }
 
-    item_t* items = malloc(sizeof(item_t)*n_shelves);
+    item_t* items = safe_malloc(sizeof(item_t)*n_shelves);
     file_read_items(items, n_shelves, items_file);
     fclose(items_file);
 
@@ -21,13 +33,13 @@ item_t* read_items_from_file(char* file_name) {
 
 warehouse_t* create_warehouse() {
 
-    warehouse_t* warehouse = (warehouse_t*)malloc(sizeof(warehouse_t));
+    warehouse_t* warehouse = (warehouse_t*)safe_malloc(sizeof(warehouse_t));
 
     warehouse->rows = SHELF_AMOUNT * (2 + AISLE_WIDTH) + AISLE_WIDTH;
     warehouse->columns = MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2;
     warehouse->number_of_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
     warehouse->drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
-    warehouse->shelves = malloc(sizeof(shelf_t*)*warehouse->number_of_shelves);
+    warehouse->shelves = safe_malloc(sizeof(shelf_t*)*warehouse->number_of_shelves);
     warehouse->items = read_items_from_file(ITEM_FILE);
     warehouse->map = generate_layout(warehouse);
 
@@ -36,11 +48,11 @@ warehouse_t* create_warehouse() {
 
 void destroy_warehouse(warehouse_t* warehouse) {
 
-    free(warehouse->items);
-    free(warehouse->map);
-    free_shelves(warehouse->shelves, warehouse->number_of_shelves);
-    free(warehouse->drop_zones);
-    free(warehouse);
+    if (warehouse->items != NULL) free(warehouse->items);
+    if (warehouse->map != NULL) free(warehouse->map);
+    if (warehouse->shelves != NULL) free_shelves(warehouse->shelves, warehouse->number_of_shelves);
+    if (warehouse->drop_zones != NULL) free(warehouse->drop_zones);
+    if (warehouse != NULL) free(warehouse);
 }
 
 bool is_vertical_end_aisle(const warehouse_t* warehouse, int row) {
@@ -69,7 +81,7 @@ cell_e* generate_layout(const warehouse_t* warehouse) {
     const int columns = warehouse->columns;
     const int shelf_width = 2;
 
-    cell_e* map = (cell_e*)malloc(sizeof(cell_e)*columns*rows);
+    cell_e* map = (cell_e*)safe_malloc(sizeof(cell_e)*columns*rows);
 
     int row_pattern = 0;
     for (int row = 0; row < rows; row++) {
@@ -160,10 +172,10 @@ shelf_t** populate_shelves(const warehouse_t* warehouse) {
 }
 
 drop_zones* generate_drop_zones(int capacity) {
-    drop_zones* zones = (drop_zones*)malloc(sizeof(drop_zones));
+    drop_zones* zones = (drop_zones*)safe_malloc(sizeof(drop_zones));
     zones->amount = 0;
     zones->capacity = capacity;
-    zones->zones = (drop_zone_t**)malloc(sizeof(drop_zone_t*) * capacity);
+    zones->zones = (drop_zone_t**)safe_malloc(sizeof(drop_zone_t*) * capacity);
 
     return zones;
 }
@@ -247,7 +259,7 @@ void file_read_items(item_t* items, int n_items, FILE* file) {
 }
 
 struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
-    shelf_t* shelf = (shelf_t*)malloc(sizeof(shelf_t));
+    shelf_t* shelf = (shelf_t*)safe_malloc(sizeof(shelf_t));
     shelf->item = item;
     shelf->stock = stock;
     shelf->x = x;
