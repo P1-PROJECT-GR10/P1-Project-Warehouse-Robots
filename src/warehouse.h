@@ -80,6 +80,8 @@ warehouse_t* create_warehouse();
 
 void destroy_warehouse(warehouse_t* warehouse);
 
+void destroy_test_warehouse(warehouse_t* warehouse);
+
 /**
  * Gets stored data from a cell in a warehouse.
  * @param warehouse The warehouse in which the cell exists
@@ -165,6 +167,8 @@ shelf_t* manual_search_item(const warehouse_t* warehouse);
  * @param file The file from which the items are read
  */
 void file_read_items(item_t* items, int number_of_items, FILE* file);
+
+item_t* read_items_from_file(char* file_name);
 
 /**
  * A helper function for generating the warehouse that populates a given shelf with an item
