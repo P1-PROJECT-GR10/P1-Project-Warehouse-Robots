@@ -93,7 +93,7 @@ drop_zones* generate_drop_zones(int capacity) {
 }
 
 void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
-    cell_e* cell = get_cell(warehouse, x, y); // Remove magic number, once columns is made global definition
+    cell_e* cell = get_cell(warehouse, x, y);
 
     if (warehouse->drop_zones->amount >= warehouse->drop_zones->capacity) {
         printf("Maximum amount of drop zones already reached\n");

@@ -16,8 +16,8 @@ int main(void) {
     warehouse_t* warehouse = create_warehouse();
 
     // TODO: Change these functions to accept new warehouse handle
-    //set_drop_zone_cell(warehouse, drop_zones, 4, 17);
-    //set_drop_zone_cell(warehouse, drop_zones, 5, 17);
+    //set_drop_zone_cell(warehouse, drop_zones, 17, 4);
+    //set_drop_zone_cell(warehouse, drop_zones, 17, 5);
 
     item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(pickingItems, warehouse, AMOUNT_OF_PICKING_ITEMS);
