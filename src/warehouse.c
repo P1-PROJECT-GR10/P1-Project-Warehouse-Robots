@@ -86,7 +86,6 @@ cell_e* generate_layout(const warehouse_t* warehouse) {
             }
         }
     }
-    free(warehouse->items);
     return map;
 }
 
