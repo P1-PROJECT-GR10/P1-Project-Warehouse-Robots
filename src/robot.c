@@ -1,5 +1,4 @@
 #include "robot.h"
-
 #include "a_star.h"
 
 robot_t* create_robot(const warehouse_t* warehouse) {
