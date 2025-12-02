@@ -19,19 +19,9 @@ int main(void) {
     //set_drop_zone_cell(warehouse, drop_zones, 17, 4);
     //set_drop_zone_cell(warehouse, drop_zones, 17, 5);
 
-    item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
-    generate_picking_list(pickingItems, warehouse, AMOUNT_OF_PICKING_ITEMS);
-    display_picking_list(pickingItems, AMOUNT_OF_PICKING_ITEMS);
-
-    /*
-    shelf_t picking_shelves[AMOUNT_OF_PICKING_ITEMS];
-
-    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++){
-        // Sets picking_shelve to the corresponding shelf that contains an item from the picking list
-        // TODO: Rewrite function to incorporate warehouse handle and figure out what the hell this does
-        picking_shelves[i] = *search_item(pickingItems[i].name,pickingItems[i].color, shelves, n_shelves);
-    }
-    */
+    item_t picking_list[AMOUNT_OF_PICKING_ITEMS];
+    generate_picking_list(picking_list, warehouse, AMOUNT_OF_PICKING_ITEMS);
+    display_picking_list(picking_list, AMOUNT_OF_PICKING_ITEMS);
 
     // Create a robot
     robot_t* robot1 = create_robot();
@@ -43,9 +33,9 @@ int main(void) {
     print_warehouse(warehouse);
 
     // Move the robot to a specified point
-    move_robot_to_point(robot1, warehouse, 0, 0);
+    move_robot_to_point(robot1, warehouse, 9, 0);
     // The robot finds the items in the picking list, then gets them and returns them to a point.
-    robot_get_picking_list(robot1, warehouse, pickingItems);
+    robot_get_picking_list(robot1, warehouse, picking_list);
 
     // Free allocated memory
     free_robot(robot1);

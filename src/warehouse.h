@@ -71,6 +71,7 @@ typedef struct {
 
 
 //---------------------------------------FUNCTIONS---------------------------------------
+void* safe_malloc(size_t size);
 
 warehouse_t* create_warehouse();
 

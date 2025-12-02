@@ -17,10 +17,10 @@ int manhattan_h(node_t current, node_t goal) {
 
 
 minheap* create_minheap(int capacity) {
-    minheap* heap = (minheap*)malloc(sizeof(minheap));
+    minheap* heap = (minheap*)safe_malloc(sizeof(minheap));
     heap->size = 0;
     heap->capacity = capacity;
-    heap->array = (node_t**)malloc(sizeof(node_t*) * capacity);
+    heap->array = (node_t**)safe_malloc(sizeof(node_t*) * capacity);
     return heap;
 }
 
@@ -135,7 +135,7 @@ bool is_in_bounds(int x, int y, const warehouse_t* warehouse) {
 }
 
 node_t* create_node_map(const warehouse_t* warehouse) {
-    node_t* node_map = malloc(sizeof(node_t) * warehouse->rows * warehouse->columns);
+    node_t* node_map = safe_malloc(sizeof(node_t) * warehouse->rows * warehouse->columns);
     return node_map;
 }
 
@@ -267,7 +267,7 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length) {
     *path_length = steps;
 
     // Allocate memory for path
-    direction_e* path = (direction_e*)malloc(sizeof(direction_e)*steps);
+    direction_e* path = (direction_e*)safe_malloc(sizeof(direction_e)*steps);
 
     node_t* current = goal_node;
 
