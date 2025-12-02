@@ -24,12 +24,7 @@ int main(void) {
     display_picking_list(picking_list, AMOUNT_OF_PICKING_ITEMS);
 
     // Create a robot
-    robot_t* robot1 = create_robot();
-
-    // TODO: Move code below into create_robot function
-    int robot1_index = get_index(robot1->x, robot1->y, warehouse->columns);
-    warehouse->map[robot1_index] = robot; // Sets the robot in the warehouse
-
+    robot_t* robot1 = create_robot(warehouse);
     print_warehouse(warehouse);
 
     // Move the robot to a specified point
@@ -45,7 +40,8 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &end);
     const double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("Runtime: %.9f seconds\n", runtime);
-    printf("Seed: %d\n", seed);
+
+    //printf("Seed: %d\n", seed);
 
     return 0;
 }

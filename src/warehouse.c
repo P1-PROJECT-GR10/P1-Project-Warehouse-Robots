@@ -3,13 +3,11 @@
 void* safe_malloc(size_t size) {
     // Attempt to allocate memory
     void* pointer = malloc(size);
-
     // Check return value for NULL
     if (pointer == NULL) {
         printf("Error: Could not allocate memory!\n");
         exit(EXIT_FAILURE);
     }
-
     return pointer;
 }
 
