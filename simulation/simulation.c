@@ -48,7 +48,6 @@ int main(int argc, char** argv) {
 
     srand(seed);
 
-
     //-------------------------------
     // Prepare results.txt
     //-------------------------------
@@ -59,16 +58,9 @@ int main(int argc, char** argv) {
     }
 
     //-------------------------------
-    // Load items
+    // Create warehouse
     //-------------------------------
-    FILE* items_file = fopen("items.txt", "r");
-    if (!items_file) {
-        fprintf(stderr, "ERROR: Could not open items.txt\n");
-        return EXIT_FAILURE;
-    }
-    item_t items[n_shelves];
-    file_read_items(items, n_shelves, items_file);
-    fclose(items_file);
+    warehouse_t* warehouse = create_warehouse();
 
     //-------------------------------
     // Start time / clock
@@ -76,31 +68,25 @@ int main(int argc, char** argv) {
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
 
-    shelf_t* shelves[n_shelves];
-    warehouse_t* warehouse = create_warehouse();
-    //int* warehouse = generate_layout(main_aisle_width, aisle_width, shelf_length, rows, columns, shelves, items);
-    //drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
 
-    item_t pickingItems[picking_item_amount];
-    //generate_picking_list(pickingItems, items, picking_item_amount, seed, n_shelves);
     item_t picking_list[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(picking_list, warehouse, AMOUNT_OF_PICKING_ITEMS);
 
+    //-------------------------------
+    // Creating a robot
+    //-------------------------------
     robot_t* robot1 = create_robot(warehouse);
-    //warehouse[columns * robot1->y + robot1->x] = robot;
 
-    // TEMP: Move robot to picking area (placeholder)
-    //move_robot_to_point(robot1, warehouse, rows, columns, 14, 0);
-
+    // Move the robot to a specified point
     move_robot_to_point(robot1, warehouse, 9, 0);
+    // The robot finds the items in the picking list, then gets them and returns them to a point.
+    robot_get_picking_list(robot1, warehouse, picking_list);
 
     //-------------------------------
     // Cleanup Heap Memory
     //-------------------------------
     destroy_warehouse(warehouse);
     free_robot(robot1);
-    //free_shelves(shelves, n_shelves);
-    //free(drop_zones);
 
     //-------------------------------
     // End time / clock
