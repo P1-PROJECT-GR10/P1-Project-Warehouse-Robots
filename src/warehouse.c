@@ -1,6 +1,5 @@
 #include "warehouse.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 
 item_t* read_items_from_file(char* file_name) {
 
@@ -121,6 +120,10 @@ void print_cell(cell_e cell) {
             break;
         case robot:
             printf("|R");
+            break;
+        case drop_zone:
+            printf("|D");
+            break;
     }
 
 }
@@ -135,7 +138,7 @@ void print_warehouse(const warehouse_t* warehouse) {
     int columns = warehouse->columns;
 
     // Print row of x-coords
-    printf("Y: X:");
+    printf("\nY: X:");
     for (int x = 0; x < columns; x++) {
         printf("%d ", x % 10);
     }
@@ -176,7 +179,7 @@ struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
     return shelf;
 }
 
-shelf_t* search_item(char search_input_title[20], char search_input_color[20], const warehouse_t* warehouse) {
+shelf_t* search_item(char search_input_title[32], char search_input_color[32], const warehouse_t* warehouse) {
     int n_shelves = warehouse->number_of_shelves;
     for (int i = 0; i < n_shelves; i++) {
         if (strcmp(warehouse->shelves[i]->item.color, search_input_color) == 0 && // Using string compare to find the shelf where the item is located.
@@ -206,6 +209,8 @@ shelf_t* manual_search_item(const warehouse_t* warehouse) {
     }
     return 0;
 }
+
+
 
 void free_shelves(shelf_t** shelves, const int n_shelves){
     for (int i = 0; i < n_shelves; i++) {

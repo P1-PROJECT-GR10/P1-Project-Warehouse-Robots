@@ -1,8 +1,10 @@
 #pragma once
 #include <stdbool.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "robot.h"
+#include "warehouse.h"
 
 
 //---------------------------------------STRUCTURES---------------------------------------
@@ -145,4 +147,47 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length);
  */
 void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_x, int goal_y);
 
+/**
+ * A function that moves the robot to the points from where it can pick up items in a picking list
+ * @param robot1 A pointer to a valid robot structure
+ * @param warehouse The map of a warehouse
+ * @param rows Rows in the warehouse
+ * @param columns Columns in the warehouse
+ * @param picking_list An array of items for the robot to pickup
+ * @param amount_of_picking_items The amount of items in the picking list
+ * @param shelves pointer to an array of shelf_t pointers
+ * @param n_shelves the number of shelves
+ */
+void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves);
+
+/**
+ * Function for checking which direction a node came from
+ * @param node A valid node type
+ * @return the direction from the node to the parent
+ */
+direction_e parent_direction(node_t node);
+
+/**
+ * For printing an arrowhead indicating where a nodes back pointer is pointing
+ * @param node A valid node type
+ * @return a string representing a cell with a pointer
+ */
+char* node_came_from_to_string(node_t node);
+
+/**
+ * Prints a map of nodes evaluated by the A* algorithm and their back pointers
+ * @param node_map A map of A* nodes
+ * @param rows The amount of rows in the map
+ * @param columns The amount of columns in the map.
+ */
+void print_node_map(node_t* node_map, int rows, int columns);
+
+/**
+ * Return whether a point is inside the width and height of a grid
+ * @param x x-coordinate of a point
+ * @param y y-coordinate of a point
+ * @param rows amount of rows in grid
+ * @param columns amount of columns in grid
+ * @return a boolean value representing whether the point is in bounds
+ */
 bool is_in_bounds(int x, int y, const warehouse_t* warehouse);

@@ -7,7 +7,7 @@
 //---------------------------------------ENUMERATIONS---------------------------------------
 
 #define ROBOT_MAX_CAPACITY 8
-typedef enum direction {north, south, east, west} direction_e;
+typedef enum direction {north, south, east, west, no_direction} direction_e;
 
 //---------------------------------------STRUCTURES---------------------------------------
 

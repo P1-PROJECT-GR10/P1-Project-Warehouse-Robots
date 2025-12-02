@@ -33,6 +33,7 @@ int main(void) {
     }
     */
 
+    // Create a robot
     robot_t* robot1 = create_robot();
 
     // TODO: Move code below into create_robot function
@@ -43,6 +44,8 @@ int main(void) {
 
     // Move the robot to a specified point
     move_robot_to_point(robot1, warehouse, 0, 0);
+    // The robot finds the items in the picking list, then gets them and returns them to a point.
+    robot_get_picking_list(robot1, warehouse, rows, columns, pickingItems, AMOUNT_OF_PICKING_ITEMS, shelves, n_shelves);
 
     // Free allocated memory
     free_robot(robot1);
