@@ -47,7 +47,7 @@ drop_zones* generate_drop_zones(int capacity) {
 }
 
 void set_drop_zone_cell(int* warehouse, drop_zones* drop_zones, const int x, const int y) {
-    int* cell = get_cell(warehouse, 17, x, y); // Remove magic number, once columns is made global definition
+    int* cell = get_cell(warehouse, 18, x, y); // Remove magic number, once columns is made global definition
 
     if (drop_zones->amount >= drop_zones->capacity) {
         printf("Maximum amount of drop zones already reached\n");
@@ -74,6 +74,10 @@ void print_cell(cell_e cell) {
             break;
         case robot:
             printf("|R");
+            break;
+        case drop_zone:
+            printf("|D");
+            break;
     }
 
 }

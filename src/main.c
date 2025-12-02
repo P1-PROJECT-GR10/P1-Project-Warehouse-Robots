@@ -35,8 +35,8 @@ int main(void) {
 
     // Sets the drop zones in the warehouse.
     drop_zones* drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
-    set_drop_zone_cell(warehouse, drop_zones, 4, 17);
-    set_drop_zone_cell(warehouse, drop_zones, 5, 17);
+    set_drop_zone_cell(warehouse, drop_zones, 17, 4);
+    set_drop_zone_cell(warehouse, drop_zones, 17, 5);
 
     // Generate the picking list
     item_t pickingItems[AMOUNT_OF_PICKING_ITEMS];
