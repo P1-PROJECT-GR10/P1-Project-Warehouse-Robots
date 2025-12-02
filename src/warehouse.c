@@ -43,15 +43,74 @@ void destroy_warehouse(warehouse_t* warehouse) {
     free(warehouse);
 }
 
-cell_e* generate_layout(const warehouse_t* warehouse) {
+bool is_vertical_end_aisle(const warehouse_t* warehouse, int row) {
+    if (row < AISLE_WIDTH
+        || row >= warehouse->rows - AISLE_WIDTH){
+        return true; // Top & bottom aisles
+    }
+    return false;
+}
 
+bool is_main_aisle(const warehouse_t* warehouse, int row, int column) {
+    if (column >= MAIN_AISLE_WIDTH+SHELF_LENGTH
+        && column < MAIN_AISLE_WIDTH + SHELF_LENGTH + MAIN_AISLE_WIDTH){
+        return true; // Center main aisle
+    }
+
+    if (column < MAIN_AISLE_WIDTH
+        || column >= MAIN_AISLE_WIDTH * 2 + SHELF_LENGTH * 2){
+        return true; // Left & right side main aisles
+    }
+    return false;
+}
+
+cell_e* generate_layout(const warehouse_t* warehouse) {
     const int rows = warehouse->rows;
     const int columns = warehouse->columns;
+    const int shelf_width = 2;
 
     cell_e* map = (cell_e*)malloc(sizeof(cell_e)*columns*rows);
 
+    int row_pattern = 0;
+    for (int row = 0; row < rows; row++) {
+        bool is_end_aisle = is_vertical_end_aisle(warehouse, row);
+
+        if (!is_end_aisle) {
+            row_pattern++;
+        }
+
+        for (int col = 0; col < columns; col++) {
+            int id = row * columns + col;
+
+            if (is_end_aisle) {
+                map[id] = empty;
+                continue;
+            }
+
+            if (is_main_aisle(warehouse, row, col)) {
+                map[id] = empty;
+                continue;
+            }
+
+            if (row_pattern > AISLE_WIDTH + shelf_width) {
+                row_pattern = 1;
+            }
+
+            if (row_pattern <= shelf_width) {
+                map[id] = shelf;
+            } else {
+                map[id] = empty;
+            }
+        }
+    }
+
+    /*
+
+    ////////////// DEPRECATED CODE: //////////////
+
     int shelf_count = 0;
     for (int i = 0, l = 0; i < rows; i++) {
+
         // i: Row count
         // l: Working row count
         if (i > AISLE_WIDTH-1 && i < rows-AISLE_WIDTH) { // If i is inbetween top & bottom aisle boundary, l++
@@ -80,7 +139,24 @@ cell_e* generate_layout(const warehouse_t* warehouse) {
             }
         }
     }
+    */
     return map;
+}
+
+shelf_t** populate_shelves(const warehouse_t* warehouse) {
+    int shelf_count = 0;
+    for (int row = 0; row < warehouse->rows; row++) {
+        for (int col = 0; col < warehouse->columns; col++) {
+            cell_e* cell = get_cell(warehouse, col, row);
+
+            if (*cell != shelf)
+                continue;
+
+            //shelves[shelf_count] = generate_shelf(warehouse->items[shelf_count], STOCK_AMOUNT, col, row);
+            shelf_count++;
+        }
+    }
+
 }
 
 drop_zones* generate_drop_zones(int capacity) {

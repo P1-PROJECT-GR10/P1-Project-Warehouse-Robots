@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -17,6 +18,8 @@
 #define SHELF_AMOUNT 3
 /// The number of items that gets generated on the picking list
 #define AMOUNT_OF_PICKING_ITEMS 5
+/// Stocked number of items in any given shelf
+#define STOCK_AMOUNT 10
 /// The maximum amount of drop zones
 #define AMOUNT_OF_DROP_ZONES 2
 /// The name of the file containing items
