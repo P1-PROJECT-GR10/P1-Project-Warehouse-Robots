@@ -83,7 +83,6 @@ void destroy_warehouse(warehouse_t* warehouse);
 /**
  * Gets stored data from a cell in a warehouse.
  * @param warehouse The warehouse in which the cell exists
- * @param columns Number of columns in the warehouse
  * @param x x-coordinate of the cell desired cell
  * @param y y-coordinate of the cell desired cell
  * @return Pointer to desired cell
@@ -91,20 +90,36 @@ void destroy_warehouse(warehouse_t* warehouse);
 cell_e* get_cell(const warehouse_t* warehouse, int x, int y);
 
 /**
+ * Checks whether a certain row is one of the top- or bottom aisles
+ * @param warehouse The warehouse heap
+ * @param row The row to check boundary for
+ * @return Bool if row should be a top- or bottom aisle
+ */
+bool is_vertical_end_aisle(const warehouse_t* warehouse, int row);
+
+/**
+ * Checks whether a certain column is a main aisle
+ * @param column The column to check boundary for
+ * @return Bool if column should be a main aisle
+ */
+bool is_main_aisle(int column);
+
+/**
  * Generates a heap allocated array representing a warehouse based on the given parameters,
  * with heap allocated structs for the shelves in the warehouse. \n
  * Use the get_cell() function for retrieving data from the warehouse.
  * @attention Free memory before returning!\n Both warehouse and shelves!
- * @param MAIN_AISLE_WIDTH Width of main aisles in the warehouse.
- * @param AISLE_WIDTH Width of aisles in the warehouse
- * @param SHELF_LENGTH Length of shelf blocks
- * @param rows Number of rows in the warehouse
- * @param columns Number of columns in the warehouse
- * @param shelves Pointer to an array of shelf pointers
- * @param items Array of items for putting in the shelves
+ * @param warehouse The warehouse heap
  * @return An array corresponding to a warehouse layout defined by input parameters
  */
 cell_e* generate_layout(const warehouse_t* warehouse);
+
+/**
+ * Generates a heap allocated array of shelves, according to amoutn of shelves in warehouse
+ * @param warehouse The warehouse heap
+ * @return An array of generated shelves of struct shelf
+ */
+shelf_t** populate_shelves(const warehouse_t* warehouse);
 
 /**
  * Set a cell to be of cell type drop zone
