@@ -1,5 +1,8 @@
 #include "a_star.h"
 
+#include <math.h>
+#include "warehouse.h"
+
 int manhattan_h(node_t current, node_t goal) {
     return abs(current.x - goal.x) + abs(current.y - goal.y);
 }
@@ -14,10 +17,10 @@ int manhattan_h(node_t current, node_t goal) {
 
 
 minheap* create_minheap(int capacity) {
-    minheap* heap = (minheap*)malloc(sizeof(minheap));
+    minheap* heap = (minheap*)safe_malloc(sizeof(minheap));
     heap->size = 0;
     heap->capacity = capacity;
-    heap->array = (node_t**)malloc(sizeof(node_t*) * capacity);
+    heap->array = (node_t**)safe_malloc(sizeof(node_t*) * capacity);
     return heap;
 }
 
@@ -119,7 +122,11 @@ int get_index(int x, int y, int columns) {
     return y * columns + x;
 }
 
-bool is_in_bounds(int x, int y, int rows, int columns) {
+bool is_in_bounds(int x, int y, const warehouse_t* warehouse) {
+
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
+
     if (x >= 0 && x < columns && y >= 0 && y < rows) {
         return true;
     } else {
@@ -127,13 +134,16 @@ bool is_in_bounds(int x, int y, int rows, int columns) {
     }
 }
 
-node_t* create_node_map(int rows, int columns) {
-    node_t* node_map = malloc(sizeof(node_t) * rows * columns);
+node_t* create_node_map(const warehouse_t* warehouse) {
+    node_t* node_map = safe_malloc(sizeof(node_t) * warehouse->rows * warehouse->columns);
     return node_map;
 }
 
-void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns) {
-    int total_size = rows * columns;
+void reset_node_map(node_t* node_map, const warehouse_t* warehouse) {
+
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
+    const int total_size = rows * columns;
 
     for (int i = 0; i < total_size; i++) {
         // Calculate x and y values
@@ -149,7 +159,7 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns) {
         node_map[i].heap_index = -1;
 
         // Read from warehouse if nodes are obstacles
-        if (warehouse[i] == shelf) {
+        if (warehouse->map[i] == shelf) {
             node_map[i].obstacle = true;
         } else {
             node_map[i].obstacle = false;
@@ -157,10 +167,13 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns) {
     }
 }
 
-node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int start_x, int start_y, int goal_x, int goal_y) {
+node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x, const int start_y, const int goal_x, const int goal_y) {
+    // Set height and width (rows and columns)
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
 
     // Reset the node map
-    reset_node_map(node_map, warehouse, rows, columns);
+    reset_node_map(node_map, warehouse);
 
     // Setup start and goal points
     int start_index = get_index(start_x, start_y, columns);
@@ -207,7 +220,7 @@ node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int star
             int ny = current->y + directions[i][1];
 
             // Check is neighbour is inside warehouse
-            if (is_in_bounds(nx, ny, rows, columns)) {
+            if (is_in_bounds(nx, ny, warehouse)) {
                 // Get neighbour node from map
                 int n_index = get_index(nx, ny, columns);
                 node_t* neighbour = &node_map[n_index];
@@ -254,7 +267,7 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length) {
     *path_length = steps;
 
     // Allocate memory for path
-    direction_e* path = (direction_e*)malloc(sizeof(direction_e)*steps);
+    direction_e* path = (direction_e*)safe_malloc(sizeof(direction_e)*steps);
 
     node_t* current = goal_node;
 
@@ -285,12 +298,12 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length) {
     return path;
 }
 
-void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y) {
+void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_x, int goal_y) {
     // Create node map for A* algorithm
-    node_t* node_map = create_node_map(rows, columns);
+    node_t* node_map = create_node_map(warehouse);
 
     // Find path to point
-    node_t* result = a_star(warehouse, node_map, rows, columns, robot->x, robot->y, goal_x, goal_y);
+    node_t* result = a_star(warehouse, node_map, robot->x, robot->y, goal_x, goal_y);
 
     if (result != NULL) {
         printf("\nPath found!\n");
@@ -303,35 +316,32 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
 
         // Print current robot position
         printf("Robot starts at x: %d, y: %d\n", robot->x, robot->y);
-        print_warehouse(warehouse, rows, columns);
+        print_warehouse(warehouse);
         printf("\n");
 
         // Move robot
         for (int i = 0; i< length; i++) {
-            move_robot(robot, warehouse, rows, columns, path[i]);
+            move_robot(robot, warehouse, path[i]);
             printf("Robot moves %s to x: %d, y: %d\n", direction_to_string(path[i]), robot->x, robot->y);
-            //print_warehouse(warehouse, rows, columns);
-            //printf("\n"); // For readability
-
         }
         free(path);
     } else {
         printf("\nNo path found\n");
     }
-    print_node_map(node_map, rows, columns);
+    print_warehouse(warehouse);
+    print_node_map(node_map, warehouse->rows, warehouse->columns);
     free(node_map);
-    print_warehouse(warehouse, rows, columns);
 }
 
-void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves) {
-    for (int i = 0; i < amount_of_picking_items; i++) {
+void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list) {
+    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
 
-        shelf_t* goal_shelf = search_item(picking_list[i].name, picking_list[i].color, shelves, n_shelves);
+        shelf_t* goal_shelf = search_item(picking_list[i].name, picking_list[i].color, warehouse);
         int goal_x = goal_shelf->x;
         int goal_y;
 
-        int index = get_index(goal_shelf->x, goal_shelf->y+1, columns);
-        if (warehouse[index] == empty) {
+        int index = get_index(goal_shelf->x, goal_shelf->y+1, warehouse->columns);
+        if (warehouse->map[index] == empty) {
             goal_y = goal_shelf->y + 1;
         } else {
             goal_y = goal_shelf->y - 1;
@@ -340,11 +350,11 @@ void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int colum
         printf("Item %d found at shelf x: %d, y: %d\n"
                "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
 
-        move_robot_to_point(robot1, warehouse, rows, columns, goal_x, goal_y);
+        move_robot_to_point(robot1, warehouse, goal_x, goal_y);
         printf("Robot picks up item %d\n\n", i+1);
     }
 
-    move_robot_to_point(robot1, warehouse, rows, columns, 9, 9); // Move robot back to (9, 9) or a dropzone
+    move_robot_to_point(robot1, warehouse, 9, 9); // Move robot back to (9, 9) or a dropzone
 }
 
 direction_e parent_direction(node_t node) {

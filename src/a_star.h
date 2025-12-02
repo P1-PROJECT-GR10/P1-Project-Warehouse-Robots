@@ -102,7 +102,7 @@ int get_index(int x, int y, int columns);
  * @param columns the amount of columns in the grid (width)
  * @return A pointer to an array of structs in a grid
  */
-node_t* create_node_map(int rows, int columns);
+node_t* create_node_map(const warehouse_t* warehouse);
 
 /**
  * Resets a map of nodes according to a map of a warehouse.
@@ -112,7 +112,7 @@ node_t* create_node_map(int rows, int columns);
  * @param rows Amount of rows in both the node map and warehouse map
  * @param columns Amount of columns in both the node map and warehouse map
  */
-void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns);
+void reset_node_map(node_t* node_map, const warehouse_t* warehouse);
 
 /**
  * A pathfinding algorithm for finding the shortest path from a start point to a goal point
@@ -126,7 +126,7 @@ void reset_node_map(node_t* node_map, int* warehouse, int rows, int columns);
  * @param goal_y y-coordinate of the goal point
  * @return a pointer to the goal node with the appropriate back pointers for reconstructing the optimal path
  */
-node_t* a_star(int* warehouse, node_t* node_map, int rows, int columns, int start_x, int start_y, int goal_x, int goal_y);
+node_t* a_star(const warehouse_t* warehouse, node_t* node_map, int start_x, int start_y, int goal_x, int goal_y);
 
 /**
  * Reconstructs a path from a goal node through identifying parent nodes
@@ -145,7 +145,7 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length);
  * @param goal_x x-coordinate of the goal point
  * @param goal_y y-coordinate of the goal point
  */
-void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, int goal_x, int goal_y);
+void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_x, int goal_y);
 
 /**
  * A function that moves the robot to the points from where it can pick up items in a picking list
@@ -158,7 +158,7 @@ void move_robot_to_point(robot_t* robot, int* warehouse, int rows, int columns, 
  * @param shelves pointer to an array of shelf_t pointers
  * @param n_shelves the number of shelves
  */
-void robot_get_picking_list(robot_t* robot1, int* warehouse, int rows, int columns, item_t* picking_list, int amount_of_picking_items, shelf_t** shelves, int n_shelves);
+void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list);
 
 /**
  * Function for checking which direction a node came from
@@ -190,4 +190,4 @@ void print_node_map(node_t* node_map, int rows, int columns);
  * @param columns amount of columns in grid
  * @return a boolean value representing whether the point is in bounds
  */
-bool is_in_bounds(int x, int y, int rows, int columns);
+bool is_in_bounds(int x, int y, const warehouse_t* warehouse);

@@ -6,140 +6,107 @@ TEST_CASE(robot_moves_north,
 /*--------------- Arrange ---------------*/
     const direction_e direction = north;
 
+    warehouse_t* warehouse = create_warehouse();
+
     const int robot_id = 1;
     const int n_items = 0;
     const int x = 1;
     const int y = 1;
 
-    const int columns = 3;
-    const int rows = 3;
-
-    int warehouse[] = {
-        empty, empty, empty,
-        empty, robot, empty,
-        empty, empty, empty,
-    };
     robot_t robot = {robot_id, n_items, {0}, x, y};
-/*--------------- Act ---------------*/
-    move_robot(&robot, warehouse, rows, columns, direction);
-/*--------------- Assert ---------------*/
+    /*--------------- Act ---------------*/
+    move_robot(&robot, warehouse, direction);
+    /*--------------- Assert ---------------*/
     CHECK_EQ_INT(robot.x, x);
     CHECK_EQ_INT(robot.y, y-1);
-)
 
+    destroy_warehouse(warehouse);
+)
 
 TEST_CASE(robot_moves_south,
 /*--------------- Arrange ---------------*/
     const direction_e direction = south;
 
+    warehouse_t* warehouse = create_warehouse();
+
     const int robot_id = 1;
     const int n_items = 0;
     const int x = 1;
     const int y = 1;
 
-    const int columns = 3;
-    const int rows = 3;
-
-    int warehouse[] = {
-        empty, empty, empty,
-        empty, robot, empty,
-        empty, empty, empty,
-    };
-
     robot_t robot = {robot_id, n_items, {0}, x, y};
-/*--------------- Act ---------------*/
-    move_robot(&robot, warehouse, rows, columns, direction);
-/*--------------- Assert ---------------*/
+    /*--------------- Act ---------------*/
+    move_robot(&robot, warehouse, direction);
+    /*--------------- Assert ---------------*/
     CHECK_EQ_INT(robot.x, x);
     CHECK_EQ_INT(robot.y, y+1);
-)
 
+    destroy_warehouse(warehouse);
+)
 
 TEST_CASE(robot_moves_west,
 /*--------------- Arrange ---------------*/
     const direction_e direction = west;
 
+    warehouse_t* warehouse = create_warehouse();
+
     const int robot_id = 1;
     const int n_items = 0;
     const int x = 1;
     const int y = 1;
 
-    const int columns = 3;
-    const int rows = 3;
-
-    int warehouse[] = {
-        empty, empty, empty,
-        empty, robot, empty,
-        empty, empty, empty,
-    };
-
     robot_t robot = {robot_id, n_items, {0}, x, y};
-/*--------------- Act ---------------*/
-    move_robot(&robot, warehouse, rows, columns, direction);
-/*--------------- Assert ---------------*/
+    /*--------------- Act ---------------*/
+    move_robot(&robot, warehouse, direction);
+    /*--------------- Assert ---------------*/
     CHECK_EQ_INT(robot.x, x-1);
     CHECK_EQ_INT(robot.y, y);
-)
 
+    destroy_warehouse(warehouse);
+)
 
 TEST_CASE(robot_moves_east,
 /*--------------- Arrange ---------------*/
     const direction_e direction = east;
 
+    warehouse_t* warehouse = create_warehouse();
+
     const int robot_id = 1;
     const int n_items = 0;
     const int x = 1;
     const int y = 1;
 
-    const int columns = 3;
-    const int rows = 3;
-
-    int warehouse[] = {
-        empty, empty, empty,
-        empty, robot, empty,
-        empty, empty, empty,
-    };
-
     robot_t robot = {robot_id, n_items, {0}, x, y};
-/*--------------- Act ---------------*/
-    move_robot(&robot, warehouse, rows, columns, direction);
-/*--------------- Assert ---------------*/
-    CHECK_EQ_INT(robot.x, x+1);
+    printf("%d,%d\n",robot.x,robot.y);
+    /*--------------- Act ---------------*/
+    move_robot(&robot, warehouse, direction);
+    printf("%d,%d\n",robot.x,robot.y);
+    /*--------------- Assert ---------------*/
+    CHECK_EQ_INT(robot.x, x); // Robot drives into shelf, so shouldn't move
     CHECK_EQ_INT(robot.y, y);
-)
 
+    destroy_warehouse(warehouse);
+)
 
 TEST_CASE(move_robot_updates_arena,
 /*--------------- Arrange ---------------*/
-    const direction_e direction = east;
+    const direction_e direction = north;
+
+    warehouse_t* warehouse = create_warehouse();
 
     const int robot_id = 1;
     const int n_items = 0;
     const int x = 1;
     const int y = 1;
 
-    const int columns = 3;
-    const int rows = 3;
+    robot_t test_robot = {robot_id, n_items, {0}, x, y};
+    /*--------------- Act ---------------*/
+    move_robot(&test_robot, warehouse, direction);
+    /*--------------- Assert ---------------*/
+    CHECK_EQ_INT(warehouse->map[0*warehouse->rows+1], robot);
+    CHECK_EQ_INT(warehouse->map[1*warehouse->rows+1], empty);
 
-    int warehouse[] = {
-        empty, empty, empty,
-        empty, robot, empty,
-        empty, empty, empty,
-    };
-
-    robot_t robot1 = {robot_id, n_items, {0}, x, y};
-/*--------------- Act ---------------*/
-    move_robot(&robot1, warehouse, rows, columns, direction);
-/*--------------- Assert ---------------*/
-    for (int i = 0; i < columns; i++) {
-        for (int j = 0; j < rows; j++) {
-            if (i == x + 1 && j == y) {
-                CHECK_EQ_INT(warehouse[j*rows+i], robot);
-            } else {
-                CHECK_EQ_INT(warehouse[j*rows+i], empty);
-            }
-        }
-    }
+    destroy_warehouse(warehouse);
 )
 
 

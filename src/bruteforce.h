@@ -1,6 +1,7 @@
 #include "robot.h"
 #include "math.h"
 #include "warehouse.h"
+#include "a_star.h"
 #include <stdbool.h>
 
 /** Struct for the neighbours of the robot.
@@ -19,7 +20,7 @@ typedef struct neighbour {
     cell_e cell;
 } neighbour_t;
 
-int manhat_dist(int x, int y, int goal_x, int goal_y);
+int manhat_dist(int x1, int y1, int x2, int y2);
 
 /** The main function for the bruteforce algorithm, here lies the conditions for the function.
  *  It also prints the total number of steps (amount of recursive calls) it uses.
@@ -30,7 +31,7 @@ int manhat_dist(int x, int y, int goal_x, int goal_y);
  * @param columns   -   The paramater for the columns, and also the rows, of the warehouse.
  * @param rows      -   They are unnessecary, and will be removed when cleaned up.
  */
-void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows);
+void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
 
 /** The recoursive part of the bruteforcing algorithm.
  *  Moves the robot one step at a time until it has gotten to its goal point.
@@ -47,6 +48,4 @@ void bruteforce(int* warehouse, robot_t* robot, int goal_x, int goal_y, int colu
  *                  -   Used to keep track of the algorithms efficiency.
  * @return
  */
-int bruteforce_recursive(int* warehouse, robot_t* robot, int goal_x, int goal_y, int columns, int rows, direction_e prev, int moves);
-
-bool is_in_bounds(int x, int y, int rows, int columns);
+int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y, direction_e prev, int moves);
