@@ -18,11 +18,11 @@ on:
       shelf_amount:
         description: "How many shelves should the warehouse have?"
         required: false
-        default: 5
+        default: 3
       shelf_length:
         description: "What should the length of the shelves be?"
         required: false
-        default: 4
+        default: 6
       aisle_width:
         description: "What should the width of the aisle's be?"
         required: false
