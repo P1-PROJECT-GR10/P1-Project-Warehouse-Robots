@@ -304,6 +304,9 @@ void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_
     // Create node map for A* algorithm
     node_t* node_map = create_node_map(warehouse);
 
+    // Create goal index
+    int goal_idx = get_index(goal_x, goal_y, warehouse->columns);
+
     // Find path to point
     node_t* result = a_star(warehouse, node_map, robot->x, robot->y, goal_x, goal_y);
 
@@ -331,7 +334,7 @@ void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_
         printf("\nNo path found\n");
     }
     print_warehouse(warehouse);
-    print_node_map(node_map, warehouse->rows, warehouse->columns);
+    print_node_map(node_map, warehouse->rows, warehouse->columns, goal_idx);
     free(node_map);
 }
 
@@ -395,7 +398,7 @@ char* node_came_from_to_string(node_t node) {
     return "| ";
 }
 
-void print_node_map(node_t* node_map, int rows, int columns) {
+void print_node_map(node_t* node_map, const int rows, const int columns, const int goal_index) {
     // Print row of x-coords
     printf("\nY: X:");
     for (int x = 0; x < columns; x++) {
@@ -407,6 +410,11 @@ void print_node_map(node_t* node_map, int rows, int columns) {
         printf("%d - ", y % 10);    // Prints y-coords
         for (int x = 0; x < columns; x++) {
             int index = get_index(x, y, columns);
+            // Print goal node
+            if (index == goal_index) {
+                printf("|G");
+                continue;
+            }
             printf("%s", node_came_from_to_string(node_map[index]));
         }
         printf("|\n");
