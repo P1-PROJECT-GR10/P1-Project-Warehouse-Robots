@@ -1,5 +1,7 @@
 #include "warehouse.h"
 
+#include "bruteforce.h"
+
 void* safe_malloc(size_t size) {
     // Attempt to allocate memory
     void* pointer = malloc(size);
@@ -137,7 +139,7 @@ shelf_t** populate_shelves(const warehouse_t* warehouse) {
 drop_zones* generate_drop_zones(int capacity) {
     drop_zones* zones = (drop_zones*)safe_malloc(sizeof(drop_zones));
     zones->amount = 0;
-    zones->capacity = capacity;
+    zones->max_amount = capacity;
     zones->zones = (drop_zone_t**)safe_malloc(sizeof(drop_zone_t*) * capacity);
 
     return zones;
@@ -146,21 +148,32 @@ drop_zones* generate_drop_zones(int capacity) {
 void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
     cell_e* cell = get_cell(warehouse, x, y);
 
-    if (warehouse->drop_zones->amount >= warehouse->drop_zones->capacity) {
+    if (warehouse->drop_zones->amount >= warehouse->drop_zones->max_amount) {
         printf("Maximum amount of drop zones already reached\n");
         return;
     }
 
     if (*cell != shelf && *cell != drop_zone) {
         *cell = drop_zone;
-        drop_zone_t drop_zone;
-        drop_zone.x = x;
-        drop_zone.y = y;
-        warehouse->drop_zones->zones[warehouse->drop_zones->amount] = &drop_zone;
+        drop_zone_t* drop_zone = (drop_zone_t*)safe_malloc(sizeof(drop_zone_t*));
+        drop_zone->x = x;
+        drop_zone->y = y;
+        warehouse->drop_zones->zones[warehouse->drop_zones->amount] = drop_zone;
         warehouse->drop_zones->amount++;
         return;
     }
     printf("Cell is already occupied\n");
+}
+
+drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y) {
+    int nearest_distance = INFINITY;
+    for (int i = 0; i < warehouse->drop_zones->amount; i++) {
+        int dist = manhat_dist(x, y, warehouse->drop_zones->zones[i]->x, warehouse->drop_zones->zones[i]->y);
+        if (dist < nearest_distance) {
+            return warehouse->drop_zones->zones[i];
+        }
+    }
+    return NULL;
 }
 
 void print_cell(cell_e cell) {
@@ -186,7 +199,6 @@ cell_e* get_cell(const warehouse_t* warehouse, int x, int y) {
 }
 
 void print_warehouse(const warehouse_t* warehouse) {
-
     int rows = warehouse->rows;
     int columns = warehouse->columns;
 

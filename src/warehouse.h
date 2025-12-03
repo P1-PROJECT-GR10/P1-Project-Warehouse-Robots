@@ -58,7 +58,7 @@ typedef struct drop_zone {
 typedef struct {
     drop_zone_t** zones;
     int amount;
-    int capacity;
+    int max_amount;
 } drop_zones;
 
 typedef struct {
@@ -127,6 +127,14 @@ shelf_t** populate_shelves(const warehouse_t* warehouse);
  * @param y y-coordinate of the shelf
  */
 void set_drop_zone_cell(warehouse_t* warehouse, int x, int y);
+
+/**
+ * Get nearest drop zone to a point
+ * @param warehouse The warehouse heap
+ * @param x x-coordinate of the point to get nearest drop zone from
+ * @param y y-coordinate of the point to get nearest drop zone from
+ */
+drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y);
 
 /**
  * Helper function for printing warehouse\n

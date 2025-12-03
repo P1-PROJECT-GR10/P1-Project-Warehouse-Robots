@@ -241,7 +241,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, const int amount) {
 }
 
 bool is_robot_in_drop_zone(const robot_t* robot, const warehouse_t* warehouse) {
-    for (int i = 0; i < warehouse->drop_zones->capacity; i++) {
+    for (int i = 0; i < warehouse->drop_zones->max_amount; i++) {
         if (robot->x != warehouse->drop_zones->zones[i]->x || robot->y != warehouse->drop_zones->zones[i]->y)
             continue; // x or y isn't corresponding to drop zone i
         return true; // Robot is in a drop zone

@@ -123,7 +123,6 @@ int get_index(int x, int y, int columns) {
 }
 
 bool is_in_bounds(int x, int y, const warehouse_t* warehouse) {
-
     const int rows = warehouse->rows;
     const int columns = warehouse->columns;
 
@@ -353,8 +352,13 @@ void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_
         move_robot_to_point(robot1, warehouse, goal_x, goal_y);
         printf("Robot picks up item %d\n\n", i+1);
     }
-
-    move_robot_to_point(robot1, warehouse, 9, 9); // Move robot back to (9, 9) or a dropzone
+    //move_robot_to_point(robot1, warehouse, 9, 9); // Move robot back to (9, 9) or a dropzone
+    drop_zone_t* drop_zone = get_nearest_drop_zone(warehouse, robot1->x, robot1->y);
+    printf("Robot is finished picking up items, navigating to drop zone at %d, %d\n",drop_zone->x, drop_zone->y);
+    move_robot_to_point(robot1, warehouse, drop_zone->x, drop_zone->y);
+    printf("Robot navigated to drop zone\n");
+    robot_drop_all(robot1, warehouse);
+    printf("Robot drops items at (%d %d)\n\n", drop_zone->x, drop_zone->y);
 }
 
 direction_e parent_direction(node_t node) {
