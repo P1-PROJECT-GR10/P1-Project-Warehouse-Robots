@@ -36,7 +36,7 @@ void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal
 
     // calls the recursive algorithm, and prints the amount of recursive calls.
     int moves = 0;
-    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, -1, moves);
+    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, no_direction, moves);
     printf("\nrobot moved: %d tiles\n", amount_of_moves);
 }
 
