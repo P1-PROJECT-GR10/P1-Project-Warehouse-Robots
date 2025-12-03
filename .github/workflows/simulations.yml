@@ -31,10 +31,6 @@ on:
         description: "What should the width of the main aisle's be?"
         required: false
         default: 2
-      drop_zones:
-        description: "How many drop zones should there be?"
-        required: false
-        default: 2
 
 env:
   BUILD_TYPE: Release
@@ -71,8 +67,7 @@ jobs:
             ${{ github.event.inputs.shelf_amount }} \
             ${{ github.event.inputs.shelf_length }} \
             ${{ github.event.inputs.aisle_width }} \
-            ${{ github.event.inputs.main_aisle_width }} \
-            ${{ github.event.inputs.drop_zones }}
+            ${{ github.event.inputs.main_aisle_width }}
 
           echo "Simulation finished with custom parameters."
 

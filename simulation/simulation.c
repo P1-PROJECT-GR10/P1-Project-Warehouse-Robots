@@ -30,8 +30,7 @@ warehouse_config_t config = {
     .shelf_amount = 3,
     .shelf_length = 6,
     .aisle_width = 1,
-    .main_aisle_width = 2,
-    .drop_zones = 2
+    .main_aisle_width = 2
 };
 /*
  *#######################################################################
@@ -60,7 +59,6 @@ int main(int argc, char** argv) {
     if (argc >= 6) config.shelf_length = validate_int(argv[5], 1, "shelf length");
     if (argc >= 7) config.aisle_width = validate_int(argv[6], 1, "aisle width");
     if (argc >= 8) config.main_aisle_width = validate_int(argv[7], 1, "main aisle width");
-    if (argc >= 9) config.drop_zones = validate_int(argv[8], 1, "drop zones");
 
     //=========== Warehouse size error handling ===========
     if (config.shelf_amount * config.shelf_length > 1000) {
@@ -107,7 +105,6 @@ int main(int argc, char** argv) {
         clock_gettime(CLOCK_MONOTONIC, &start);
 
         // Run simulation
-        move_robot_to_point(robot1, warehouse, warehouse->rows - 1, 0);
         robot_get_picking_list(robot1, warehouse, picking_list);
 
         // End timer
@@ -158,14 +155,13 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->columns = cfg.main_aisle_width * 3 + cfg.shelf_length * 2; // Sum = columns
     warehouse->number_of_shelves = cfg.shelf_amount * cfg.shelf_length * 2 * 2; // Sum = n_shelves
     // Function based struct variables.
-    warehouse->drop_zones = generate_drop_zones(cfg.drop_zones);
-    if (!warehouse->drop_zones) { fprintf(stderr,"drop_zones failed\n"); exit(1); }
+    warehouse->drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES); // fixed drop_zone amount for now
     warehouse->items = read_items_from_file(ITEM_FILE);
-    if (!warehouse->items) { fprintf(stderr,"items failed\n"); exit(1); }
     warehouse->map = generate_layout(warehouse);
-    if (!warehouse->map) { fprintf(stderr,"map failed\n"); exit(1); }
     warehouse->shelves = populate_shelves(warehouse);
-    if (!warehouse->shelves) { fprintf(stderr,"shelves failed\n"); exit(1); }
+
+    set_drop_zone_cell(warehouse, 17, 4); // fixed position might not with larger layout
+    set_drop_zone_cell(warehouse, 17, 5); // fixed position might not with larger layout
 
     return warehouse;
 }
