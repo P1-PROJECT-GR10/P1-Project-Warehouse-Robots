@@ -159,9 +159,13 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->number_of_shelves = cfg.shelf_amount * cfg.shelf_length * 2 * 2; // Sum = n_shelves
     // Function based struct variables.
     warehouse->drop_zones = generate_drop_zones(cfg.drop_zones);
+    if (!warehouse->drop_zones) { fprintf(stderr,"drop_zones failed\n"); exit(1); }
     warehouse->items = read_items_from_file(ITEM_FILE);
+    if (!warehouse->items) { fprintf(stderr,"items failed\n"); exit(1); }
     warehouse->map = generate_layout(warehouse);
+    if (!warehouse->map) { fprintf(stderr,"map failed\n"); exit(1); }
     warehouse->shelves = populate_shelves(warehouse);
+    if (!warehouse->shelves) { fprintf(stderr,"shelves failed\n"); exit(1); }
 
     return warehouse;
 }
