@@ -31,7 +31,7 @@ int manhat_dist(int x1, int y1, int x2, int y2);
  * @param columns   -   The paramater for the columns, and also the rows, of the warehouse.
  * @param rows      -   They are unnessecary, and will be removed when cleaned up.
  */
-void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
+void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
 
 /** The recoursive part of the bruteforcing algorithm.
  *  Moves the robot one step at a time until it has gotten to its goal point.

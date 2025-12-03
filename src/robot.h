@@ -39,7 +39,7 @@ robot_t* create_robot(const warehouse_t* warehouse);
  * Test function for printing the coordinates of a robot.
  * @param robot1 A valid robot structure.
  */
-void print_robot_xy(robot_t robot1);
+void print_robot_xy(const robot_t* robot1);
 
 /**
  * Moves a robot in a specified direction\n

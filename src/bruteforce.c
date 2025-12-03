@@ -16,11 +16,11 @@ int get_mirror_direction(neighbour_t neighbour) {
             return east;
         default:
             printf("wrong input in function: get_mirror_direction");
-            return -1;
+            return no_direction;
     }
 }
 
-void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y) {
+void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y) {
 
     // checks if goal point is a shelf, i.e. impassible.
     if (*get_cell(warehouse, goal_x, goal_y) == shelf) {
@@ -35,10 +35,9 @@ void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int go
     }
 
     // calls the recursive algorithm, and prints the amount of recursive calls.
-    printf("\n");
-    // TODO: clean up magic numbers please
-    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, -1, 0);
-    printf("robot moved: %d tiles\n", amount_of_moves);
+    int moves = 0;
+    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, -1, moves);
+    printf("\nrobot moved: %d tiles\n", amount_of_moves);
 }
 
 int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {
@@ -50,26 +49,14 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
     } // checks if the robot has arrived at the goal point.
 
     neighbour_t neighbour[4]; // initializes the neighbours for the robot.
-    //Their directions:
-    neighbour[0].direction = east;
-    neighbour[1].direction = west;
-    neighbour[2].direction = south;
-    neighbour[3].direction = north;
 
-    //and their positions compared to the robots position:
-    //east:
-    neighbour[0].x = robot->x+1;
-    neighbour[0].y = robot->y;
-    // west:
-    neighbour[1].x = robot->x-1;
-    neighbour[1].y = robot->y;
-    // south:
-    neighbour[2].x = robot->x;
-    neighbour[2].y = robot->y+1;
-    // north:
-    neighbour[3].x = robot->x;
-    neighbour[3].y = robot->y-1;
-
+    //Their directions:         north,      south,      east,     west;
+    int directions[4][2] = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+    for (int i = north; i <= west; i++) {
+        neighbour[i].direction = i;
+        neighbour[i].x = directions[i][0];
+        neighbour[i].y = directions[i][1];
+    }
 
     // Evaluates the manhattan distance to the goal point from each neighbouring points individually.
     // If the point is unreachable, then its distance is set to infinity, so that it never is the closest point.
