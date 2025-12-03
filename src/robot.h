@@ -61,17 +61,17 @@ void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t picki
 
 /**
  * A function that checks for nearby shelves y+1 / y-1 from the robot
- * @param robot Pointer to the robot struct
+ * @param robot Pointer to the robot
+ * @param robot Pointer to the warehouse
+ * @param shelf Pointer to the shelf
  */
 bool check_shelf(robot_t* robot, const warehouse_t* warehouse, shelf_t* shelf);
 
-void check_nearby_shelves(robot_t* robot, const warehouse_t* warehouse, item_t pickingItems[]);
-
 /**
  * A function that can pickup items from a shelf
- * @param robot
- * @param shelf
- * @param amount
+ * @param robot Pointer to the robot
+ * @param shelf Pointer to the shelf
+ * @param amount Amount of items to pick up from shelf
  */
 void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount);
 
