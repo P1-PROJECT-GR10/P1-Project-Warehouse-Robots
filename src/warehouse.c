@@ -172,7 +172,7 @@ void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
 }
 
 drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y) {
-    int nearest_distance = 999;
+    float nearest_distance = INFINITY;
     drop_zone_t* nearest_zone = NULL;
     for (int i = 0; i < warehouse->drop_zones->amount; i++) {
         int dist = manhat_dist(x, y, warehouse->drop_zones->zones[i]->x, warehouse->drop_zones->zones[i]->y);
@@ -183,6 +183,7 @@ drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y) {
     }
     if (nearest_zone != NULL)
         return nearest_zone;
+    printf("Couldn't find any drop zone to return");
     return NULL;
 }
 
