@@ -1,4 +1,9 @@
 #include "warehouse.h"
+#include "a_star.h"
+
+int manhat_dist(const int x1, const int y1, const int x2, const int y2) {
+    return abs(x1 - x2) + abs(y1 - y2);
+}
 
 void* safe_malloc(size_t size) {
     // Attempt to allocate memory
@@ -40,6 +45,9 @@ warehouse_t* create_warehouse() {
     warehouse->items = read_items_from_file(ITEM_FILE);
     warehouse->map = generate_layout(warehouse);
     warehouse->shelves = populate_shelves(warehouse);
+
+    set_drop_zone_cell(warehouse, 17, 4);
+    set_drop_zone_cell(warehouse, 17, 5);
 
     return warehouse;
 }
@@ -137,7 +145,7 @@ shelf_t** populate_shelves(const warehouse_t* warehouse) {
 drop_zones* generate_drop_zones(int capacity) {
     drop_zones* zones = (drop_zones*)safe_malloc(sizeof(drop_zones));
     zones->amount = 0;
-    zones->capacity = capacity;
+    zones->max_amount = capacity;
     zones->zones = (drop_zone_t**)safe_malloc(sizeof(drop_zone_t*) * capacity);
 
     return zones;
@@ -146,19 +154,32 @@ drop_zones* generate_drop_zones(int capacity) {
 void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
     cell_e* cell = get_cell(warehouse, x, y);
 
-    if (warehouse->drop_zones->amount >= warehouse->drop_zones->capacity) {
+    if (warehouse->drop_zones->amount >= warehouse->drop_zones->max_amount) {
         printf("Maximum amount of drop zones already reached\n");
         return;
     }
 
     if (*cell != shelf && *cell != drop_zone) {
         *cell = drop_zone;
-        drop_zone_t drop_zone;
-        drop_zone.x = x;
-        drop_zone.y = y;
-        warehouse->drop_zones->zones[warehouse->drop_zones->amount] = &drop_zone;
+        drop_zone_t* drop_zone = (drop_zone_t*)safe_malloc(sizeof(drop_zone_t*));
+        drop_zone->x = x;
+        drop_zone->y = y;
+        warehouse->drop_zones->zones[warehouse->drop_zones->amount] = drop_zone;
         warehouse->drop_zones->amount++;
+        return;
     }
+    printf("Cell is already occupied\n");
+}
+
+drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y) {
+    int nearest_distance = 999;
+    for (int i = 0; i < warehouse->drop_zones->amount; i++) {
+        int dist = manhat_dist(x, y, warehouse->drop_zones->zones[i]->x, warehouse->drop_zones->zones[i]->y);
+        if (dist < nearest_distance) {
+            return warehouse->drop_zones->zones[i];
+        }
+    }
+    return NULL;
 }
 
 void print_cell(cell_e cell) {
@@ -184,7 +205,6 @@ cell_e* get_cell(const warehouse_t* warehouse, int x, int y) {
 }
 
 void print_warehouse(const warehouse_t* warehouse) {
-
     int rows = warehouse->rows;
     int columns = warehouse->columns;
 
@@ -242,7 +262,6 @@ shelf_t* search_item(char search_input_title[32], char search_input_color[32], c
 }
 
 shelf_t* manual_search_item(const warehouse_t* warehouse) {
-
     int n_shelves = warehouse->number_of_shelves;
 
     char search_input_color[20];
@@ -260,8 +279,6 @@ shelf_t* manual_search_item(const warehouse_t* warehouse) {
     }
     return 0;
 }
-
-
 
 void free_shelves(shelf_t** shelves, const int n_shelves){
     for (int i = 0; i < n_shelves; i++) {
