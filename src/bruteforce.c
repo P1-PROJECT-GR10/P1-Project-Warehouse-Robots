@@ -1,8 +1,5 @@
 #include "bruteforce.h"
-
-int manhat_dist(const int x1, const int y1, const int x2, const int y2) {
-    return abs(x1 - x2) + abs(y1 - y2);
-}
+#include "a_star.h"
 
 int get_mirror_direction(neighbour_t neighbour) {
     switch (neighbour.direction) {
@@ -21,7 +18,6 @@ int get_mirror_direction(neighbour_t neighbour) {
 }
 
 void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y) {
-
     // checks if goal point is a shelf, i.e. impassible.
     if (*get_cell(warehouse, goal_x, goal_y) == shelf) {
         printf("Can't reach target, as it is a shelf! :(\n");
@@ -41,7 +37,6 @@ void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int go
 }
 
 int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {
-
     if (goal_x == robot->x && goal_y == robot->y) {
         print_warehouse(warehouse);
         printf("Arrived at destination :)\n");

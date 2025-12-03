@@ -5,9 +5,6 @@
 #include "bruteforce.h"
 #include "warehouse.h"
 
-int manhattan_h(node_t current, node_t goal) {
-    return abs(current.x - goal.x) + abs(current.y - goal.y);
-}
 
 /*
  *#######################################################################
@@ -193,7 +190,7 @@ node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x
     minheap* open_set = create_minheap(rows * columns);
 
     start_node->g = 0;
-    start_node->h = manhattan_h(*start_node, *goal_node);
+    start_node->h = manhat_dist(start_node->x, start_node->y, goal_node->x, goal_node->y);
     start_node->f = start_node->g + start_node->h;
 
     heap_push(open_set, start_node);

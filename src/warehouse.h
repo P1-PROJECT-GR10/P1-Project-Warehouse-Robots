@@ -80,6 +80,17 @@ warehouse_t* create_warehouse();
 void destroy_warehouse(warehouse_t* warehouse);
 
 /**
+ * A function for calculating the manhattan distance between two nodes: (|x1 - x2| + |y1 - y2|)\n
+ * Designed as heuristic function for an A* algorithm
+ * @param x1 The current x-coordinate
+ * @param y1 The current y-coordinate
+ * @param x2 The goal x-coordinate
+ * @param y2 The goal y-coordinate
+ * @return An integer value representing the manhattan distance between the two input nodes
+ */
+int manhat_dist(int x1, int y1, int x2, int y2);
+
+/**
  * Gets stored data from a cell in a warehouse.
  * @param warehouse The warehouse in which the cell exists
  * @param x x-coordinate of the cell desired cell

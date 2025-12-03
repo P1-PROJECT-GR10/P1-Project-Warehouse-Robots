@@ -20,8 +20,6 @@ typedef struct neighbour {
     cell_e cell;
 } neighbour_t;
 
-int manhat_dist(int x1, int y1, int x2, int y2);
-
 /** The main function for the bruteforce algorithm, here lies the conditions for the function.
  *  It also prints the total number of steps (amount of recursive calls) it uses.
  * @param warehouse -   The warehouse layout.

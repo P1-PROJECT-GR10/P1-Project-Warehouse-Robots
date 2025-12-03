@@ -34,15 +34,6 @@ typedef struct {
 //---------------------------------------FUNCTIONS---------------------------------------
 
 /**
- * A function for calculating the manhattan distance between two nodes: (|x1 - x2| + |y1 - y2|)\n
- * Designed as heuristic function for an A* algorithm
- * @param current The current node as node_t struct
- * @param goal The goal node as node_t struct
- * @return An integer value representing the manhattan distance between the two input nodes
- */
-int manhattan_h(node_t current, node_t goal);
-
-/**
  * Creates a heap allocated MinHeap
  * @attention Remember to free allocated memory!
  * @param capacity The maximum capacity of the MinHeap

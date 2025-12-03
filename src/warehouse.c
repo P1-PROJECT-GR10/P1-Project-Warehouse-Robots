@@ -1,6 +1,9 @@
 #include "warehouse.h"
+#include "a_star.h"
 
-#include "bruteforce.h"
+int manhat_dist(const int x1, const int y1, const int x2, const int y2) {
+    return abs(x1 - x2) + abs(y1 - y2);
+}
 
 void* safe_malloc(size_t size) {
     // Attempt to allocate memory
@@ -166,7 +169,7 @@ void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
 }
 
 drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y) {
-    int nearest_distance = INFINITY;
+    int nearest_distance = 999;
     for (int i = 0; i < warehouse->drop_zones->amount; i++) {
         int dist = manhat_dist(x, y, warehouse->drop_zones->zones[i]->x, warehouse->drop_zones->zones[i]->y);
         if (dist < nearest_distance) {
@@ -273,8 +276,6 @@ shelf_t* manual_search_item(const warehouse_t* warehouse) {
     }
     return 0;
 }
-
-
 
 void free_shelves(shelf_t** shelves, const int n_shelves){
     for (int i = 0; i < n_shelves; i++) {
