@@ -27,8 +27,8 @@ typedef struct {
 
 // Default values if user does !pass arguments (This is a 10x18 warehouse layout)
 warehouse_config_t config = {
-    .shelf_amount = 5,
-    .shelf_length = 4,
+    .shelf_amount = 3,
+    .shelf_length = 6,
     .aisle_width = 1,
     .main_aisle_width = 2,
     .drop_zones = 2
