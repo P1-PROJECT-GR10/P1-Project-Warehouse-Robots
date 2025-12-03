@@ -256,7 +256,6 @@ shelf_t* search_item(char search_input_title[32], char search_input_color[32], c
 }
 
 shelf_t* manual_search_item(const warehouse_t* warehouse) {
-
     int n_shelves = warehouse->number_of_shelves;
 
     char search_input_color[20];

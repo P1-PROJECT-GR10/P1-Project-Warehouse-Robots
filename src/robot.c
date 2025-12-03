@@ -1,5 +1,6 @@
 #include "robot.h"
 #include "a_star.h"
+#include "bruteforce.h"
 
 robot_t* create_robot(const warehouse_t* warehouse) {
     robot_t* robot1 = (robot_t*)(safe_malloc(sizeof(robot_t)));
@@ -122,7 +123,7 @@ void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t picki
 
     int i = 1;
     char input;
-    printf("try moving the robot :), use: n, s, e, w, t, p or b (stop / break)\n");
+    printf("try moving the robot :), use: n, s, e, w, p or b (stop / break)\n");
     while (input != 'b') {
         scanf("%c",&input);
         switch (input) {
@@ -147,55 +148,25 @@ void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t picki
                 break;
             case 'b':
                 break;
-            case 't':
-                //robot_item_pickup(robot1, shelves[6], 1);
-                check_nearby_shelves(robot1, warehouse, pickingItems);
-                break;
             default:
-                printf("unreadable expression, try: n, s, e, w, t, p or b (stop / break)\n");
+                printf("unreadable expression, try: n, s, e, w, p or b (stop / break)\n");
                 break;
         }
     }
 }
 
-
-void check_nearby_shelves (robot_t* robot, const warehouse_t* warehouse, item_t pickingItems[]){
-    shelf_t* nearby_shelf[] = {NULL,NULL}; //Since there is only maximum 2 nearby_shelf
-
-    const int n_shelves = warehouse->number_of_shelves;
-
-    printf("Robot is on x:%d, y:%d\n", robot->x, robot->y);
-
-    for (int i = 0, index = 0; i < n_shelves && index < 2; i++){
-        if (warehouse->shelves[i]->x == robot->x &&
-           (warehouse->shelves[i]->y == robot->y-1 ||
-            warehouse->shelves[i]->y == robot->y+1)){ // Finds the nearby shelves around the robot
-            nearby_shelf[index] = warehouse->shelves[i];
-            index++;
-        }
+bool check_shelf(robot_t* robot1, const warehouse_t* warehouse, shelf_t* shelf) {
+    if (manhat_dist(robot1->x, robot1->y, shelf->x, shelf->y) > 1) {
+        printf("The robot too far away: %d", manhat_dist(robot1->x, robot1->y, shelf->x, shelf->y));
+        return false;
     }
 
-    if (nearby_shelf[0] == NULL && nearby_shelf[1] == NULL){
-        printf("Nearby shelf wasn't found):\n"); //Prints if there weren't found at least one shelf
-        return;
+    if (shelf->stock <= 0) {
+        printf("Shelf is out of stock");
+        return false;
     }
-    for (int n = 0; n < AMOUNT_OF_PICKING_ITEMS; n++){ //Runs the for loop AMOUNT_OF_PICKING_ITEMS times
-        for (int shelfID = 0; shelfID <= 1; shelfID++){ //Checks both nearby_shelves pr. AMOUNT_OF_PICKING_ITEMS
-            if (nearby_shelf[shelfID] != NULL){ //Checks the nearby_shelf is valid and has being assigned
-                if (strcmp(pickingItems[n].name, nearby_shelf[shelfID]->item.name) == 0 &&
-                    strcmp(pickingItems[n].color, nearby_shelf[shelfID]->item.color) == 0){ //Now checks if the nearby_shelves has an item in the picking list
-                    pickingItems[n] = (item_t){0}; //Sets the pickingItems to 0, therefore the item gets removed since it is being picked up.
-                    printf("The picking list is: ");
-                    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
-                        printf("%s %s %.2lf ", pickingItems[i].color, pickingItems[i].name, pickingItems[i].weight);
-                    }
-                    printf("\n \n");
 
-                    robot_item_pickup(robot, nearby_shelf[shelfID], 1); //Runs pickup function
-                }
-            }
-        }
-    }
+    return true;
 }
 
 
@@ -262,7 +233,7 @@ int robot_drop_all(robot_t* robot, const warehouse_t* warehouse) {
 
     int steps = 0;
     for (int i = 0; i < ROBOT_MAX_CAPACITY; i++) {
-        if (robot->item[i].weight != 0 && !strlen(robot->item[i].name) && !strlen(robot->item[i].color)) {
+        if (robot->item[i].weight != 0 && strlen(robot->item[i].name) && strlen(robot->item[i].color)) {
             robot->item[i] = (item_t){0};
             steps++;
         }

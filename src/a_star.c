@@ -350,7 +350,9 @@ void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_
                "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
 
         move_robot_to_point(robot1, warehouse, goal_x, goal_y);
-        printf("Robot picks up item %d\n\n", i+1);
+        if (check_shelf(robot1, warehouse, goal_shelf)) {
+            robot_item_pickup(robot1, goal_shelf, 1);
+        }
     }
     //move_robot_to_point(robot1, warehouse, 9, 9); // Move robot back to (9, 9) or a dropzone
     drop_zone_t* drop_zone = get_nearest_drop_zone(warehouse, robot1->x, robot1->y);
