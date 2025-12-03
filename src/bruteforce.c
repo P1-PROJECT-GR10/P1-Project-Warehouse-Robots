@@ -50,19 +50,22 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
 
     neighbour_t neighbour[4]; // initializes the neighbours for the robot.
 
-    //Their directions:         north,      south,      east,     west;
+    //The directions:           north,      south,      east,     west;
     int directions[4][2] = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
     for (int i = north; i <= west; i++) {
+        // sets the direction the neighbour is, relative to the robots position.
         neighbour[i].direction = i;
-        neighbour[i].x = directions[i][0];
-        neighbour[i].y = directions[i][1];
+        // sets the x and y - coordinates for the neighbouring cell.
+        neighbour[i].x = directions[i][0] + robot->x;
+        neighbour[i].y = directions[i][1] + robot->y;
+        // initializes the status of the neighbouring cell.
+        neighbour[i].cell = *get_cell(warehouse, neighbour[i].x, neighbour[i].y);
     }
 
     // Evaluates the manhattan distance to the goal point from each neighbouring points individually.
     // If the point is unreachable, then its distance is set to infinity, so that it never is the closest point.
-    for (int i = 0; i < 4; i++) {
-        // initializes the status of the neighbouring cell.
-        neighbour[i].cell = *get_cell(warehouse, neighbour[i].x, neighbour[i].y);
+    for (int i = north; i <= west; i++) {
+
         if (is_in_bounds(neighbour[i].x, neighbour[i].y, warehouse) == true // is neighbour within bounds?
             && neighbour[i].cell == empty // is the neighbour an empty cell?
             // to prevent the robot from moving back to were it just came from.
@@ -74,12 +77,12 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
         }
     }
 
-    // The 0'th direction (east) is base case and all others are evaluated from there.
+    // The 0'th direction (north) is base case and all others are evaluated from there.
     direction_e heading = neighbour[0].direction;
 
     // current = currently used direction. i = Next direction to compare to, to see if it is closer to the goal.
-    int current = 0;
-    for (int i = 1; i < 4; i++) {
+    int current = north;
+    for (int i = north; i <= west; i++) {
         if (neighbour[current].distance > neighbour[i].distance) {
             heading = neighbour[i].direction;
             current = i;
@@ -88,8 +91,8 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
     // moves robot in the direction that has been chosen.
     move_robot(robot, warehouse, heading);
 
-    print_warehouse(warehouse); // Can print each individual step,
-    printf("%d moves \n  \n", moves);        // nice for testing purposes.
+    // print_warehouse(warehouse); // Can print each individual step,
+    // printf("%d moves \n  \n", moves);        // nice for testing purposes.
 
     prev = heading; // prepares the function for the next iteration.
 
