@@ -17,10 +17,6 @@ int main(void) {
     // Create warehouse:
     warehouse_t* warehouse = create_warehouse();
 
-    // Set drop zones
-    set_drop_zone_cell(warehouse, 17, 4);
-    set_drop_zone_cell(warehouse, 17, 5);
-
     // Generate picking list
     item_t picking_list[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(picking_list, warehouse, AMOUNT_OF_PICKING_ITEMS);

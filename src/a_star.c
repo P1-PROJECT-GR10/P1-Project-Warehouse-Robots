@@ -1,9 +1,7 @@
-#include "a_star.h"
-
 #include <math.h>
-
 #include "bruteforce.h"
 #include "warehouse.h"
+#include "a_star.h"
 
 
 /*
