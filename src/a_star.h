@@ -180,7 +180,7 @@ char* node_came_from_to_string(node_t node);
  * @param rows The amount of rows in the map
  * @param columns The amount of columns in the map.
  */
-void print_node_map(node_t* node_map, int rows, int columns);
+void print_node_map(node_t* node_map, int rows, int columns, int goal_index);
 
 /**
  * Return whether a point is inside the width and height of a grid

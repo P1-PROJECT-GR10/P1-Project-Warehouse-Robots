@@ -245,5 +245,5 @@ int robot_drop_all(robot_t* robot, const warehouse_t* warehouse) {
 }
 
 void free_robot(robot_t* robot1){
-    free(robot1);
+    if (robot1 != NULL) free(robot1);
 }

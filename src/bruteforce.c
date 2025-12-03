@@ -29,16 +29,15 @@ void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int go
     }
 
     // checks if goal point is out of bounds, i.e. impassible.
-    if (is_in_bounds(goal_x, goal_y, warehouse) == false) {
+    if (!is_in_bounds(goal_x, goal_y, warehouse)) {
         printf("Can't reach target, as it is out of bounds! :(\n");
         return;
     }
 
     // calls the recursive algorithm, and prints the amount of recursive calls.
-    printf("\n");
     // TODO: clean up magic numbers please
-    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, -1, 0);
-    printf("Robot moved: %d tiles\n", amount_of_moves);
+    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, no_direction, 0);
+    printf("\nRobot moved: %d tiles\n", amount_of_moves);
 }
 
 int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {
@@ -76,7 +75,7 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
     for (int i = 0; i < 4; i++) {
         // initializes the status of the neighbouring cell.
         neighbour[i].cell = *get_cell(warehouse, neighbour[i].x, neighbour[i].y);
-        if (is_in_bounds(neighbour[i].x, neighbour[i].y, warehouse) == true // is neighbour within bounds?
+        if (is_in_bounds(neighbour[i].x, neighbour[i].y, warehouse) // is neighbour within bounds?
             && neighbour[i].cell == empty // is the neighbour an empty cell?
             // to prevent the robot from moving back to were it just came from.
             && prev != get_mirror_direction(neighbour[i])) {
