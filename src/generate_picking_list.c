@@ -12,6 +12,7 @@ void generate_picking_list(item_t pickingItems[], const warehouse_t* warehouse, 
 }
 
 void display_picking_list(item_t* pickingItems, int item_amount_input) {
+    // Display the picking list in order
     printf("The picking list is: ");
     for (int i = 0; i < item_amount_input; i++) {
         printf("%s %s %.2lf ", pickingItems[i].color, pickingItems[i].name, pickingItems[i].weight);

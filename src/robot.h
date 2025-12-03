@@ -21,6 +21,7 @@ typedef struct robot_t {
     item_t item[ROBOT_MAX_CAPACITY]; ///< The number of items structs in an array, the robot can carry
     int x;                  ///< The x-coordinate of the robot
     int y;                  ///< The y-coordinate of the robot
+    bool is_in_drop_zone;
 } robot_t;
 
 
@@ -39,7 +40,7 @@ robot_t* create_robot(const warehouse_t* warehouse);
  * Test function for printing the coordinates of a robot.
  * @param robot1 A valid robot structure.
  */
-void print_robot_xy(robot_t robot1);
+void print_robot_xy(const robot_t* robot1);
 
 /**
  * Moves a robot in a specified direction\n
@@ -60,15 +61,17 @@ void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t picki
 
 /**
  * A function that checks for nearby shelves y+1 / y-1 from the robot
- * @param robot Pointer to the robot struct
+ * @param robot Pointer to the robot
+ * @param robot Pointer to the warehouse
+ * @param shelf Pointer to the shelf
  */
-void check_nearby_shelves(robot_t* robot, const warehouse_t* warehouse, item_t pickingItems[]);
+bool check_shelf(robot_t* robot, const warehouse_t* warehouse, shelf_t* shelf);
 
 /**
  * A function that can pickup items from a shelf
- * @param robot
- * @param shelf
- * @param amount
+ * @param robot Pointer to the robot
+ * @param shelf Pointer to the shelf
+ * @param amount Amount of items to pick up from shelf
  */
 void robot_item_pickup(robot_t* robot, shelf_t* shelf, int amount);
 

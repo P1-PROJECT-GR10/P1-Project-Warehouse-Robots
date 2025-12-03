@@ -25,7 +25,6 @@
 /// The name of the file containing items
 #define ITEM_FILE "items.txt"
 
-
 //---------------------------------------ENUMERATIONS---------------------------------------
 
 /// Defines the state of a cell in a warehouse
@@ -59,7 +58,7 @@ typedef struct drop_zone {
 typedef struct {
     drop_zone_t** zones;
     int amount;
-    int capacity;
+    int max_amount;
 } drop_zones;
 
 typedef struct {
@@ -80,7 +79,16 @@ warehouse_t* create_warehouse();
 
 void destroy_warehouse(warehouse_t* warehouse);
 
-void destroy_test_warehouse(warehouse_t* warehouse);
+/**
+ * A function for calculating the manhattan distance between two nodes: (|x1 - x2| + |y1 - y2|)\n
+ * Designed as heuristic function for an A* algorithm
+ * @param x1 The current x-coordinate
+ * @param y1 The current y-coordinate
+ * @param x2 The goal x-coordinate
+ * @param y2 The goal y-coordinate
+ * @return An integer value representing the manhattan distance between the two input nodes
+ */
+int manhat_dist(int x1, int y1, int x2, int y2);
 
 /**
  * Gets stored data from a cell in a warehouse.
@@ -130,6 +138,14 @@ shelf_t** populate_shelves(const warehouse_t* warehouse);
  * @param y y-coordinate of the shelf
  */
 void set_drop_zone_cell(warehouse_t* warehouse, int x, int y);
+
+/**
+ * Get nearest drop zone to a point
+ * @param warehouse The warehouse heap
+ * @param x x-coordinate of the point to get nearest drop zone from
+ * @param y y-coordinate of the point to get nearest drop zone from
+ */
+drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y);
 
 /**
  * Helper function for printing warehouse\n

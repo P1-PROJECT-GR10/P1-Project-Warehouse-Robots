@@ -20,18 +20,14 @@ typedef struct neighbour {
     cell_e cell;
 } neighbour_t;
 
-int manhat_dist(int x1, int y1, int x2, int y2);
-
 /** The main function for the bruteforce algorithm, here lies the conditions for the function.
  *  It also prints the total number of steps (amount of recursive calls) it uses.
  * @param warehouse -   The warehouse layout.
  * @param robot     -   The robot that is moving
  * @param goal_x    -   The x-coordinate of the goal point for the algorithm.
  * @param goal_y    -   The y-coordinate of the goal point for the algorithm.
- * @param columns   -   The paramater for the columns, and also the rows, of the warehouse.
- * @param rows      -   They are unnessecary, and will be removed when cleaned up.
  */
-void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
+void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
 
 /** The recoursive part of the bruteforcing algorithm.
  *  Moves the robot one step at a time until it has gotten to its goal point.
@@ -39,8 +35,6 @@ void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int go
  * @param robot     -   The robot that is moving
  * @param goal_x    -   The x-coordinate of the goal point for the algorithm.
  * @param goal_y    -   The y-coordinate of the goal point for the algorithm.
- * @param columns   -   The paramater for the columns, and also the rows, of the warehouse.
- * @param rows          They are unnessecary, and will be removed when cleaned up.
  * @param prev      -   The previous direction that has been moved by the robot.
  *                      This is used to stop the robot from moving back and fourth,
  *                      by making it unable to move back the way that is just came.
