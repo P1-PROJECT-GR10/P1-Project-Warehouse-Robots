@@ -112,8 +112,8 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
     }
 }
 
-void print_robot_xy(const robot_t robot1) { // for testing purposes
-    printf("%d, %d\n",robot1.x, robot1.y);
+void print_robot_xy(const robot_t* robot1) { // for testing purposes
+    printf("%d, %d\n",robot1->x, robot1->y);
 }
 
 void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t pickingItems[]) {
@@ -144,7 +144,7 @@ void manual_movement(robot_t* robot1, const warehouse_t* warehouse, item_t picki
                 print_warehouse(warehouse);
                 break;
             case 'p':
-                print_robot_xy(*robot1);
+                print_robot_xy(robot1);
                 break;
             case 'b':
                 break;

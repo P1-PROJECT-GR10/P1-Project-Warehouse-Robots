@@ -27,7 +27,7 @@ typedef struct neighbour {
  * @param goal_x    -   The x-coordinate of the goal point for the algorithm.
  * @param goal_y    -   The y-coordinate of the goal point for the algorithm.
  */
-void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
+void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
 
 /** The recoursive part of the bruteforcing algorithm.
  *  Moves the robot one step at a time until it has gotten to its goal point.
