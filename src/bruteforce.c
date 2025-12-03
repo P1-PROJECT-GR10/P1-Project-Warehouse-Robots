@@ -12,7 +12,7 @@ int get_mirror_direction(neighbour_t neighbour) {
         case west:
             return east;
         default:
-            printf("wrong input in function: get_mirror_direction");
+            printf("Wrong input in function: get_mirror_direction");
             return no_direction;
     }
 }
