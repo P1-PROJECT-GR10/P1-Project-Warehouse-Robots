@@ -80,8 +80,6 @@ warehouse_t* create_warehouse();
 
 void destroy_warehouse(warehouse_t* warehouse);
 
-void destroy_test_warehouse(warehouse_t* warehouse);
-
 /**
  * Gets stored data from a cell in a warehouse.
  * @param warehouse The warehouse in which the cell exists

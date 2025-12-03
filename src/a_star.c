@@ -1,6 +1,8 @@
 #include "a_star.h"
 
 #include <math.h>
+
+#include "bruteforce.h"
 #include "warehouse.h"
 
 int manhattan_h(node_t current, node_t goal) {
@@ -97,8 +99,8 @@ node_t* heap_pop(minheap* heap) {
     }
 
     node_t* root = heap->array[0];
-    root->heap_index = -1;      // No longer in heap
-    heap->size--;                  // Heap is smaller
+    root->heap_index = -1;          // No longer in heap
+    heap->size--;                   // Heap is smaller
 
     // Move last node to the top
     heap->array[0] = heap->array[heap->size];    // Doesnt use heap_swap for efficiency
@@ -211,7 +213,7 @@ node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x
             return current;
         }
 
-        // Check neighbours
+        // Check neighbours (east, west, south, north)
         int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
         for (int i = 0; i < 4; i++) {
@@ -219,7 +221,7 @@ node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x
             int nx = current->x + directions[i][0];
             int ny = current->y + directions[i][1];
 
-            // Check is neighbour is inside warehouse
+            // Check if neighbour is inside warehouse
             if (is_in_bounds(nx, ny, warehouse)) {
                 // Get neighbour node from map
                 int n_index = get_index(nx, ny, columns);
@@ -236,7 +238,7 @@ node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x
                     // Set up neighbour values
                     neighbour->parent = current;
                     neighbour->g = tentative_g;
-                    neighbour->h = manhattan_h(*neighbour, *goal_node);
+                    neighbour->h = manhat_dist(neighbour->x, neighbour->y, goal_node->x, goal_node->y);
                     neighbour->f = neighbour->g + neighbour->h;
 
                     // Push neighbour to open_set or reorder heap with new values
