@@ -15,7 +15,7 @@ int get_mirror_direction(neighbour_t neighbour) {
         case west:
             return east;
         default:
-            printf("wrong input in function: get_mirror_direction");
+            printf("Wrong input in function: get_mirror_direction");
             return -1;
     }
 }
@@ -24,13 +24,13 @@ void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int go
 
     // checks if goal point is a shelf, i.e. impassible.
     if (*get_cell(warehouse, goal_x, goal_y) == shelf) {
-        printf("can't reach target, as it is a shelf! :(\n");
+        printf("Can't reach target, as it is a shelf! :(\n");
         return;
     }
 
     // checks if goal point is out of bounds, i.e. impassible.
     if (is_in_bounds(goal_x, goal_y, warehouse) == false) {
-        printf("can't reach target, as it is out of bounds! :(\n");
+        printf("Can't reach target, as it is out of bounds! :(\n");
         return;
     }
 
@@ -38,14 +38,14 @@ void bruteforce(const warehouse_t* warehouse, robot_t* robot, int goal_x, int go
     printf("\n");
     // TODO: clean up magic numbers please
     int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, -1, 0);
-    printf("robot moved: %d tiles\n", amount_of_moves);
+    printf("Robot moved: %d tiles\n", amount_of_moves);
 }
 
 int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {
 
     if (goal_x == robot->x && goal_y == robot->y) {
         print_warehouse(warehouse);
-        printf("arrived at destination :)\n");
+        printf("Arrived at destination :)\n");
         return moves;
     } // checks if the robot has arrived at the goal point.
 

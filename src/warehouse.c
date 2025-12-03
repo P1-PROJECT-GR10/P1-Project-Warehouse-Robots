@@ -158,7 +158,9 @@ void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
         drop_zone.y = y;
         warehouse->drop_zones->zones[warehouse->drop_zones->amount] = &drop_zone;
         warehouse->drop_zones->amount++;
+        return;
     }
+    printf("Cell is already occupied\n");
 }
 
 void print_cell(cell_e cell) {

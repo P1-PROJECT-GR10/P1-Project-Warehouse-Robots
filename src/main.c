@@ -9,16 +9,19 @@ int main(void) {
     // Time Parameters and functionality
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
+
+    // Seed pseudo-random number generator, with a set seed
     int seed = 123456789;
     srand(seed);
 
     // Create warehouse:
     warehouse_t* warehouse = create_warehouse();
 
-    // TODO: Change these functions to accept new warehouse handle
-    //set_drop_zone_cell(warehouse, drop_zones, 17, 4);
-    //set_drop_zone_cell(warehouse, drop_zones, 17, 5);
+    // Set drop zones
+    set_drop_zone_cell(warehouse, 17, 4);
+    set_drop_zone_cell(warehouse, 17, 5);
 
+    // Generate picking list
     item_t picking_list[AMOUNT_OF_PICKING_ITEMS];
     generate_picking_list(picking_list, warehouse, AMOUNT_OF_PICKING_ITEMS);
     display_picking_list(picking_list, AMOUNT_OF_PICKING_ITEMS);
@@ -40,8 +43,7 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &end);
     const double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
     printf("Runtime: %.9f seconds\n", runtime);
-
-    //printf("Seed: %d\n", seed);
+    printf("Seed: %d\n", seed);
 
     return 0;
 }

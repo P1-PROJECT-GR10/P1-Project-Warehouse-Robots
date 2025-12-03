@@ -21,6 +21,7 @@ typedef struct robot_t {
     item_t item[ROBOT_MAX_CAPACITY]; ///< The number of items structs in an array, the robot can carry
     int x;                  ///< The x-coordinate of the robot
     int y;                  ///< The y-coordinate of the robot
+    bool is_in_drop_zone;
 } robot_t;
 
 

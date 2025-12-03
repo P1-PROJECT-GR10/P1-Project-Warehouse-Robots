@@ -10,6 +10,10 @@ robot_t* create_robot(const warehouse_t* warehouse) {
     robot1->y = 0;
 
     int robot1_index = get_index(robot1->x, robot1->y, warehouse->columns);
+    if (warehouse->map[robot1_index] == drop_zone)
+        robot1->is_in_drop_zone = true;
+    else
+        robot1->is_in_drop_zone = false;
     warehouse->map[robot1_index] = robot; // Sets the robot in the warehouse
 
     return robot1;
@@ -45,11 +49,13 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
                 printf("Error: Invalid movement\n");
                 return;
                 }
-            warehouse->map[columns * robot1->y + robot1->x] = empty;
-
-            robot1->y --;// moves the inbuilt coordinate of the robot,
-                                    // and changes the robot position on the visuals
+            if (robot1->is_in_drop_zone)
+                warehouse->map[columns * robot1->y + robot1->x] = drop_zone;
+            else
+                warehouse->map[columns * robot1->y + robot1->x] = empty;
+            robot1->y --;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
+            robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
             break;
         case south:
             if (warehouse->map[columns * (robot1->y+1)  + robot1->x] == shelf
@@ -59,10 +65,13 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
                 printf("Error: Invalid movement\n");
                 return;
                 }
-            warehouse->map[columns * robot1->y + robot1->x] = empty;
-            robot1->y ++;// moves the inbuilt coordinate of the robot,
-                                    // and changes the robot position on the visuals
+            if (robot1->is_in_drop_zone)
+                warehouse->map[columns * robot1->y + robot1->x] = drop_zone;
+            else
+                warehouse->map[columns * robot1->y + robot1->x] = empty;
+            robot1->y ++;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
+            robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
             break;
         case east:
             if (warehouse->map[columns * robot1->y  + robot1->x+1] == shelf
@@ -72,10 +81,13 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
                 printf("Error: Invalid movement\n");
                 return;
                 }
-            warehouse->map[columns * robot1->y + robot1->x] = empty;
-            robot1->x ++; // moves the inbuilt coordinate of the robot,
-                                     // and changes the robot position on the visuals
+            if (robot1->is_in_drop_zone)
+                warehouse->map[columns * robot1->y + robot1->x] = drop_zone;
+            else
+                warehouse->map[columns * robot1->y + robot1->x] = empty;
+            robot1->x ++; // moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
+            robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
             break;
         case west:
             if (warehouse->map[columns * robot1->y  + robot1->x-1] == shelf
@@ -85,10 +97,13 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
                 printf("Error: Invalid movement\n");
                 return;
             }
-            warehouse->map[columns * robot1->y + robot1->x] = empty;
-            robot1->x --;// moves the inbuilt coordinate of the robot,
-                                    // and changes the robot position on the visuals
+            if (robot1->is_in_drop_zone)
+                warehouse->map[columns * robot1->y + robot1->x] = drop_zone;
+            else
+                warehouse->map[columns * robot1->y + robot1->x] = empty;
+            robot1->x --;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
+            robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
             break;
         default:
             printf("Error: Invalid input\n");

@@ -25,7 +25,6 @@
 /// The name of the file containing items
 #define ITEM_FILE "items.txt"
 
-
 //---------------------------------------ENUMERATIONS---------------------------------------
 
 /// Defines the state of a cell in a warehouse
@@ -79,8 +78,6 @@ void* safe_malloc(size_t size);
 warehouse_t* create_warehouse();
 
 void destroy_warehouse(warehouse_t* warehouse);
-
-void destroy_test_warehouse(warehouse_t* warehouse);
 
 /**
  * Gets stored data from a cell in a warehouse.
