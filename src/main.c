@@ -26,8 +26,6 @@ int main(void) {
     robot_t* robot1 = create_robot(warehouse);
     print_warehouse(warehouse);
 
-    // Move the robot to a specified point
-    move_robot_to_point(robot1, warehouse, 9, 0);
     // The robot finds the items in the picking list, then gets them and returns them to a point.
     robot_get_picking_list(robot1, warehouse, picking_list);
 
