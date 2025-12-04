@@ -360,7 +360,8 @@ void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_
     move_robot_to_point(robot1, warehouse, drop_zone->x, drop_zone->y);
     printf("Robot navigated to drop zone\n");
     robot_drop_all(robot1, warehouse);
-    printf("Robot drops items at (%d %d)\n\n", drop_zone->x, drop_zone->y);
+    printf("Robot drops items at (%d %d)\n", drop_zone->x, drop_zone->y);
+    printf("Robot is finished, and took %d steps in total.\n\n",robot1->steps);
 }
 
 direction_e parent_direction(node_t node) {

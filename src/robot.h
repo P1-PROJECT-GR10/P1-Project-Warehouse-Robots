@@ -16,11 +16,11 @@ typedef enum direction {north, south, east, west, no_direction} direction_e;
  * Contains the ID, number of items, and x/y-coordinates of the robot.
  */
 typedef struct robot_t {
-    int robot_id;           ///< The ID of the robot
     int number_of_items;    ///< The number of items the robot is carrying
     item_t item[ROBOT_MAX_CAPACITY]; ///< The number of items structs in an array, the robot can carry
     int x;                  ///< The x-coordinate of the robot
     int y;                  ///< The y-coordinate of the robot
+    int steps;
     bool is_in_drop_zone;
 } robot_t;
 
