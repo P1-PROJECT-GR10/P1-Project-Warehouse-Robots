@@ -65,7 +65,8 @@ void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, 
 
     printf("Robot navigated to drop zone\n");
     robot_drop_all(robot1, warehouse);
-    printf("Robot drops items at (%d %d)\n\n", drop_zone->x, drop_zone->y);
+    printf("Robot drops items at (%d %d)\n", drop_zone->x, drop_zone->y);
+    printf("Robot is finished, and took %d steps in total.\n\n",robot1->steps);
 }
 
 int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {

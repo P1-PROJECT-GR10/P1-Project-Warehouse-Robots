@@ -5,7 +5,7 @@
 robot_t* create_robot(const warehouse_t* warehouse) {
     robot_t* robot1 = (robot_t*)(safe_malloc(sizeof(robot_t)));
 
-    robot1->robot_id = 1;
+    robot1->steps = 0;
     robot1->number_of_items = 0;
     robot1->x = 0;
     robot1->y = 0;
@@ -61,6 +61,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->y --;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps++;
             break;
         case south:
             if (warehouse->map[columns * (robot1->y+1)  + robot1->x] == shelf
@@ -77,6 +78,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->y ++;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps++;
             break;
         case east:
             if (warehouse->map[columns * robot1->y  + robot1->x+1] == shelf
@@ -93,6 +95,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->x ++; // moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps++;
             break;
         case west:
             if (warehouse->map[columns * robot1->y  + robot1->x-1] == shelf
@@ -109,6 +112,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->x --;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps++;
             break;
         default:
             printf("Error: Invalid input\n");
@@ -197,7 +201,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, const int amount) {
 
     shelf->stock -= amount;
     robot->number_of_items += amount; //The robot gets the item amount transferred
-    printf("Robot %d picked %d item(s) from the shelve with the coordinats x: %d, y: %d.\nThe robot is now carrying %d items.\n", robot->robot_id, amount, shelf->x, shelf->y, robot->number_of_items);
+    printf("Robot picked %d item(s) from the shelve with the coordinats x: %d, y: %d.\nThe robot is now carrying %d items.\n", amount, shelf->x, shelf->y, robot->number_of_items);
 
     //Checks the robot's items from 0 to ROBOT_MAX_CAPACITY.
     for (int k = 0; k < amount; k++){
@@ -244,7 +248,6 @@ int robot_drop_all(robot_t* robot, const warehouse_t* warehouse) {
         }
     }
     robot->number_of_items = 0;
-    printf("Robot dropped %d items off in a drop zone\n",steps);
     return steps;
 }
 
