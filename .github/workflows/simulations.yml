@@ -76,3 +76,47 @@ jobs:
         with:
           name: simulation-results
           path: ${{ github.workspace }}/build/results.txt
+
+      # Discord simulation webhook.
+      - name: Send results.txt to Discord via webhook
+        if: always()                    # still run even if previous steps failed because we want all results
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          TZ: "Europe/Copenhagen"
+        run: |
+          set -e
+
+          # path to your results file
+          RESULTS_FILE="${{ github.workspace }}/build/results.txt"
+
+          if [ ! -f "$RESULTS_FILE" ]; then
+            echo "No results file at $RESULTS_FILE"
+            exit 0
+          fi
+
+          # read file content into a variable, then JSON-escape safely with python
+          CONTENT=$(python3 - <<'PY'
+          import json,sys,os
+          p = os.environ['RESULTS_FILE']
+          with open(p, 'r', encoding='utf-8') as f:
+          text = f.read().strip()
+        # Normalize line endings
+          text = text.replace('\r\n', '\n')
+          # Prepare message body with date + code block
+          from datetime import datetime
+          date = datetime.now().strftime('%d-%m-%Y')
+          message = f"# Date Posted: {date}\n\n" + text
+          print(json.dumps(message))
+          PY
+          )
+
+        # Use the JSON-escaped string to create the payload
+          PAYLOAD=$(jq -n --arg content "$CONTENT" '{content: $content}')
+
+        # Post to Discord
+          curl -s -X POST "$DISCORD_WEBHOOK" \
+          -H "Content-Type: application/json" \
+          -d "$PAYLOAD"
+          
+          echo "Posted results to Discord."
+        shell: bash
