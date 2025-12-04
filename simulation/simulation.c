@@ -82,7 +82,8 @@ int main(int argc, char** argv) {
     //-------------------------------
     // Run simulations multiple times
     //-------------------------------
-    double total_runtime = 0.0;
+    double total_runtime_astar = 0.0;
+    double total_runtime_bruteforce = 0.0;
 
     //-------------------------------
     // A* Simulation
@@ -117,18 +118,18 @@ int main(int argc, char** argv) {
         // End timer
         clock_gettime(CLOCK_MONOTONIC, &end);
         double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-        total_runtime += runtime;
+        total_runtime_astar += runtime;
 
         // Cleanup heap memory
         destroy_warehouse(warehouse);
         free_robot(robot1);
 
-        // Per-run run runtime
-        fprintf(results, "run_%d_runtime=%.9f\n", i + 1, runtime);
+        // Per-run runtime
+        fprintf(results, "astar_run_%d_runtime=%.9f\n", i + 1, runtime);
     }
 
-    // reset seed for bruteforce simulation
-    seed = atoi(argv[3]);
+    // safely reset seed to start seed for bruteforce simulation
+    if (argc >= 4) seed = atoi(argv[3]);
 
     //-------------------------------
     // Bruteforce simulation
@@ -163,27 +164,40 @@ int main(int argc, char** argv) {
         // End timer
         clock_gettime(CLOCK_MONOTONIC, &end);
         double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-        total_runtime += runtime;
+        total_runtime_bruteforce += runtime;
 
         // Cleanup heap memory
         destroy_warehouse(warehouse);
         free_robot(robot1);
 
-        // Per-run run runtime
-        fprintf(results, "run_%d_runtime=%.9f\n", i + 1, runtime);
+        // Per-run runtime
+        fprintf(results, "bruteforce_run_%d_runtime=%.9f\n", i + 1, runtime);
     }
 
-    //-------------------------------
+    //---------------------------------------------
     // Write summary of simulations
-    //-------------------------------
-    fprintf(results, "\nruns=%d\n", runs);
+    //---------------------------------------------
+    fprintf(results, "\n=== SUMMARY ===\n");
+
+    fprintf(results, "runs=%d\n", runs);
     fprintf(results, "start_seed=%d\n", seed);
     fprintf(results, "picking_items=%d\n", picking_item_amount);
-    fprintf(results, "warehouse=%dx%d\n",
-            config.shelf_amount * (2 + config.aisle_width) + config.aisle_width,
+
+    // Warehouse dimensions
+    fprintf(results, "warehouse_rows=%d\n",
+            config.shelf_amount * (2 + config.aisle_width) + config.aisle_width);
+
+    fprintf(results, "warehouse_columns=%d\n",
             config.main_aisle_width * 3 + config.shelf_length * 2);
-    fprintf(results, "total_runtime=%.9f\n", total_runtime);
-    fprintf(results, "avg_runtime_per_run=%.9f\n", total_runtime / runs);
+
+    // Separate results
+    fprintf(results, "\n=== A_STAR ===\n");
+    fprintf(results, "total_runtime_astar=%.9f\n", total_runtime_astar);
+    fprintf(results, "avg_runtime_astar=%.9f\n", total_runtime_astar / runs);
+
+    fprintf(results, "\n=== BRUTEFORCE ===\n");
+    fprintf(results, "total_runtime_bruteforce=%.9f\n", total_runtime_bruteforce);
+    fprintf(results, "avg_runtime_bruteforce=%.9f\n", total_runtime_bruteforce / runs);
 
     fclose(results);
     return 0;
