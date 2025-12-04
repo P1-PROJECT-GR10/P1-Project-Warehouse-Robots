@@ -16,8 +16,7 @@ void* safe_malloc(size_t size) {
     return pointer;
 }
 
-item_t* read_items_from_file(char* file_name) {
-
+item_t* read_items_from_file(char* file_name, int* items_read) {
     int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
 
     FILE* items_file = fopen(file_name, "r");
@@ -28,7 +27,7 @@ item_t* read_items_from_file(char* file_name) {
     }
 
     item_t* items = safe_malloc(sizeof(item_t)*n_shelves);
-    file_read_items(items, n_shelves, items_file);
+    *items_read = file_read_items(items, n_shelves, items_file);
     fclose(items_file);
 
     return items;
@@ -42,7 +41,7 @@ warehouse_t* create_warehouse() {
     warehouse->columns = MAIN_AISLE_WIDTH * 3 + SHELF_LENGTH * 2;
     warehouse->number_of_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
     warehouse->drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES);
-    warehouse->items = read_items_from_file(ITEM_FILE);
+    warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->map = generate_layout(warehouse);
     warehouse->shelves = populate_shelves(warehouse);
 
@@ -135,7 +134,7 @@ shelf_t** populate_shelves(const warehouse_t* warehouse) {
             if (*cell != shelf) // Continue if not a shelf
                 continue;
 
-            shelves[shelf_count] = generate_shelf(warehouse->items[shelf_count], STOCK_AMOUNT, col, row); // Generate shelf
+            shelves[shelf_count] = generate_shelf(warehouse, shelf_count, STOCK_AMOUNT, col, row); // Generate shelf
             shelf_count++; // Keep track of array positions
         }
     }
@@ -230,25 +229,38 @@ void print_warehouse(const warehouse_t* warehouse) {
     }
 }
 
-void file_read_items(item_t* items, int n_items, FILE* file) {
+int file_read_items(item_t* items, int n_items, FILE* file) {
     item_t item;
     int i;
     for (i = 0; i < n_items; i++) {
         int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
         if(success != 3){
-            printf("Failed to read enough fields for item %d, only read %d field(s).", i, success);
-            exit(EXIT_FAILURE);
+            printf("Failed to read enough fields for item %d, only read %d field(s).\n", i, success);
+            break;
+            //exit(EXIT_FAILURE);
         }
         items[i] = item;
     }
     if (i < n_items) {
         printf("Failed to generate %d items, only read %d items from file.\n", n_items, i);
     }
+    printf("Setting remainder of shelves to empty.\n");
+    return i;
 }
 
-struct shelf* generate_shelf(item_t item, int stock, int x, int y) {
+struct shelf* generate_shelf(warehouse_t* warehouse, int shelf_count, int stock, int x, int y) {
     shelf_t* shelf = (shelf_t*)safe_malloc(sizeof(shelf_t));
-    shelf->item = item;
+
+    item_t empty_item = (item_t){0};
+    char empty_name[20] = "empty";
+    strcpy(empty_item.name, empty_name);
+
+    if (shelf_count < warehouse->number_of_items) {
+        shelf->item = warehouse->items[shelf_count];
+    } else {
+        shelf->item = empty_item;
+    }
+
     shelf->stock = stock;
     shelf->x = x;
     shelf->y = y;

@@ -18,7 +18,6 @@ int get_mirror_direction(neighbour_t neighbour) {
 }
 
 void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y) {
-
     // checks if goal point is a shelf, i.e. impassible.
     if (*get_cell(warehouse, goal_x, goal_y) == shelf) {
         printf("Can't reach target, as it is a shelf! :(\n");
@@ -35,6 +34,38 @@ void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal
     int moves = 0;
     int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, no_direction, moves);
     printf("\nrobot moved: %d tiles\n", amount_of_moves);
+}
+
+void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list) {
+    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
+        shelf_t* goal_shelf = search_item(picking_list[i].name, picking_list[i].color, warehouse);
+        int goal_x = goal_shelf->x;
+        int goal_y;
+
+        int index = get_index(goal_shelf->x, goal_shelf->y+1, warehouse->columns);
+        if (warehouse->map[index] == empty) {
+            goal_y = goal_shelf->y + 1;
+        } else {
+            goal_y = goal_shelf->y - 1;
+        }
+
+        printf("Item %d found at shelf x: %d, y: %d\n"
+               "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
+
+        bruteforce_algorithm(warehouse, robot1, goal_x, goal_y);
+        if (check_shelf(robot1, warehouse, goal_shelf)) {
+            robot_item_pickup(robot1, goal_shelf, 1);
+        }
+    }
+    //move_robot_to_point(robot1, warehouse, 9, 9); // Move robot back to (9, 9) or a dropzone
+    drop_zone_t* drop_zone = get_nearest_drop_zone(warehouse, robot1->x, robot1->y);
+    printf("Robot is finished picking up items, navigating to drop zone at %d, %d\n",drop_zone->x, drop_zone->y);
+
+    bruteforce_algorithm(warehouse, robot1, drop_zone->x, drop_zone->y);
+
+    printf("Robot navigated to drop zone\n");
+    robot_drop_all(robot1, warehouse);
+    printf("Robot drops items at (%d %d)\n\n", drop_zone->x, drop_zone->y);
 }
 
 int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {
@@ -63,7 +94,7 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
     for (int i = north; i <= west; i++) {
 
         if (is_in_bounds(neighbour[i].x, neighbour[i].y, warehouse) == true // is neighbour within bounds?
-            && neighbour[i].cell == empty // is the neighbour an empty cell?
+            && (neighbour[i].cell == empty || neighbour[i].cell == drop_zone) // is the neighbour an empty cell?
             // to prevent the robot from moving back to were it just came from.
             && prev != get_mirror_direction(neighbour[i])) {
             //calculates manhattan distance to goal point.
