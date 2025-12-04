@@ -8,10 +8,12 @@ TEST_CASE(robot_moves_north,
 
     warehouse_t* warehouse = create_warehouse();
 
+    const int n_items = 0;
+    const int n_steps = 0;
     const int x = 1;
     const int y = 1;
 
-    robot_t robot = {0, {0}, x, y, 0};
+    robot_t robot = {n_items, {0}, x, y, n_steps};
     /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, direction);
     /*--------------- Assert ---------------*/
@@ -27,10 +29,12 @@ TEST_CASE(robot_moves_south,
 
     warehouse_t* warehouse = create_warehouse();
 
+    const int n_items = 0;
+    const int n_steps = 0;
     const int x = 1;
     const int y = 1;
 
-    robot_t robot = {0, {0}, x, y, 0};
+    robot_t robot = {n_items, {0}, x, y, n_steps};
     /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, direction);
     /*--------------- Assert ---------------*/
@@ -46,10 +50,12 @@ TEST_CASE(robot_moves_west,
 
     warehouse_t* warehouse = create_warehouse();
 
+    const int n_items = 0;
+    const int n_steps = 0;
     const int x = 1;
     const int y = 1;
 
-    robot_t robot = {0, {0}, x, y, 0};
+    robot_t robot = {n_items, {0}, x, y, n_steps};
     /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, direction);
     /*--------------- Assert ---------------*/
@@ -65,14 +71,14 @@ TEST_CASE(robot_moves_east,
 
     warehouse_t* warehouse = create_warehouse();
 
+    const int n_items = 0;
+    const int n_steps = 0;
     const int x = 1;
     const int y = 1;
 
-    robot_t robot = {0, {0}, x, y, 0};
-    printf("%d,%d\n",robot.x,robot.y);
+    robot_t robot = {n_items, {0}, x, y, n_steps};
     /*--------------- Act ---------------*/
     move_robot(&robot, warehouse, direction);
-    printf("%d,%d\n",robot.x,robot.y);
     /*--------------- Assert ---------------*/
     CHECK_EQ_INT(robot.x, x); // Robot drives into shelf, so shouldn't move
     CHECK_EQ_INT(robot.y, y);
@@ -86,10 +92,12 @@ TEST_CASE(move_robot_updates_arena,
 
     warehouse_t* warehouse = create_warehouse();
 
+    const int n_items = 0;
+    const int n_steps = 0;
     const int x = 1;
     const int y = 1;
 
-    robot_t test_robot = {0, {0}, x, y, 0};
+    robot_t test_robot = {n_items, {0}, x, y, n_steps};
     /*--------------- Act ---------------*/
     move_robot(&test_robot, warehouse, direction);
     /*--------------- Assert ---------------*/
