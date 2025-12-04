@@ -5,6 +5,10 @@ int manhat_dist(const int x1, const int y1, const int x2, const int y2) {
     return abs(x1 - x2) + abs(y1 - y2);
 }
 
+double euclidean_dist(const int x1, const int y1, const int x2, const int y2) {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
 void* safe_malloc(size_t size) {
     // Attempt to allocate memory
     void* pointer = malloc(size);
@@ -242,9 +246,8 @@ int file_read_items(item_t* items, int n_items, FILE* file) {
         items[i] = item;
     }
     if (i < n_items) {
-        printf("Failed to generate %d items, only read %d items from file.\n", n_items, i);
+        printf("Failed to generate %d items, only read %d items from file.\nSetting remainder of shelves to empty\n", n_items, i);
     }
-    printf("Setting remainder of shelves to empty.\n");
     return i;
 }
 

@@ -91,6 +91,8 @@ void destroy_warehouse(warehouse_t* warehouse);
  */
 int manhat_dist(int x1, int y1, int x2, int y2);
 
+double euclidean_dist(int x1, int y1, int x2, int y2);
+
 /**
  * Gets stored data from a cell in a warehouse.
  * @param warehouse The warehouse in which the cell exists
