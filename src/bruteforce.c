@@ -96,12 +96,13 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
 
         if (is_in_bounds(neighbour[i].x, neighbour[i].y, warehouse) == true // is neighbour within bounds?
             && (neighbour[i].cell == empty || neighbour[i].cell == drop_zone) // is the neighbour an empty cell?
-            // to prevent the robot from moving back to were it just came from.
+            // to prevent the robot from moving back to where it just came from.
             && prev != get_mirror_direction(neighbour[i])) {
-            //calculates manhattan distance to goal point.
-            neighbour[i].distance = manhat_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
+            // calculates distance to goal point.
+            neighbour[i].distance = (int)euclidean_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
+            // neighbour[i].distance = manhat_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
         } else {
-            neighbour[i].distance = INFINITY; // if not reachable, make distance infinite. >:)
+            neighbour[i].distance = INFINITY; // if not reachable, make distance infinite.
         }
     }
 
@@ -116,6 +117,7 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
             current = i;
         }
     }
+
     // moves robot in the direction that has been chosen.
     move_robot(robot, warehouse, heading);
 

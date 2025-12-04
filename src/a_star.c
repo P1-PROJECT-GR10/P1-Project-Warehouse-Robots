@@ -232,7 +232,8 @@ node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x
                     // Set up neighbour values
                     neighbour->parent = current;
                     neighbour->g = tentative_g;
-                    neighbour->h = manhat_dist(neighbour->x, neighbour->y, goal_node->x, goal_node->y);
+                    neighbour->h = (float)euclidean_dist(neighbour->x, neighbour->y, goal_node->x, goal_node->y);
+                    //neighbour->h = manhat_dist(neighbour->x, neighbour->y, goal_node->x, goal_node->y);
                     neighbour->f = neighbour->g + neighbour->h;
 
                     // Push neighbour to open_set or reorder heap with new values

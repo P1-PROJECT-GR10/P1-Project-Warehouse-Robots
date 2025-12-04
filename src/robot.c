@@ -41,7 +41,6 @@ char* direction_to_string(direction_e direction) {
 }
 
 void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e direction) {
-
     const int rows = warehouse->rows;
     const int columns = warehouse->columns;
 
