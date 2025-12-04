@@ -160,8 +160,8 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->map = generate_layout(warehouse);
     warehouse->shelves = populate_shelves(warehouse);
 
-    set_drop_zone_cell(warehouse, 17, 4); // fixed position might not with larger layout
-    set_drop_zone_cell(warehouse, 17, 5); // fixed position might not with larger layout
+    set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
+    set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);
 
     return warehouse;
 }
