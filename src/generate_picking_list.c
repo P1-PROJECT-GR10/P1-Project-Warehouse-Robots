@@ -2,12 +2,9 @@
 #include "generate_picking_list.h"
 
 void generate_picking_list(item_t pickingItems[], const warehouse_t* warehouse, const int item_amount_input) {
-    // Since there is 1 item per shelf n_shelves = n_items
-    const int n_items = warehouse->number_of_shelves;
-
     for (int i = 0; i < item_amount_input; i++) {
-        int random_number = rand() % n_items; // Randomness depending on the given seed.
-        pickingItems[i] = warehouse->items[random_number]; // copying the whole struct
+        int random_number = rand() % warehouse->number_of_items; // Randomness depending on the given seed.
+        pickingItems[i] = warehouse->items[random_number]; // Copying the whole struct
     }
 }
 
