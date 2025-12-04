@@ -89,8 +89,7 @@ int get_index(int x, int y, int columns);
 /**
  * Creates a heap allocated 1D grid array of node structs
  * @attention Remember to free allocated memory!
- * @param rows the amount of rows in the grid (height)
- * @param columns the amount of columns in the grid (width)
+ * @param warehouse The warehouse heap
  * @return A pointer to an array of structs in a grid
  */
 node_t* create_node_map(const warehouse_t* warehouse);
@@ -100,8 +99,6 @@ node_t* create_node_map(const warehouse_t* warehouse);
  * Node and warehouse map should have same amount of rows and columns
  * @param node_map Map of nodes
  * @param warehouse Map of warehouse
- * @param rows Amount of rows in both the node map and warehouse map
- * @param columns Amount of columns in both the node map and warehouse map
  */
 void reset_node_map(node_t* node_map, const warehouse_t* warehouse);
 
@@ -109,8 +106,6 @@ void reset_node_map(node_t* node_map, const warehouse_t* warehouse);
  * A pathfinding algorithm for finding the shortest path from a start point to a goal point
  * @param warehouse Map of a warehouse
  * @param node_map Map of nodes
- * @param rows Amount of rows in both the node map and warehouse map
- * @param columns Amount of columns in both the node map and warehouse map
  * @param start_x x-coordinate of the start point
  * @param start_y y-coordinate of the start point
  * @param goal_x x-coordinate of the goal point
@@ -131,8 +126,6 @@ direction_e* reconstruct_path(node_t* goal_node, int* path_length);
  * A function that uses A* pathfinding and path reconstruction for moving a robot to a point
  * @param robot The robot that should move
  * @param warehouse An array representing the map of a warehouse
- * @param rows the amount of rows in the warehouse
- * @param columns the amount of columns in the warehouse
  * @param goal_x x-coordinate of the goal point
  * @param goal_y y-coordinate of the goal point
  */
@@ -141,13 +134,8 @@ void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_
 /**
  * A function that moves the robot to the points from where it can pick up items in a picking list
  * @param robot1 A pointer to a valid robot structure
- * @param warehouse The map of a warehouse
- * @param rows Rows in the warehouse
- * @param columns Columns in the warehouse
+ * @param warehouse The warehouse heap
  * @param picking_list An array of items for the robot to pickup
- * @param amount_of_picking_items The amount of items in the picking list
- * @param shelves pointer to an array of shelf_t pointers
- * @param n_shelves the number of shelves
  */
 void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list);
 
@@ -177,8 +165,7 @@ void print_node_map(node_t* node_map, int rows, int columns, int goal_index);
  * Return whether a point is inside the width and height of a grid
  * @param x x-coordinate of a point
  * @param y y-coordinate of a point
- * @param rows amount of rows in grid
- * @param columns amount of columns in grid
+ * @param warehouse The warehouse heap
  * @return a boolean value representing whether the point is in bounds
  */
 bool is_in_bounds(int x, int y, const warehouse_t* warehouse);
