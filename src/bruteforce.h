@@ -43,3 +43,11 @@ void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal
  * @return
  */
 int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y, direction_e prev, int moves);
+
+/**
+ * Uses bruteforce algorithm to move the robot and pick up items from the picking list, to then drop off at the drop zone
+ * @param robot1 The robot to move
+ * @param warehouse The warehosue heap
+ * @param picking_list The picking list
+ */
+void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list);

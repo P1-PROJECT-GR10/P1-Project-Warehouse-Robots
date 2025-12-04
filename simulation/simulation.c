@@ -5,6 +5,7 @@
 #include "generate_picking_list.h"
 #include "robot.h"
 #include "a_star.h"
+#include "bruteforce.h"
 /*
  *#######################################################################
  *##                                                                   ##
@@ -120,6 +121,46 @@ int main(int argc, char** argv) {
         fprintf(results, "run_%d_runtime=%.9f\n", i + 1, runtime);
     }
 
+    for (int i = 0; i < runs; i++) {
+        //-------------------------------
+        // Seed random number generator -> random seed per run
+        //-------------------------------
+        srand(seed+i);
+        // Create warehouse
+        warehouse_t* warehouse = create_simulated_warehouse(config);
+        if (!warehouse) { fprintf(stderr, "ERROR: Failed to create warehouse\n"); exit(EXIT_FAILURE);}
+        if (warehouse->rows > 500 || warehouse->columns > 500) {
+            fprintf(stderr, "ERROR: Warehouse size exceeds maximum 500x500.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        // Generate picking list
+        item_t picking_list[picking_item_amount];
+        generate_picking_list(picking_list, warehouse, picking_item_amount);
+
+        // Create robot
+        robot_t* robot1 = create_robot(warehouse);
+
+        // Start timer
+        struct timespec start, end;
+        clock_gettime(CLOCK_MONOTONIC, &start);
+
+        // Run simulation
+        bruteforce_get_picking_list(robot1, warehouse, picking_list);
+
+        // End timer
+        clock_gettime(CLOCK_MONOTONIC, &end);
+        double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+        total_runtime += runtime;
+
+        // Cleanup heap memory
+        destroy_warehouse(warehouse);
+        free_robot(robot1);
+
+        // Per-run run runtime
+        fprintf(results, "run_%d_runtime=%.9f\n", i + 1, runtime);
+    }
+
     //-------------------------------
     // Write summary
     //-------------------------------
@@ -156,7 +197,7 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->number_of_shelves = cfg.shelf_amount * cfg.shelf_length * 2 * 2; // Sum = n_shelves
     // Function based struct variables.
     warehouse->drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES); // fixed drop_zone amount for now
-    warehouse->items = read_items_from_file(ITEM_FILE);
+    warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->map = generate_layout(warehouse);
     warehouse->shelves = populate_shelves(warehouse);
 

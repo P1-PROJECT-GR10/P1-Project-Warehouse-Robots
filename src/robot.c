@@ -17,6 +17,10 @@ robot_t* create_robot(const warehouse_t* warehouse) {
         robot1->is_in_drop_zone = false;
     warehouse->map[robot1_index] = robot; // Sets the robot in the warehouse
 
+    for (int j = 0; j < ROBOT_MAX_CAPACITY; j++){
+        robot1->item[j] = (item_t){0};
+    }
+
     return robot1;
 }
 

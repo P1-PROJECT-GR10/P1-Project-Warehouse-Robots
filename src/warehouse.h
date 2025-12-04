@@ -68,6 +68,7 @@ typedef struct {
     shelf_t** shelves;
     item_t* items;
     int number_of_shelves;
+    int number_of_items;
     drop_zones* drop_zones;
 } warehouse_t;
 
@@ -182,9 +183,9 @@ shelf_t* manual_search_item(const warehouse_t* warehouse);
  * @param number_of_items The size of the array of items, and the amount of items to be read from the file.
  * @param file The file from which the items are read
  */
-void file_read_items(item_t* items, int number_of_items, FILE* file);
+int file_read_items(item_t* items, int number_of_items, FILE* file);
 
-item_t* read_items_from_file(char* file_name);
+item_t* read_items_from_file(char* file_name, int* items_read) ;
 
 /**
  * A helper function for generating the warehouse that populates a given shelf with an item
@@ -196,7 +197,7 @@ item_t* read_items_from_file(char* file_name);
  * @param y y-coordinate of the shelf
  * @return A pointer to the generated shelf
  */
-struct shelf* generate_shelf(item_t item, int stock, int x, int y);
+struct shelf* generate_shelf(warehouse_t* warehouse, int shelf_count, int stock, int x, int y);
 
 /**
  * A helper function for generating a struct to store the drop zones in
