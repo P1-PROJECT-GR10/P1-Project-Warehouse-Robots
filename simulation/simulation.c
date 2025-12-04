@@ -5,6 +5,7 @@
 #include "generate_picking_list.h"
 #include "robot.h"
 #include "a_star.h"
+#include "bruteforce.h"
 /*
  *#######################################################################
  *##                                                                   ##
@@ -41,6 +42,9 @@ warehouse_config_t config = {
  */
 warehouse_t* create_simulated_warehouse(warehouse_config_t cfg);
 int validate_int(const char* arg, int min, const char* name);
+cell_e* generate_simulated_layout(const warehouse_t* warehouse, warehouse_config_t cfg);
+bool is_vertical_end_aisle_simulated(const warehouse_t* warehouse, int row, warehouse_config_t cfg);
+bool is_main_aisle_simulated(int column, warehouse_config_t cfg);
 
 int main(int argc, char** argv) {
     //===============================
@@ -80,6 +84,9 @@ int main(int argc, char** argv) {
     //-------------------------------
     double total_runtime = 0.0;
 
+    //-------------------------------
+    // A* Simulation
+    //-------------------------------
     for (int i = 0; i < runs; i++) {
         //-------------------------------
         // Seed random number generator -> random seed per run
@@ -120,11 +127,57 @@ int main(int argc, char** argv) {
         fprintf(results, "run_%d_runtime=%.9f\n", i + 1, runtime);
     }
 
+    // reset seed for bruteforce simulation
+    seed = atoi(argv[3]);
+
     //-------------------------------
-    // Write summary
+    // Bruteforce simulation
+    //-------------------------------
+    for (int i = 0; i < runs; i++) {
+        //-------------------------------
+        // Seed random number generator -> random seed per run
+        //-------------------------------
+        srand(seed+i);
+        // Create warehouse
+        warehouse_t* warehouse = create_simulated_warehouse(config);
+        if (!warehouse) { fprintf(stderr, "ERROR: Failed to create warehouse\n"); exit(EXIT_FAILURE);}
+        if (warehouse->rows > 500 || warehouse->columns > 500) {
+            fprintf(stderr, "ERROR: Warehouse size exceeds maximum 500x500.\n");
+            exit(EXIT_FAILURE);
+        }
+
+        // Generate picking list
+        item_t picking_list[picking_item_amount];
+        generate_picking_list(picking_list, warehouse, picking_item_amount);
+
+        // Create robot
+        robot_t* robot1 = create_robot(warehouse);
+
+        // Start timer
+        struct timespec start, end;
+        clock_gettime(CLOCK_MONOTONIC, &start);
+
+        // Run simulation
+        bruteforce_get_picking_list(robot1, warehouse, picking_list);
+
+        // End timer
+        clock_gettime(CLOCK_MONOTONIC, &end);
+        double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+        total_runtime += runtime;
+
+        // Cleanup heap memory
+        destroy_warehouse(warehouse);
+        free_robot(robot1);
+
+        // Per-run run runtime
+        fprintf(results, "run_%d_runtime=%.9f\n", i + 1, runtime);
+    }
+
+    //-------------------------------
+    // Write summary of simulations
     //-------------------------------
     fprintf(results, "\nruns=%d\n", runs);
-    fprintf(results, "seed=%d\n", seed);
+    fprintf(results, "start_seed=%d\n", seed);
     fprintf(results, "picking_items=%d\n", picking_item_amount);
     fprintf(results, "warehouse=%dx%d\n",
             config.shelf_amount * (2 + config.aisle_width) + config.aisle_width,
@@ -146,6 +199,69 @@ int validate_int(const char* arg, int min, const char* name) {
     return value;
 }
 
+bool is_vertical_end_aisle_simulated(const warehouse_t* warehouse, int row, warehouse_config_t cfg) {
+    if (row < cfg.aisle_width
+        || row >= warehouse->rows - cfg.aisle_width){
+        return true; // Top & bottom aisles
+        }
+    return false;
+}
+
+bool is_main_aisle_simulated(int column, warehouse_config_t cfg) {
+    if (column >= cfg.main_aisle_width+cfg.shelf_length
+        && column < cfg.main_aisle_width + cfg.shelf_length + cfg.main_aisle_width){
+        return true; // Center main aisle
+        }
+
+    if (column < cfg.main_aisle_width
+        || column >= cfg.main_aisle_width * 2 + cfg.shelf_length * 2){
+        return true; // Left & right side main aisles
+        }
+    return false;
+}
+
+cell_e* generate_simulated_layout(const warehouse_t* warehouse, warehouse_config_t cfg) {
+    const int rows = warehouse->rows;
+    const int columns = warehouse->columns;
+    const int shelf_width = 2;
+
+    cell_e* map = (cell_e*)safe_malloc(sizeof(cell_e)*columns*rows); // Allocate memory for the map
+
+    int row_pattern = 0;
+    for (int row = 0; row < rows; row++) {
+        bool is_end_aisle = is_vertical_end_aisle_simulated(warehouse, row, cfg); // Bool per row: Is aisle is at the ends (top or bottom)
+
+        if (!is_end_aisle) {
+            row_pattern++; // Pattern inside the rows with shelves & aisles inbetween shelves
+        }
+
+        for (int col = 0; col < columns; col++) {
+            int id = row * columns + col; // Array position
+
+            if (is_end_aisle) {
+                map[id] = empty; // Top & bottom aisles
+                continue;
+            }
+
+            if (is_main_aisle_simulated(col, cfg)) {
+                map[id] = empty; // Left, right & center main aisles
+                continue;
+            }
+
+            if (row_pattern > cfg.aisle_width + shelf_width) {
+                row_pattern = 1; // Restart pattern
+            }
+
+            if (row_pattern <= shelf_width) {
+                map[id] = shelf; // Pattern is within shelf width; must be shelf
+            } else {
+                map[id] = empty; // Outside of shelf width; must be aisle
+            }
+        }
+    }
+    return map;
+}
+
 // Reconfigured create_warehouse() function to take CLI parsed inputs for size
 warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
 
@@ -156,8 +272,8 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->number_of_shelves = cfg.shelf_amount * cfg.shelf_length * 2 * 2; // Sum = n_shelves
     // Function based struct variables.
     warehouse->drop_zones = generate_drop_zones(AMOUNT_OF_DROP_ZONES); // fixed drop_zone amount for now
-    warehouse->items = read_items_from_file(ITEM_FILE);
-    warehouse->map = generate_layout(warehouse);
+    warehouse->map = generate_simulated_layout(warehouse, cfg);
+    warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->shelves = populate_shelves(warehouse);
 
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);

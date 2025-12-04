@@ -1,8 +1,0 @@
-run_1_runtime=0.530994800
-
-runs=1
-seed=123456789
-picking_items=5
-warehouse=10x18
-total_runtime=0.530994800
-avg_runtime_per_run=0.530994800
