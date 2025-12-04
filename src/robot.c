@@ -5,7 +5,7 @@
 robot_t* create_robot(const warehouse_t* warehouse) {
     robot_t* robot1 = (robot_t*)(safe_malloc(sizeof(robot_t)));
 
-    robot1->robot_id = 1;
+    robot1->steps = 0;
     robot1->number_of_items = 0;
     robot1->x = 0;
     robot1->y = 0;
@@ -193,7 +193,7 @@ void robot_item_pickup(robot_t* robot, shelf_t* shelf, const int amount) {
 
     shelf->stock -= amount;
     robot->number_of_items += amount; //The robot gets the item amount transferred
-    printf("Robot %d picked %d item(s) from the shelve with the coordinats x: %d, y: %d.\nThe robot is now carrying %d items.\n", robot->robot_id, amount, shelf->x, shelf->y, robot->number_of_items);
+    printf("Robot picked %d item(s) from the shelve with the coordinats x: %d, y: %d.\nThe robot is now carrying %d items.\n", amount, shelf->x, shelf->y, robot->number_of_items);
 
     //Checks the robot's items from 0 to ROBOT_MAX_CAPACITY.
     for (int k = 0; k < amount; k++){
