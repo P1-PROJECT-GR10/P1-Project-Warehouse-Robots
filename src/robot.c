@@ -61,6 +61,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->y --;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps += 1;
             break;
         case south:
             if (warehouse->map[columns * (robot1->y+1)  + robot1->x] == shelf
@@ -77,6 +78,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->y ++;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps += 1;
             break;
         case east:
             if (warehouse->map[columns * robot1->y  + robot1->x+1] == shelf
@@ -93,6 +95,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->x ++; // moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps += 1;
             break;
         case west:
             if (warehouse->map[columns * robot1->y  + robot1->x-1] == shelf
@@ -109,6 +112,7 @@ void move_robot(robot_t* robot1, const warehouse_t* warehouse, const direction_e
             robot1->x --;// moves the inbuilt coordinate of the robot, and changes the robot position on the visuals
             warehouse->map[columns * robot1->y + robot1->x] = robot;
             robot1->is_in_drop_zone = is_robot_in_drop_zone(robot1, warehouse);
+            robot1->steps += 1;
             break;
         default:
             printf("Error: Invalid input\n");
@@ -244,7 +248,6 @@ int robot_drop_all(robot_t* robot, const warehouse_t* warehouse) {
         }
     }
     robot->number_of_items = 0;
-    printf("Robot dropped %d items off in a drop zone\n",steps);
     return steps;
 }
 
