@@ -355,6 +355,7 @@ void remove_item(picking_list_t* picking_list, item_t item) {
             continue;
         if (strcmp(picking_list->items[i].color,item.color) == 0 && strcmp(picking_list->items[i].name,item.name) == 0) {
             picking_list->items[i] = (item_t){0};
+            return;
         }
     }
 }
