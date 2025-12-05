@@ -128,6 +128,7 @@ int main(int argc, char** argv) {
 
         // Per-run runtime
         fprintf(results, "astar_run_%d_runtime=%.9f\n", i + 1, runtime);
+        fprintf(results, "current_seed=%d\n", seed+i);
         printf("Seed: %d\n",seed+i);
     }
 
@@ -176,6 +177,7 @@ int main(int argc, char** argv) {
 
         // Per-run runtime
         fprintf(results, "bruteforce_run_%d_runtime=%.9f\n", i + 1, runtime);
+        fprintf(results, "current_seed=%d\n", seed+i);
         printf("Seed: %d\n",seed+i);
     }
 
