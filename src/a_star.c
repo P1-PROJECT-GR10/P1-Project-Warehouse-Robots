@@ -333,10 +333,16 @@ void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_
     free(node_map);
 }
 
-void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list) {
+void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list) {
     for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
 
-        shelf_t* goal_shelf = search_item(picking_list[i].name, picking_list[i].color, warehouse);
+        shelf_t* goal_shelf;
+        if (OPTIMIZE_PICKING_ORDER) {
+            goal_shelf = find_nearest_item(robot1->x, robot1->y, warehouse, picking_list);
+        } else {
+            goal_shelf = search_item(picking_list->items[i].name, picking_list->items[i].color, warehouse);
+        }
+
         int goal_x = goal_shelf->x;
         int goal_y;
 
@@ -353,6 +359,7 @@ void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_
         move_robot_to_point(robot1, warehouse, goal_x, goal_y);
         if (check_shelf(robot1, warehouse, goal_shelf)) {
             robot_item_pickup(robot1, goal_shelf, 1);
+            remove_item(picking_list, goal_shelf->item);
         }
     }
     //move_robot_to_point(robot1, warehouse, 9, 9); // Move robot back to (9, 9) or a dropzone

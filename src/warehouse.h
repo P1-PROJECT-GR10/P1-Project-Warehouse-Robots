@@ -24,6 +24,8 @@
 #define AMOUNT_OF_DROP_ZONES 2
 /// The name of the file containing items
 #define ITEM_FILE "items.txt"
+/// Where to optimize picking order
+#define OPTIMIZE_PICKING_ORDER true
 
 //---------------------------------------ENUMERATIONS---------------------------------------
 
@@ -221,3 +223,25 @@ void free_warehouse(int *warehouse);
  * @param n_shelves Number of shelves in the warehouse
  */
 void free_shelves(shelf_t** shelves, int n_shelves);
+
+typedef struct picking_list {
+    item_t* items;
+    int max_amount;
+} picking_list_t;
+
+/**
+ * Generates a random picking list with a given amount of items according to a set seed.
+* @param pickingItems items for the picking list
+*  * @param warehouse warehouse heap
+ * @param item_amount_input amount of items added to the picking list
+ */
+picking_list_t* generate_picking_list(const warehouse_t* warehouse, int item_amount_input);
+/**
+ * Displays the current generated picking list
+ * @param pickingItems items for the picking list
+ * @param item_amount_input amount of items added to the picking list
+ */
+void display_picking_list(picking_list_t* picking_list, int item_amount_input);
+
+shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_list_t* picking_list);
+void remove_item(picking_list_t* picking_list, item_t item);

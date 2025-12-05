@@ -1,5 +1,4 @@
 #include <time.h>
-#include "generate_picking_list.h"
 #include "warehouse.h"
 #include "robot.h"
 #include "a_star.h"
@@ -18,8 +17,7 @@ int main(void) {
     warehouse_t* warehouse = create_warehouse();
 
     // Generate picking list
-    item_t picking_list[AMOUNT_OF_PICKING_ITEMS];
-    generate_picking_list(picking_list, warehouse, AMOUNT_OF_PICKING_ITEMS);
+    picking_list_t* picking_list = generate_picking_list(warehouse, AMOUNT_OF_PICKING_ITEMS);
     display_picking_list(picking_list, AMOUNT_OF_PICKING_ITEMS);
 
     // Create a robot
