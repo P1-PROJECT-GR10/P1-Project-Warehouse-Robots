@@ -128,6 +128,7 @@ int main(int argc, char** argv) {
 
         // Per-run runtime
         fprintf(results, "astar_run_%d_runtime=%.9f\n", i + 1, runtime);
+        printf("Seed: %d\n",seed+i);
     }
 
     // safely reset seed to start seed for bruteforce simulation
@@ -175,6 +176,7 @@ int main(int argc, char** argv) {
 
         // Per-run runtime
         fprintf(results, "bruteforce_run_%d_runtime=%.9f\n", i + 1, runtime);
+        printf("Seed: %d\n",seed+i);
     }
 
     //---------------------------------------------
