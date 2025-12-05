@@ -51,7 +51,7 @@ typedef struct shelf {
 } shelf_t;
 
 /// A structure for storing coordinates and dropzone activity.
-typedef struct drop_zone {
+typedef struct {
     int x; ///< The x-coordinate of this drop zone
     int y; ///< The x-coordinate of this drop zone
 } drop_zone_t;
@@ -62,7 +62,7 @@ typedef struct {
     int amount;
     int max_amount;
 } drop_zones;
-
+/// A structure for storing the warehouse data
 typedef struct {
     cell_e* map;
     int rows;
@@ -73,6 +73,12 @@ typedef struct {
     int number_of_items;
     drop_zones* drop_zones;
 } warehouse_t;
+
+/// A structure for storing items in the picking list
+typedef struct {
+    item_t* items;
+    int max_amount;
+} picking_list_t;
 
 
 //---------------------------------------FUNCTIONS---------------------------------------
@@ -195,7 +201,7 @@ item_t* read_items_from_file(char* file_name, int* items_read) ;
  * A helper function for generating the warehouse that populates a given shelf with an item
  * and sets the stock of the shelf while allocating memory on the heap.
  * @attention Remember to free allocated memory!
- * @param item The item that is stored in this shelf
+ * @param warehouse The warehouse heap
  * @param stock The stock of the item in the shelf
  * @param x x-coordinate of the shelf
  * @param y y-coordinate of the shelf
@@ -224,24 +230,32 @@ void free_warehouse(int *warehouse);
  */
 void free_shelves(shelf_t** shelves, int n_shelves);
 
-typedef struct picking_list {
-    item_t* items;
-    int max_amount;
-} picking_list_t;
-
 /**
  * Generates a random picking list with a given amount of items according to a set seed.
 * @param pickingItems items for the picking list
-*  * @param warehouse warehouse heap
+*  * @param warehouse The warehouse
  * @param item_amount_input amount of items added to the picking list
  */
 picking_list_t* generate_picking_list(const warehouse_t* warehouse, int item_amount_input);
 /**
  * Displays the current generated picking list
- * @param pickingItems items for the picking list
+ *  * @param picking_list The picking list
  * @param item_amount_input amount of items added to the picking list
  */
 void display_picking_list(picking_list_t* picking_list, int item_amount_input);
 
+
+/**
+ * Finds nearest shelf with a given item from a list of items, to a x,y point
+ * @param picking_list The picking list to remove from
+ * @param warehouse The warehouse
+ * @param picking_list The picking list
+ */
 shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_list_t* picking_list);
+
+/**
+ * Removes item from the picking list
+ * @param picking_list The picking list to remove from
+ * @param item The item to remove
+ */
 void remove_item(picking_list_t* picking_list, item_t item);
