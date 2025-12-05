@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include "warehouse.h"
-#include "generate_picking_list.h"
 #include "robot.h"
 #include "a_star.h"
 #include "bruteforce.h"
@@ -104,8 +103,7 @@ int main(int argc, char** argv) {
         }
 
         // Generate picking list
-        item_t picking_list[picking_item_amount];
-        generate_picking_list(picking_list, warehouse, picking_item_amount);
+        picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
@@ -152,8 +150,7 @@ int main(int argc, char** argv) {
         }
 
         // Generate picking list
-        item_t picking_list[picking_item_amount];
-        generate_picking_list(picking_list, warehouse, picking_item_amount);
+        picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);

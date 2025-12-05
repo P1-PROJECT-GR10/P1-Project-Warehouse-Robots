@@ -300,6 +300,61 @@ shelf_t* manual_search_item(const warehouse_t* warehouse) {
     return 0;
 }
 
+shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_list_t* picking_list) {
+    int nearest_distance = (int)INFINITY;
+    shelf_t* nearest_shelf = &(shelf_t){0};
+
+    for (int i = 0; i < picking_list->max_amount; i++) {
+        if (picking_list->items[i].weight <= 0 && !strlen(picking_list->items[i].name) && !strlen(picking_list->items[i].color))
+            continue;
+        shelf_t* shelf = search_item(picking_list->items[i].name, picking_list->items[i].color, warehouse);
+        int distance = (int)euclidean_dist(x, y, shelf->x, shelf->y);
+        if (distance < nearest_distance) {
+            nearest_shelf = shelf;
+            nearest_distance = distance;
+        }
+    }
+
+    if (nearest_distance < (int)INFINITY) {
+        return nearest_shelf;
+    }
+    printf("Failed to locate any shelf, exiting.");
+    exit(EXIT_FAILURE);
+}
+
+picking_list_t* generate_picking_list(const warehouse_t* warehouse, const int item_amount_input) {
+    picking_list_t* picking_list = (picking_list_t*)safe_malloc(sizeof(picking_list_t));
+    picking_list->max_amount = AMOUNT_OF_PICKING_ITEMS;
+    item_t* items = safe_malloc(sizeof(item_t)*AMOUNT_OF_PICKING_ITEMS);
+    picking_list->items = items;
+
+    for (int i = 0; i < item_amount_input; i++) {
+        int random_number = rand() % warehouse->number_of_items; // Randomness depending on the given seed.
+        picking_list->items[i] = warehouse->items[random_number]; // Copying the whole struct
+    }
+
+    return picking_list;
+}
+
+void display_picking_list(picking_list_t* picking_list, int item_amount_input) {
+    // Display the picking list in order
+    printf("The picking list is: ");
+    for (int i = 0; i < item_amount_input; i++) {
+        printf("%s %s %.2lf ", picking_list->items[i].color, picking_list->items[i].name, picking_list->items[i].weight);
+    }
+    printf("\n \n");
+}
+
+void remove_item(picking_list_t* picking_list, item_t item) {
+    for (int i = 0; i < picking_list->max_amount; i++) {
+        if (picking_list->items[i].weight <= 0 && !strlen(picking_list->items[i].name) && !strlen(picking_list->items[i].color))
+            continue;
+        if (strcmp(picking_list->items[i].color,item.color) == 0 && strcmp(picking_list->items[i].name,item.name) == 0) {
+            picking_list->items[i] = (item_t){0};
+        }
+    }
+}
+
 void free_shelves(shelf_t** shelves, const int n_shelves){
     for (int i = 0; i < n_shelves; i++) {
         free(shelves[i]);

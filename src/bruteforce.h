@@ -50,4 +50,4 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, int goal_
  * @param warehouse The warehosue heap
  * @param picking_list The picking list
  */
-void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list);
+void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list);

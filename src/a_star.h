@@ -137,7 +137,7 @@ void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_
  * @param warehouse The warehouse heap
  * @param picking_list An array of items for the robot to pickup
  */
-void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, item_t* picking_list);
+void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list);
 
 /**
  * Function for checking which direction a node came from
