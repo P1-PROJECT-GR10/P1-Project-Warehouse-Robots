@@ -104,6 +104,7 @@ int main(int argc, char** argv) {
 
         // Generate picking list
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
+        display_picking_list(picking_list, picking_item_amount);
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
@@ -152,6 +153,7 @@ int main(int argc, char** argv) {
 
         // Generate picking list
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
+        display_picking_list(picking_list, picking_item_amount);
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
@@ -298,6 +300,7 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->map = generate_simulated_layout(warehouse, cfg);
     warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->shelves = populate_shelves(warehouse);
+    warehouse->printing = false;
 
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);

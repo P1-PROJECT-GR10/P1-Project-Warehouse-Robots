@@ -312,29 +312,36 @@ void move_robot_to_point(robot_t* robot, const warehouse_t* warehouse, int goal_
         // Reconstruct Path
         direction_e* path = reconstruct_path(result, &length);
 
-        printf("Path length is: %d\n\n", length);
+        if (warehouse->printing)
+            printf("Path length is: %d\n\n", length);
 
         // Print current robot position
-        printf("Robot starts at x: %d, y: %d\n", robot->x, robot->y);
+        if (warehouse->printing)
+            printf("Robot starts at x: %d, y: %d\n", robot->x, robot->y);
         print_warehouse(warehouse);
         printf("\n");
 
         // Move robot
         for (int i = 0; i< length; i++) {
             move_robot(robot, warehouse, path[i]);
-            printf("Robot moves %s to x: %d, y: %d\n", direction_to_string(path[i]), robot->x, robot->y);
+            if (warehouse->printing)
+                printf("Robot moves %s to x: %d, y: %d\n", direction_to_string(path[i]), robot->x, robot->y);
         }
         free(path);
     } else {
         printf("\nNo path found\n");
     }
-    print_warehouse(warehouse);
-    print_node_map(node_map, warehouse->rows, warehouse->columns, goal_idx);
+
+    if (warehouse->printing) {
+        print_warehouse(warehouse);
+        print_node_map(node_map, warehouse->rows, warehouse->columns, goal_idx);
+    }
+
     free(node_map);
 }
 
 void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list) {
-    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
+    for (int i = 0; i < picking_list->amount; i++) {
 
         shelf_t* goal_shelf;
         if (OPTIMIZE_PICKING_ORDER) {

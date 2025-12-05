@@ -48,6 +48,7 @@ warehouse_t* create_warehouse() {
     warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->map = generate_layout(warehouse);
     warehouse->shelves = populate_shelves(warehouse);
+    warehouse->printing = true;
 
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);
@@ -217,6 +218,9 @@ cell_e* get_cell(const warehouse_t* warehouse, int x, int y) {
 }
 
 void print_warehouse(const warehouse_t* warehouse) {
+    if (!warehouse->printing)
+        return;
+
     int rows = warehouse->rows;
     int columns = warehouse->columns;
 
@@ -308,7 +312,7 @@ shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_l
     int nearest_distance = (int)INFINITY;
     shelf_t* nearest_shelf = &(shelf_t){0};
 
-    for (int i = 0; i < picking_list->max_amount; i++) {
+    for (int i = 0; i < picking_list->amount; i++) {
         if (picking_list->items[i].weight <= 0 && !strlen(picking_list->items[i].name) && !strlen(picking_list->items[i].color))
             continue;
         shelf_t* shelf = search_item(picking_list->items[i].name, picking_list->items[i].color, warehouse);
@@ -328,8 +332,8 @@ shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_l
 
 picking_list_t* generate_picking_list(const warehouse_t* warehouse, const int item_amount_input) {
     picking_list_t* picking_list = (picking_list_t*)safe_malloc(sizeof(picking_list_t));
-    picking_list->max_amount = AMOUNT_OF_PICKING_ITEMS;
-    item_t* items = safe_malloc(sizeof(item_t)*AMOUNT_OF_PICKING_ITEMS);
+    picking_list->amount = item_amount_input;
+    item_t* items = safe_malloc(sizeof(item_t)*item_amount_input);
     picking_list->items = items;
 
     for (int i = 0; i < item_amount_input; i++) {
@@ -350,7 +354,7 @@ void display_picking_list(picking_list_t* picking_list, int item_amount_input) {
 }
 
 void remove_item(picking_list_t* picking_list, item_t item) {
-    for (int i = 0; i < picking_list->max_amount; i++) {
+    for (int i = 0; i < picking_list->amount; i++) {
         if (picking_list->items[i].weight <= 0 && !strlen(picking_list->items[i].name) && !strlen(picking_list->items[i].color))
             continue;
         if (strcmp(picking_list->items[i].color,item.color) == 0 && strcmp(picking_list->items[i].name,item.name) == 0) {
