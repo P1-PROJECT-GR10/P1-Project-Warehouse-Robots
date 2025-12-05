@@ -77,7 +77,7 @@ typedef struct {
 /// A structure for storing items in the picking list
 typedef struct {
     item_t* items;
-    int max_amount;
+    int amount;
 } picking_list_t;
 
 

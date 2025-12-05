@@ -37,7 +37,7 @@ void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal
 }
 
 void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list) {
-    for (int i = 0; i < AMOUNT_OF_PICKING_ITEMS; i++) {
+    for (int i = 0; i < picking_list->amount; i++) {
         shelf_t* goal_shelf;
         if (OPTIMIZE_PICKING_ORDER) {
             goal_shelf = find_nearest_item(robot1->x, robot1->y, warehouse, picking_list);

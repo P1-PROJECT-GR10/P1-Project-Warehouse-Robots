@@ -13,7 +13,7 @@
  *#######################################################################
  */
 // Default values if user does !pass arguments
-#define DEFAULT_PICKING_ITEM_AMOUNT 5
+#define DEFAULT_PICKING_ITEM_AMOUNT 50
 #define DEFAULT_RUNS 1
 #define DEFAULT_SEED 123456789
 
@@ -104,6 +104,7 @@ int main(int argc, char** argv) {
 
         // Generate picking list
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
+        display_picking_list(picking_list, picking_item_amount);
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
@@ -152,6 +153,7 @@ int main(int argc, char** argv) {
 
         // Generate picking list
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
+        display_picking_list(picking_list, picking_item_amount);
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
