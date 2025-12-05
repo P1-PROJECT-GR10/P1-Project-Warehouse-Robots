@@ -36,7 +36,7 @@ warehouse_config_t config = {
 /*
  *#######################################################################
  *##                                                                   ##
- *##                         Simulation function                       ##
+ *##                         Simulation functions                      ##
  *##                                                                   ##
  *#######################################################################
  */
@@ -84,6 +84,8 @@ int main(int argc, char** argv) {
     //-------------------------------
     double total_runtime_astar = 0.0;
     double total_runtime_bruteforce = 0.0;
+    int A_star_total_steps = 0;
+    int bf_total_steps = 0;
 
     //-------------------------------
     // A* Simulation
@@ -114,6 +116,8 @@ int main(int argc, char** argv) {
 
         // Run simulation
         robot_get_picking_list(robot1, warehouse, picking_list);
+        int A_star_steps = robot1->steps;
+        A_star_total_steps += A_star_steps;
 
         // End timer
         clock_gettime(CLOCK_MONOTONIC, &end);
@@ -160,6 +164,8 @@ int main(int argc, char** argv) {
 
         // Run simulation
         bruteforce_get_picking_list(robot1, warehouse, picking_list);
+        int bf_steps = robot1->steps;
+        bf_total_steps += bf_steps;
 
         // End timer
         clock_gettime(CLOCK_MONOTONIC, &end);
@@ -177,7 +183,7 @@ int main(int argc, char** argv) {
     //---------------------------------------------
     // Write summary of simulations
     //---------------------------------------------
-    fprintf(results, "\n=== SUMMARY ===\n");
+    fprintf(results, "\n=== SUMMARY OF SIMULATIONS ===\n");
 
     fprintf(results, "runs=%d\n", runs);
     fprintf(results, "start_seed=%d\n", seed);
@@ -194,10 +200,14 @@ int main(int argc, char** argv) {
     fprintf(results, "\n=== A_STAR ===\n");
     fprintf(results, "total_runtime_astar=%.9f\n", total_runtime_astar);
     fprintf(results, "avg_runtime_astar=%.9f\n", total_runtime_astar / runs);
+    fprintf(results, "total_steps_astar=%d\n", A_star_total_steps);
+    fprintf(results, "avg_steps_astar=%d\n", A_star_total_steps / runs);
 
     fprintf(results, "\n=== BRUTEFORCE ===\n");
     fprintf(results, "total_runtime_bruteforce=%.9f\n", total_runtime_bruteforce);
     fprintf(results, "avg_runtime_bruteforce=%.9f\n", total_runtime_bruteforce / runs);
+    fprintf(results, "total_steps_bruteforce=%d\n", bf_total_steps);
+    fprintf(results, "avg_steps_bruteforce=%d\n", bf_total_steps / runs);
 
     fclose(results);
     return 0;

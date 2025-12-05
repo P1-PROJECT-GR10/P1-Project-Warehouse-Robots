@@ -76,3 +76,11 @@ jobs:
         with:
           name: simulation-results
           path: ${{ github.workspace }}/build/results.txt
+
+      - name: Send results to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          RESULTS_FILE: ${{ github.workspace }}/build/results.txt
+        run: |
+          pip install -r .github/scripts/requirements.txt
+          python3 .github/scripts/send_to_discord.py
