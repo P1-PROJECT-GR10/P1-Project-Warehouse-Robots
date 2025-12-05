@@ -305,7 +305,6 @@ shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_l
     shelf_t* nearest_shelf = &(shelf_t){0};
 
     for (int i = 0; i < picking_list->max_amount; i++) {
-        printf("%s %llu\n",picking_list->items[i].name,strlen(picking_list->items[i].name));
         if (picking_list->items[i].weight <= 0 && !strlen(picking_list->items[i].name) && !strlen(picking_list->items[i].color))
             continue;
         shelf_t* shelf = search_item(picking_list->items[i].name, picking_list->items[i].color, warehouse);
