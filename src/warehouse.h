@@ -24,7 +24,7 @@
 #define AMOUNT_OF_DROP_ZONES 2
 /// The name of the file containing items
 #define ITEM_FILE "items.txt"
-/// Where to optimize picking order
+/// Whether to optimize picking order
 #define OPTIMIZE_PICKING_ORDER true
 
 //---------------------------------------ENUMERATIONS---------------------------------------
@@ -87,6 +87,8 @@ void* safe_malloc(size_t size);
 warehouse_t* create_warehouse();
 
 void destroy_warehouse(warehouse_t* warehouse);
+
+void destroy_picking_list(picking_list_t* picking_list);
 
 /**
  * A function for calculating the manhattan distance between two nodes: (|x1 - x2| + |y1 - y2|)\n

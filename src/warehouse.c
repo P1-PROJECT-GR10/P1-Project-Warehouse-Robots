@@ -56,12 +56,16 @@ warehouse_t* create_warehouse() {
 }
 
 void destroy_warehouse(warehouse_t* warehouse) {
-
     if (warehouse->items != NULL) free(warehouse->items);
     if (warehouse->map != NULL) free(warehouse->map);
     if (warehouse->shelves != NULL) free_shelves(warehouse->shelves, warehouse->number_of_shelves);
     if (warehouse->drop_zones != NULL) free(warehouse->drop_zones);
     if (warehouse != NULL) free(warehouse);
+}
+
+void destroy_picking_list(picking_list_t* picking_list) {
+    if (picking_list->items != NULL) free(picking_list->items);
+    if (picking_list != NULL) free(picking_list);
 }
 
 bool is_vertical_end_aisle(const warehouse_t* warehouse, int row) {
@@ -351,6 +355,7 @@ void remove_item(picking_list_t* picking_list, item_t item) {
             continue;
         if (strcmp(picking_list->items[i].color,item.color) == 0 && strcmp(picking_list->items[i].name,item.name) == 0) {
             picking_list->items[i] = (item_t){0};
+            return;
         }
     }
 }

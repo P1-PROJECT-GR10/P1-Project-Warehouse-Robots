@@ -29,6 +29,7 @@ int main(void) {
 
     // Free allocated memory
     free_robot(robot1);
+    destroy_picking_list(picking_list);
     destroy_warehouse(warehouse);
 
     // Lastly we display the runtime to see how fast it took the robot(s) to complete their assigned tasks
