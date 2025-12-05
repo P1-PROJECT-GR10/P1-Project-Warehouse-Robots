@@ -72,6 +72,7 @@ typedef struct {
     int number_of_shelves;
     int number_of_items;
     drop_zones* drop_zones;
+    bool printing;
 } warehouse_t;
 
 /// A structure for storing items in the picking list

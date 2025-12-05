@@ -48,6 +48,7 @@ warehouse_t* create_warehouse() {
     warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->map = generate_layout(warehouse);
     warehouse->shelves = populate_shelves(warehouse);
+    warehouse->printing = true;
 
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);
@@ -217,6 +218,9 @@ cell_e* get_cell(const warehouse_t* warehouse, int x, int y) {
 }
 
 void print_warehouse(const warehouse_t* warehouse) {
+    if (!warehouse->printing)
+        return;
+
     int rows = warehouse->rows;
     int columns = warehouse->columns;
 
