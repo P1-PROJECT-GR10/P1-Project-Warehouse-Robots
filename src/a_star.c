@@ -371,10 +371,14 @@ void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picki
     }
     //move_robot_to_point(robot1, warehouse, 9, 9); // Move robot back to (9, 9) or a dropzone
     drop_zone_t* drop_zone = get_nearest_drop_zone(warehouse, robot1->x, robot1->y);
+
     printf("Robot is finished picking up items, navigating to drop zone at %d, %d\n",drop_zone->x, drop_zone->y);
     move_robot_to_point(robot1, warehouse, drop_zone->x, drop_zone->y);
+
     printf("Robot navigated to drop zone\n");
+
     robot_drop_all(robot1, warehouse);
+
     printf("Robot drops items at (%d %d)\n", drop_zone->x, drop_zone->y);
     printf("Robot is finished, and took %d steps in total.\n\n",robot1->steps);
 }
@@ -401,13 +405,13 @@ char* node_came_from_to_string(node_t node) {
         direction_e camefrom = parent_direction(node);
         switch (camefrom) {
             case north:
-                return "|^";
-            case south:
                 return "|v";
+            case south:
+                return "|^";
             case east:
-                return "|>";
-            case west:
                 return "|<";
+            case west:
+                return "|>";
             case no_direction:
                 return "|S";
         }
@@ -427,11 +431,14 @@ void print_node_map(node_t* node_map, const int rows, const int columns, const i
         printf("%d - ", y % 10);    // Prints y-coords
         for (int x = 0; x < columns; x++) {
             int index = get_index(x, y, columns);
-            // Print goal node
+            // Print goal node:
+            // Toggle commenting for printing goal node
+            /*
             if (index == goal_index) {
                 printf("|G");
                 continue;
             }
+            */
             printf("%s", node_came_from_to_string(node_map[index]));
         }
         printf("|\n");
