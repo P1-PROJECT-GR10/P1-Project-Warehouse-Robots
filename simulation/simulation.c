@@ -106,9 +106,6 @@ int main(int argc, char** argv) {
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
         display_picking_list(picking_list, picking_item_amount);
 
-        // Blockade!
-        *get_cell(warehouse, warehouse->columns/2, warehouse->rows/2) = robot;
-
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
 
@@ -157,9 +154,6 @@ int main(int argc, char** argv) {
         // Generate picking list
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
         display_picking_list(picking_list, picking_item_amount);
-
-        // Blockade!
-        *get_cell(warehouse, warehouse->columns/2, warehouse->rows/2-1) = robot;
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);

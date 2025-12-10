@@ -20,9 +20,6 @@ int main(void) {
     picking_list_t* picking_list = generate_picking_list(warehouse, AMOUNT_OF_PICKING_ITEMS);
     display_picking_list(picking_list, AMOUNT_OF_PICKING_ITEMS);
 
-    // Blockade!
-    *get_cell(warehouse, warehouse->columns/2, warehouse->rows/2) = robot;
-
     // Create a robot
     robot_t* robot1 = create_robot(warehouse);
     print_warehouse(warehouse);
