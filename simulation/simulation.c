@@ -4,7 +4,7 @@
 #include "warehouse.h"
 #include "robot.h"
 #include "a_star.h"
-#include "bruteforce.h"
+#include "greedy_step.h"
 /*
  *#######################################################################
  *##                                                                   ##
@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
     // Run simulations multiple times
     //-------------------------------
     double total_runtime_astar = 0.0;
-    double total_runtime_bruteforce = 0.0;
+    double total_runtime_greedy_step = 0.0;
     int A_star_total_steps = 0;
     int bf_total_steps = 0;
 
@@ -105,6 +105,9 @@ int main(int argc, char** argv) {
         // Generate picking list
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
         display_picking_list(picking_list, picking_item_amount);
+
+        // Blockade!
+        *get_cell(warehouse, warehouse->columns/2, warehouse->rows/2) = robot;
 
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
@@ -132,11 +135,11 @@ int main(int argc, char** argv) {
         printf("Seed: %d\n",seed+i);
     }
 
-    // safely reset seed to start seed for bruteforce simulation
+    // safely reset seed to start seed for greedy step simulation
     if (argc >= 4) seed = atoi(argv[3]);
 
     //-------------------------------
-    // Bruteforce simulation
+    // greedy step simulation
     //-------------------------------
     for (int i = 0; i < runs; i++) {
         //-------------------------------
@@ -155,6 +158,9 @@ int main(int argc, char** argv) {
         picking_list_t* picking_list = generate_picking_list(warehouse, picking_item_amount);
         display_picking_list(picking_list, picking_item_amount);
 
+        // Blockade!
+        *get_cell(warehouse, warehouse->columns/2, warehouse->rows/2-1) = robot;
+
         // Create robot
         robot_t* robot1 = create_robot(warehouse);
 
@@ -163,21 +169,21 @@ int main(int argc, char** argv) {
         clock_gettime(CLOCK_MONOTONIC, &start);
 
         // Run simulation
-        bruteforce_get_picking_list(robot1, warehouse, picking_list);
+        greedy_step_get_picking_list(robot1, warehouse, picking_list);
         int bf_steps = robot1->steps;
         bf_total_steps += bf_steps;
 
         // End timer
         clock_gettime(CLOCK_MONOTONIC, &end);
         double runtime = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-        total_runtime_bruteforce += runtime;
+        total_runtime_greedy_step += runtime;
 
         // Cleanup heap memory
         destroy_warehouse(warehouse);
         free_robot(robot1);
 
         // Per-run runtime -> only for terminal
-        printf("bruteforce_run_%d_runtime=%.9f\n", i + 1, runtime);
+        printf("greedy_step_run_%d_runtime=%.9f\n", i + 1, runtime);
         printf("current_seed=%d\n", seed+i);
     }
 
@@ -204,11 +210,11 @@ int main(int argc, char** argv) {
     fprintf(results, "total_steps_astar=%d\n", A_star_total_steps);
     fprintf(results, "avg_steps_astar=%d\n", A_star_total_steps / runs);
 
-    fprintf(results, "\n=== BRUTEFORCE ===\n");
-    fprintf(results, "total_runtime_bruteforce=%.9f\n", total_runtime_bruteforce);
-    fprintf(results, "avg_runtime_bruteforce=%.9f\n", total_runtime_bruteforce / runs);
-    fprintf(results, "total_steps_bruteforce=%d\n", bf_total_steps);
-    fprintf(results, "avg_steps_bruteforce=%d\n", bf_total_steps / runs);
+    fprintf(results, "\n=== GREEDY STEP ===\n");
+    fprintf(results, "total_runtime_greedy_step=%.9f\n", total_runtime_greedy_step);
+    fprintf(results, "avg_runtime_greedy_step=%.9f\n", total_runtime_greedy_step / runs);
+    fprintf(results, "total_steps_greedy_step=%d\n", bf_total_steps);
+    fprintf(results, "avg_steps_greedy_step=%d\n", bf_total_steps / runs);
 
     fclose(results);
     return 0;

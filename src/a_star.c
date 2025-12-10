@@ -1,5 +1,5 @@
 #include <math.h>
-#include "bruteforce.h"
+#include "greedy_step.h"
 #include "warehouse.h"
 #include "a_star.h"
 

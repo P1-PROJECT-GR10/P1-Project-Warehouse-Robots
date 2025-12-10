@@ -1,6 +1,6 @@
 #include "robot.h"
 #include "a_star.h"
-#include "bruteforce.h"
+#include "greedy_step.h"
 
 robot_t* create_robot(const warehouse_t* warehouse) {
     robot_t* robot1 = (robot_t*)(safe_malloc(sizeof(robot_t)));

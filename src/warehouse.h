@@ -9,13 +9,13 @@
 //---------------------------------------MACROS---------------------------------------
 
 /// How wide a main aisle is considered to be when generating a warehouse layout
-#define MAIN_AISLE_WIDTH 2
+#define MAIN_AISLE_WIDTH 1
 /// How wide aa aisle is considered to be when generating a warehouse layout
 #define AISLE_WIDTH 1
 /// How long a shelf is considered to be when generating a warehouse layout
-#define SHELF_LENGTH 6
+#define SHELF_LENGTH 2
 /// How many shelves are generated when generating a warehouse layout
-#define SHELF_AMOUNT 3
+#define SHELF_AMOUNT 1
 /// The number of items that gets generated on the picking list
 #define AMOUNT_OF_PICKING_ITEMS 5
 /// Stocked number of items in any given shelf

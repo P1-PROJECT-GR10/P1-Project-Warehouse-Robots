@@ -20,14 +20,14 @@ typedef struct neighbour {
     cell_e cell;
 } neighbour_t;
 
-/** The main function for the bruteforce algorithm, here lies the conditions for the function.
+/** The main function for the greedy step algorithm, here lies the conditions for the function.
  *  It also prints the total number of steps (amount of recursive calls) it uses.
  * @param warehouse -   The warehouse layout.
  * @param robot     -   The robot that is moving
  * @param goal_x    -   The x-coordinate of the goal point for the algorithm.
  * @param goal_y    -   The y-coordinate of the goal point for the algorithm.
  */
-void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
+void greedy_step_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y);
 
 /** The recoursive part of the bruteforcing algorithm.
  *  Moves the robot one step at a time until it has gotten to its goal point.
@@ -42,12 +42,12 @@ void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal
  *                  -   Used to keep track of the algorithms efficiency.
  * @return
  */
-int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y, direction_e prev, int moves);
+int greedy_step_recursive(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y, direction_e prev, int moves);
 
 /**
- * Uses bruteforce algorithm to move the robot and pick up items from the picking list, to then drop off at the drop zone
+ * Uses greedy_step algorithm to move the robot and pick up items from the picking list, to then drop off at the drop zone
  * @param robot1 The robot to move
  * @param warehouse The warehosue heap
  * @param picking_list The picking list
  */
-void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list);
+void greedy_step_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list);

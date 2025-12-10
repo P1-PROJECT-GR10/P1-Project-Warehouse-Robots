@@ -1,4 +1,4 @@
-#include "bruteforce.h"
+#include "greedy_step.h"
 #include "warehouse.h"
 
 int get_mirror_direction(neighbour_t neighbour) {
@@ -17,7 +17,7 @@ int get_mirror_direction(neighbour_t neighbour) {
     }
 }
 
-void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y) {
+void greedy_step_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal_x, int goal_y) {
     // checks if goal point is a shelf, i.e. impassible.
     if (*get_cell(warehouse, goal_x, goal_y) == shelf) {
         printf("Can't reach target, as it is a shelf! :(\n");
@@ -32,11 +32,11 @@ void bruteforce_algorithm(const warehouse_t* warehouse, robot_t* robot, int goal
 
     // calls the recursive algorithm, and prints the amount of recursive calls.
     int moves = 0;
-    int amount_of_moves = bruteforce_recursive(warehouse, robot, goal_x, goal_y, no_direction, moves);
+    int amount_of_moves = greedy_step_recursive(warehouse, robot, goal_x, goal_y, no_direction, moves);
     printf("\nrobot moved: %d tiles\n", amount_of_moves);
 }
 
-void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list) {
+void greedy_step_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picking_list_t* picking_list) {
     for (int i = 0; i < picking_list->amount; i++) {
         shelf_t* goal_shelf;
         if (OPTIMIZE_PICKING_ORDER) {
@@ -58,7 +58,7 @@ void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, 
         printf("Item %d found at shelf x: %d, y: %d\n"
                "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
 
-        bruteforce_algorithm(warehouse, robot1, goal_x, goal_y);
+        greedy_step_algorithm(warehouse, robot1, goal_x, goal_y);
         if (check_shelf(robot1, warehouse, goal_shelf)) {
             robot_item_pickup(robot1, goal_shelf, 1);
             remove_item(picking_list, goal_shelf->item);
@@ -68,7 +68,7 @@ void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, 
     drop_zone_t* drop_zone = get_nearest_drop_zone(warehouse, robot1->x, robot1->y);
     printf("Robot is finished picking up items, navigating to drop zone at %d, %d\n",drop_zone->x, drop_zone->y);
 
-    bruteforce_algorithm(warehouse, robot1, drop_zone->x, drop_zone->y);
+    greedy_step_algorithm(warehouse, robot1, drop_zone->x, drop_zone->y);
 
     printf("Robot navigated to drop zone\n");
     robot_drop_all(robot1, warehouse);
@@ -76,7 +76,7 @@ void bruteforce_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, 
     printf("Robot is finished, and took %d steps in total.\n\n",robot1->steps);
 }
 
-int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {
+int greedy_step_recursive(const warehouse_t* warehouse, robot_t* robot, const int goal_x, const int goal_y, direction_e prev, int moves) {
     if (goal_x == robot->x && goal_y == robot->y) {
         print_warehouse(warehouse);
         printf("Arrived at destination :)\n");
@@ -134,5 +134,5 @@ int bruteforce_recursive(const warehouse_t* warehouse, robot_t* robot, const int
     prev = heading; // prepares the function for the next iteration.
 
     // executes the next step.
-    return bruteforce_recursive(warehouse, robot, goal_x, goal_y, prev, moves + 1);
+    return greedy_step_recursive(warehouse, robot, goal_x, goal_y, prev, moves + 1);
 }

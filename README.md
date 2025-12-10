@@ -8,7 +8,7 @@
 This project is a C program, developed as part of cs-25-sw-1-p1-10's semester project at the Department of Computer Science at AAU. <br />
 
 This project simulates movement of a singular robot in a dynamically generated warehouse environment, given a pathfinding algorithm. <br />
-Both A-star and a simple bruteforce pathfinding algorithm, is implemented for simulation comparisons. <br />
+Both A-star and a simple greedy step pathfinding algorithm, is implemented for simulation comparisons. <br />
 Generated shelves are populated with items from ```items.txt``` in consistent order from left to right, top to bottom, excess shelves being empty. <br />
 The robot uses a picking list, to simulate picking order(s), and ends the run when reaching closest drop-off zone.
 
