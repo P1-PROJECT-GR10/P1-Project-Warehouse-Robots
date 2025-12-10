@@ -176,12 +176,12 @@ void print_warehouse(const warehouse_t* warehouse);
 
 /**
  * Search function that finds the shelf containing the desired item
- * @param search_input_color The color of the desired item
- * @param search_input_name The name/title of the desired item
+ * @param input_name The name/title of the desired item
+ * @param input_color The color of the desired item
  * @param warehouse The warehouse heap
  * @return A pointer to the shelf containing the desired item
  */
-shelf_t* search_item(char search_input_color[32], char search_input_name[32], const warehouse_t* warehouse);
+shelf_t* search_item(char input_name[32], char input_color[32], const warehouse_t* warehouse);
 
 /**
  * A search function that prompts the user for the desired item

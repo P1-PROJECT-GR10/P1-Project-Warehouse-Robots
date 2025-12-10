@@ -278,11 +278,11 @@ struct shelf* generate_shelf(warehouse_t* warehouse, int shelf_count, int stock,
     return shelf;
 }
 
-shelf_t* search_item(char search_input_title[32], char search_input_color[32], const warehouse_t* warehouse) {
+shelf_t* search_item(char input_name[32], char input_color[32], const warehouse_t* warehouse) {
     int n_shelves = warehouse->number_of_shelves;
     for (int i = 0; i < n_shelves; i++) {
-        if (strcmp(warehouse->shelves[i]->item.color, search_input_color) == 0 && // Using string compare to find the shelf where the item is located.
-            strcmp(warehouse->shelves[i]->item.name, search_input_title) == 0) {
+        if (strcmp(warehouse->shelves[i]->item.color, input_color) == 0 && // Using string compare to find the shelf where the item is located.
+            strcmp(warehouse->shelves[i]->item.name, input_name) == 0) {
             return warehouse->shelves[i];
         }
     }
@@ -292,16 +292,16 @@ shelf_t* search_item(char search_input_title[32], char search_input_color[32], c
 shelf_t* manual_search_item(const warehouse_t* warehouse) {
     int n_shelves = warehouse->number_of_shelves;
 
-    char search_input_color[20];
-    char search_input_name[20];
+    char input_color[20];
+    char input_name[20];
 
     printf("\nWrite your search input>");
-    scanf(" %6s %9s", search_input_color, search_input_name); //input from user, assigns the string values to search_input_color and search_input_name
+    scanf(" %6s %9s", input_color, input_name); //input from user, assigns the string values to input_color and input_name
 
 
     for (int i = 0; i < n_shelves; i++) {
-        if (strcmp(warehouse->shelves[i]->item.color, search_input_color) == 0 && // String compare to find the correct shelf that holds the searched item.
-            strcmp(warehouse->shelves[i]->item.name, search_input_name) == 0) {
+        if (strcmp(warehouse->shelves[i]->item.color, input_color) == 0 && // String compare to find the correct shelf that holds the searched item.
+            strcmp(warehouse->shelves[i]->item.name, input_name) == 0) {
             return warehouse->shelves[i];
             }
     }
