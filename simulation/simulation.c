@@ -181,6 +181,10 @@ int main(int argc, char** argv) {
         printf("current_seed=%d\n", seed+i);
     }
 
+    // Average step calculations -> casting to float for results
+    float A_start_average_steps = (float)A_star_total_steps / (float)runs;
+    float bf_average_steps = (float)bf_total_steps / (float)runs;
+
     //---------------------------------------------
     // Write summary of simulations
     //---------------------------------------------
@@ -202,13 +206,13 @@ int main(int argc, char** argv) {
     fprintf(results, "total_runtime_astar=%.9f\n", total_runtime_astar);
     fprintf(results, "avg_runtime_astar=%.9f\n", total_runtime_astar / runs);
     fprintf(results, "total_steps_astar=%d\n", A_star_total_steps);
-    fprintf(results, "avg_steps_astar=%d\n", A_star_total_steps / runs);
+    fprintf(results, "avg_steps_astar=%.2f\n", A_start_average_steps);
 
     fprintf(results, "\n=== GREEDY STEP ===\n");
     fprintf(results, "total_runtime_greedy_step=%.9f\n", total_runtime_greedy_step);
     fprintf(results, "avg_runtime_greedy_step=%.9f\n", total_runtime_greedy_step / runs);
     fprintf(results, "total_steps_greedy_step=%d\n", bf_total_steps);
-    fprintf(results, "avg_steps_greedy_step=%d\n", bf_total_steps / runs);
+    fprintf(results, "avg_steps_greedy_step=%.2f\n", bf_average_steps);
 
     fclose(results);
     return 0;
