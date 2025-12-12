@@ -1,0 +1,19 @@
+
+=== SUMMARY OF SIMULATIONS ===
+runs=67
+start_seed=123456789
+picking_items=5
+warehouse_rows=10
+warehouse_columns=18
+
+=== A_STAR ===
+total_runtime_astar=4.330295700
+avg_runtime_astar=0.064631279
+total_steps_astar=2864
+avg_steps_astar=42.75
+
+=== GREEDY STEP ===
+total_runtime_greedy_step=5.250871700
+avg_runtime_greedy_step=0.078371219
+total_steps_greedy_step=3158
+avg_steps_greedy_step=47.13
