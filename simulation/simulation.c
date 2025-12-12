@@ -14,7 +14,7 @@
  */
 // Default values if user does !pass arguments
 #define DEFAULT_PICKING_ITEM_AMOUNT 5
-#define DEFAULT_RUNS 30
+#define DEFAULT_RUNS 1000
 #define DEFAULT_SEED 123456789
 
 typedef struct {
