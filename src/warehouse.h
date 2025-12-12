@@ -191,6 +191,12 @@ shelf_t* search_item(char search_input_color[32], char search_input_name[32], co
 shelf_t* manual_search_item(const warehouse_t* warehouse);
 
 /**
+ * Writes items from a file
+ * @param number_of_items The size of the array of items, and the amount of items to be read from the file.
+ * @param filename The file from which the items are read
+ */
+int file_write_items(const char* filename, int number_of_items);
+/**
  * Reads items from a file
  * @param items An array to be populated with items by the function.
  * @param number_of_items The size of the array of items, and the amount of items to be read from the file.

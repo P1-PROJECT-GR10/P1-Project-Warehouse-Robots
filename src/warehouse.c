@@ -1,4 +1,7 @@
 #include "warehouse.h"
+
+#include <time.h>
+
 #include "a_star.h"
 
 int manhat_dist(const int x1, const int y1, const int x2, const int y2) {
@@ -20,8 +23,40 @@ void* safe_malloc(size_t size) {
     return pointer;
 }
 
+int file_write_items(const char* filename, int number_of_items) {
+    srand((unsigned)time(NULL)); // randomness
+
+    // 10 Random colors and names
+    const char* colors[] = {
+        "Red", "Blue", "Green", "Yellow", "Black",
+        "White", "Orange", "Purple", "Pink", "Gray"
+    };
+
+    const char* names[] = {
+        "Box", "Ball", "Cube", "Bottle", "Bag",
+        "Stone", "Book", "Lamp", "Pen", "Plate"
+    };
+
+    FILE* file = fopen(filename, "w");
+    if (!file) {
+        fprintf(stderr, "ERROR: Failed to open file\n");
+        return EXIT_FAILURE;
+    }
+
+    for (int i = 0; i < number_of_items; i++) {
+        const char* color = colors[rand() % 10];
+        const char* name  = names[rand() % 10];
+        double weight = (rand() % 10000) / 100.0;   // 0.00–100.00
+        fprintf(file, "%s %s %.2f\n", color, name, weight); // Correct format for read later.
+    }
+    fclose(file);
+    return EXIT_SUCCESS;
+}
+
 item_t* read_items_from_file(char* file_name, int* items_read) {
     int n_shelves = SHELF_AMOUNT * SHELF_LENGTH * 2 * 2;
+
+    file_write_items(file_name, n_shelves); // Writing the items right before reading.
 
     FILE* items_file = fopen(file_name, "r");
     if (items_file == NULL) {
@@ -35,6 +70,24 @@ item_t* read_items_from_file(char* file_name, int* items_read) {
     fclose(items_file);
 
     return items;
+}
+
+int file_read_items(item_t* items, int n_items, FILE* file) {
+    item_t item;
+    int i;
+    for (i = 0; i < n_items; i++) {
+        int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
+        if(success != 3){
+            printf("Failed to read enough fields for item %d, only read %d field(s).\n", i, success);
+            break;
+            //exit(EXIT_FAILURE);
+        }
+        items[i] = item;
+    }
+    if (i < n_items) {
+        printf("Failed to generate %d items, only read %d items from file.\nSetting remainder of shelves to empty\n", n_items, i);
+    }
+    return i;
 }
 
 warehouse_t* create_warehouse() {
@@ -239,24 +292,6 @@ void print_warehouse(const warehouse_t* warehouse) {
         }
         printf("|\n"); // Prints | at the end of each row and skips to new line
     }
-}
-
-int file_read_items(item_t* items, int n_items, FILE* file) {
-    item_t item;
-    int i;
-    for (i = 0; i < n_items; i++) {
-        int success = fscanf(file, " %s %s %lf", item.color, item.name, &item.weight);
-        if(success != 3){
-            printf("Failed to read enough fields for item %d, only read %d field(s).\n", i, success);
-            break;
-            //exit(EXIT_FAILURE);
-        }
-        items[i] = item;
-    }
-    if (i < n_items) {
-        printf("Failed to generate %d items, only read %d items from file.\nSetting remainder of shelves to empty\n", n_items, i);
-    }
-    return i;
 }
 
 struct shelf* generate_shelf(warehouse_t* warehouse, int shelf_count, int stock, int x, int y) {
