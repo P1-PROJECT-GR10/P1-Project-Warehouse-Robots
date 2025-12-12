@@ -14,7 +14,7 @@
  */
 // Default values if user does !pass arguments
 #define DEFAULT_PICKING_ITEM_AMOUNT 5
-#define DEFAULT_RUNS 1
+#define DEFAULT_RUNS 30
 #define DEFAULT_SEED 123456789
 
 typedef struct {
@@ -301,6 +301,11 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->shelves = populate_shelves(warehouse);
     warehouse->printing = false;
+
+    //set_obstacle(warehouse,warehouse->columns/2,warehouse->rows/2);
+    //set_obstacle(warehouse,warehouse->columns/2-1,warehouse->rows/2);
+    //set_obstacle(warehouse,warehouse->columns/2,warehouse->rows/2-1);
+    //set_obstacle(warehouse,warehouse->columns/2-1,warehouse->rows/2-1);
 
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);

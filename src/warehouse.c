@@ -50,6 +50,11 @@ warehouse_t* create_warehouse() {
     warehouse->shelves = populate_shelves(warehouse);
     warehouse->printing = true;
 
+    set_obstacle(warehouse,warehouse->columns/2,warehouse->rows/2);
+    set_obstacle(warehouse,warehouse->columns/2-1,warehouse->rows/2);
+    set_obstacle(warehouse,warehouse->columns/2,warehouse->rows/2-1);
+    set_obstacle(warehouse,warehouse->columns/2-1,warehouse->rows/2-1);
+
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);
 
@@ -157,6 +162,11 @@ drop_zones* generate_drop_zones(int capacity) {
     zones->zones = (drop_zone_t**)safe_malloc(sizeof(drop_zone_t*) * capacity);
 
     return zones;
+}
+
+void set_obstacle(warehouse_t* warehouse, const int x, const int y) {
+    cell_e* cell = get_cell(warehouse, x, y);
+    *cell = shelf;
 }
 
 void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
@@ -316,7 +326,7 @@ shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_l
         if (picking_list->items[i].weight <= 0 && !strlen(picking_list->items[i].name) && !strlen(picking_list->items[i].color))
             continue;
         shelf_t* shelf = search_item(picking_list->items[i].name, picking_list->items[i].color, warehouse);
-        int distance = (int)euclidean_dist(x, y, shelf->x, shelf->y);
+        int distance = (int)manhat_dist(x, y, shelf->x, shelf->y);
         if (distance < nearest_distance) {
             nearest_shelf = shelf;
             nearest_distance = distance;

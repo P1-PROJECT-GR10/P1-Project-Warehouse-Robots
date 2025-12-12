@@ -10,7 +10,7 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &start);
 
     // Seed pseudo-random number generator, with a set seed
-    int seed = 123456789;
+    int seed = 123456792;
     srand(seed);
 
     // Create warehouse:
@@ -25,7 +25,7 @@ int main(void) {
     print_warehouse(warehouse);
 
     // The robot finds the items in the picking list, then gets them and returns them to a point.
-    robot_get_picking_list(robot1, warehouse, picking_list);
+    greedy_step_get_picking_list(robot1, warehouse, picking_list);
 
     // Free allocated memory
     free_robot(robot1);

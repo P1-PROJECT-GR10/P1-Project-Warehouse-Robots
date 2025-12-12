@@ -13,7 +13,7 @@
  *                  and not in between them, for ease of implementation.
  */
 typedef struct neighbour {
-    int distance;
+    float distance;
     direction_e direction;
     int x;
     int y;

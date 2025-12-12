@@ -145,6 +145,8 @@ cell_e* generate_layout(const warehouse_t* warehouse);
  */
 shelf_t** populate_shelves(const warehouse_t* warehouse);
 
+void set_obstacle(warehouse_t* warehouse, const int x, const int y);
+
 /**
  * Set a cell to be of cell type drop zone
  * @param warehouse The warehouse that should be printed

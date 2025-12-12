@@ -106,12 +106,15 @@ int greedy_step_recursive(const warehouse_t* warehouse, robot_t* robot, const in
             // to prevent the robot from moving back to where it just came from.
             && prev != get_mirror_direction(neighbour[i])) {
             // calculates distance to goal point.
-            neighbour[i].distance = (int)euclidean_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
+            neighbour[i].distance = (float)euclidean_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
+            // printf("EVAL [%d,%d] TO (%d,%d) TOWARDS (%d,%d): %lf\n",robot->x,robot->y,neighbour[i].x,neighbour[i].y,goal_x,goal_y,neighbour[i].distance);
             // neighbour[i].distance = manhat_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
         } else {
             neighbour[i].distance = INFINITY; // if not reachable, make distance infinite.
         }
     }
+    printf("MOVED\n\n");
+    //printf("MOVING TO: [%d,%d]",neighbour[0].x,neighbour[0].y);
 
     // The 0'th direction (north) is base case and all others are evaluated from there.
     direction_e heading = neighbour[0].direction;
