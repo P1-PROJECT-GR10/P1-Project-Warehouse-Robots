@@ -1,5 +1,6 @@
 #include "greedy_step.h"
 #include "warehouse.h"
+#include <limits.h>
 
 int get_mirror_direction(neighbour_t neighbour) {
     switch (neighbour.direction) {
@@ -109,7 +110,7 @@ int greedy_step_recursive(const warehouse_t* warehouse, robot_t* robot, const in
             neighbour[i].distance = (int)euclidean_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
             // neighbour[i].distance = manhat_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
         } else {
-            neighbour[i].distance = INFINITY; // if not reachable, make distance infinite.
+            neighbour[i].distance = INT_MAX; // if not reachable, make distance infinite.
         }
     }
 
