@@ -31,6 +31,10 @@ on:
         description: "What should the width of the main aisle's be?"
         required: false
         default: 2
+      block_center_aisle:
+        description: "Block center aisle? (0 or 1)"
+        required: false
+        default: 0
 
 env:
   BUILD_TYPE: Release

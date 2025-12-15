@@ -10,7 +10,7 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &start);
 
     // Seed pseudo-random number generator, with a set seed
-    int seed = 0.0;
+    int seed = 123456789;
     srand(seed);
 
     // Create warehouse:
