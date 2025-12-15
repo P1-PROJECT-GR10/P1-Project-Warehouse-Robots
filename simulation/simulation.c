@@ -326,7 +326,7 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->shelves = populate_shelves(warehouse);
     warehouse->printing = false;
 
-    if (BLOCK_CENTER_MAIN_AISLE) {
+    if (cfg.block_center_aisle) {
         block_center_aisle(warehouse);
     }
 
