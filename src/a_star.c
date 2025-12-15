@@ -347,7 +347,7 @@ void robot_get_picking_list(robot_t* robot1, const warehouse_t* warehouse, picki
         if (OPTIMIZE_PICKING_ORDER) {
             goal_shelf = find_nearest_item(robot1->x, robot1->y, warehouse, picking_list);
         } else {
-            goal_shelf = search_item(picking_list->items[i].name, picking_list->items[i].color, warehouse);
+            goal_shelf = search_nearest_item(robot1->x, robot1->y, picking_list->items[i].name, picking_list->items[i].color, warehouse);
         }
 
         int goal_x = goal_shelf->x;
