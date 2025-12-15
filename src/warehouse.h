@@ -175,15 +175,6 @@ void print_cell(cell_e cell);
 void print_warehouse(const warehouse_t* warehouse);
 
 /**
- * Search function that finds the shelf containing the desired item
- * @param search_input_color The color of the desired item
- * @param search_input_name The name/title of the desired item
- * @param warehouse The warehouse heap
- * @return A pointer to the shelf containing the desired item
- */
-shelf_t* search_item(char search_input_color[32], char search_input_name[32], const warehouse_t* warehouse);
-
-/**
  * Search function that finds the nearest shelf containing the desired item
  * @param x x-coordinate of the point to compare with
  * @param y y-coordinate of the point to compare with

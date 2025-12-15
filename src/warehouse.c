@@ -335,17 +335,6 @@ shelf_t* search_nearest_item(int x, int y, char search_input_name[32], char sear
     exit(EXIT_FAILURE);
 }
 
-shelf_t* search_item(char search_input_title[32], char search_input_color[32], const warehouse_t* warehouse) {
-    int n_shelves = warehouse->number_of_shelves;
-    for (int i = 0; i < n_shelves; i++) {
-        if (strcmp(warehouse->shelves[i]->item.color, search_input_color) == 0 && // Using string compare to find the shelf where the item is located.
-            strcmp(warehouse->shelves[i]->item.name, search_input_title) == 0) {
-            return warehouse->shelves[i];
-        }
-    }
-    return NULL;
-}
-
 shelf_t* manual_search_item(const warehouse_t* warehouse) {
     int n_shelves = warehouse->number_of_shelves;
 
