@@ -24,8 +24,6 @@ void* safe_malloc(size_t size) {
 }
 
 int file_write_items(const char* filename, int number_of_items) {
-    srand((unsigned)time(NULL)); // randomness
-
     // 10 Random colors and names
     const char* colors[] = {
         "Red", "Blue", "Green", "Yellow", "Black",
@@ -313,6 +311,30 @@ struct shelf* generate_shelf(warehouse_t* warehouse, int shelf_count, int stock,
     return shelf;
 }
 
+shelf_t* search_nearest_item(int x, int y, char search_input_name[32], char search_input_color[32], const warehouse_t* warehouse) {
+    int nearest_distance = (int)INFINITY;
+    shelf_t* nearest_shelf = &(shelf_t){0};
+
+    int n_shelves = warehouse->number_of_shelves;
+    for (int i = 0; i < n_shelves; i++) {
+        if (strcmp(warehouse->shelves[i]->item.color, search_input_color) == 0 && // Using string compare to find the shelf where the item is located.
+            strcmp(warehouse->shelves[i]->item.name, search_input_name) == 0) {
+                shelf_t* shelf = warehouse->shelves[i];
+                int distance = (int)euclidean_dist(x, y, shelf->x, shelf->y);
+                if (distance < nearest_distance) {
+                    nearest_shelf = shelf;
+                    nearest_distance = distance;
+                }
+        }
+    }
+    if (nearest_distance < (int)INFINITY) {
+        return nearest_shelf;
+    }
+
+    printf("Failed to locate any shelf.");
+    exit(EXIT_FAILURE);
+}
+
 shelf_t* search_item(char search_input_title[32], char search_input_color[32], const warehouse_t* warehouse) {
     int n_shelves = warehouse->number_of_shelves;
     for (int i = 0; i < n_shelves; i++) {
@@ -340,7 +362,8 @@ shelf_t* manual_search_item(const warehouse_t* warehouse) {
             return warehouse->shelves[i];
             }
     }
-    return 0;
+    printf("Failed to locate any shelf, exiting.");
+    exit(EXIT_FAILURE);
 }
 
 shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_list_t* picking_list) {
@@ -350,7 +373,7 @@ shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_l
     for (int i = 0; i < picking_list->amount; i++) {
         if (picking_list->items[i].weight <= 0 && !strlen(picking_list->items[i].name) && !strlen(picking_list->items[i].color))
             continue;
-        shelf_t* shelf = search_item(picking_list->items[i].name, picking_list->items[i].color, warehouse);
+        shelf_t* shelf = search_nearest_item(x, y, picking_list->items[i].name, picking_list->items[i].color, warehouse);
         int distance = (int)euclidean_dist(x, y, shelf->x, shelf->y);
         if (distance < nearest_distance) {
             nearest_shelf = shelf;
