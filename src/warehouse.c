@@ -1,8 +1,7 @@
 #include "warehouse.h"
-
 #include <time.h>
-
 #include "a_star.h"
+#include <limits.h>
 
 int manhat_dist(const int x1, const int y1, const int x2, const int y2) {
     return abs(x1 - x2) + abs(y1 - y2);
@@ -231,7 +230,7 @@ void set_drop_zone_cell(warehouse_t* warehouse, const int x, const int y) {
 }
 
 drop_zone_t* get_nearest_drop_zone(const warehouse_t* warehouse, int x, int y) {
-    int nearest_distance = INFINITY;
+    int nearest_distance = INT_MAX;
     drop_zone_t* nearest_zone = NULL;
     for (int i = 0; i < warehouse->drop_zones->amount; i++) {
         int dist = manhat_dist(x, y, warehouse->drop_zones->zones[i]->x, warehouse->drop_zones->zones[i]->y);
@@ -312,7 +311,7 @@ struct shelf* generate_shelf(warehouse_t* warehouse, int shelf_count, int stock,
 }
 
 shelf_t* search_nearest_item(int x, int y, char search_input_name[32], char search_input_color[32], const warehouse_t* warehouse) {
-    int nearest_distance = (int)INFINITY;
+    int nearest_distance = INT_MAX;
     shelf_t* nearest_shelf = &(shelf_t){0};
 
     int n_shelves = warehouse->number_of_shelves;
@@ -327,7 +326,7 @@ shelf_t* search_nearest_item(int x, int y, char search_input_name[32], char sear
                 }
         }
     }
-    if (nearest_distance < (int)INFINITY) {
+    if (nearest_distance < INT_MAX) {
         return nearest_shelf;
     }
 
@@ -356,7 +355,7 @@ shelf_t* manual_search_item(const warehouse_t* warehouse) {
 }
 
 shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_list_t* picking_list) {
-    int nearest_distance = (int)INFINITY;
+    int nearest_distance = INT_MAX;
     shelf_t* nearest_shelf = &(shelf_t){0};
 
     for (int i = 0; i < picking_list->amount; i++) {
@@ -370,7 +369,7 @@ shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_l
         }
     }
 
-    if (nearest_distance < (int)INFINITY) {
+    if (nearest_distance < INT_MAX) {
         return nearest_shelf;
     }
     printf("Failed to locate any shelf, exiting.");

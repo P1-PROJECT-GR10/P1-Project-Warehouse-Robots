@@ -2,6 +2,7 @@
 #include "greedy_step.h"
 #include "warehouse.h"
 #include "a_star.h"
+#include <limits.h>
 
 
 /*
@@ -147,8 +148,8 @@ void reset_node_map(node_t* node_map, const warehouse_t* warehouse) {
         node_map[i].y = i / columns;
 
         // Reset A* values
-        node_map[i].g = INFINITY;
-        node_map[i].f = INFINITY;
+        node_map[i].g = INT_MAX;
+        node_map[i].f = INT_MAX;
         node_map[i].h = 0;
         node_map[i].parent = NULL;
         node_map[i].visited = false;
