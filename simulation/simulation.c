@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     if (argc >= 8) config.main_aisle_width = validate_int(argv[7], 1, "main aisle width");
 
     //=========== Warehouse size error handling ===========
-    if (config.shelf_amount * config.shelf_length > 1000) {
+    if (config.shelf_amount * config.shelf_length > 10000) {
         fprintf(stderr, "ERROR: Too many shelves. Choose smaller values.\n");
         exit(EXIT_FAILURE);
     }
@@ -97,8 +97,8 @@ int main(int argc, char** argv) {
         // Create warehouse
         warehouse_t* warehouse = create_simulated_warehouse(config);
         if (!warehouse) { fprintf(stderr, "ERROR: Failed to create warehouse\n"); exit(EXIT_FAILURE);}
-        if (warehouse->rows > 500 || warehouse->columns > 500) {
-            fprintf(stderr, "ERROR: Warehouse size exceeds maximum 500x500.\n");
+        if (warehouse->rows > 10000 || warehouse->columns > 10000) {
+            fprintf(stderr, "ERROR: Warehouse size exceeds maximum 10000x10000.\n");
             exit(EXIT_FAILURE);
         }
 
@@ -146,8 +146,8 @@ int main(int argc, char** argv) {
         // Create warehouse
         warehouse_t* warehouse = create_simulated_warehouse(config);
         if (!warehouse) { fprintf(stderr, "ERROR: Failed to create warehouse\n"); exit(EXIT_FAILURE);}
-        if (warehouse->rows > 500 || warehouse->columns > 500) {
-            fprintf(stderr, "ERROR: Warehouse size exceeds maximum 500x500.\n");
+        if (warehouse->rows > 10000 || warehouse->columns > 10000) {
+            fprintf(stderr, "ERROR: Warehouse size exceeds maximum 10000x10000.\n");
             exit(EXIT_FAILURE);
         }
 
