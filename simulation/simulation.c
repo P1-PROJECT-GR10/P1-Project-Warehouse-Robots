@@ -23,7 +23,7 @@ typedef struct {
     int aisle_width;
     int main_aisle_width;
     int drop_zones;
-    int block_center_aisle;
+    bool block_center_aisle;
 } warehouse_config_t;
 
 // Default values if user does !pass arguments (This is a 10x18 warehouse layout)
