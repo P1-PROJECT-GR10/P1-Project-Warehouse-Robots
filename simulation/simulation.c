@@ -32,7 +32,7 @@ warehouse_config_t config = {
     .shelf_length = 6,
     .aisle_width = 1,
     .main_aisle_width = 2,
-    .block_center_aisle = false
+    .block_center_aisle = 0
 };
 /*
  *#######################################################################
@@ -43,6 +43,7 @@ warehouse_config_t config = {
  */
 warehouse_t* create_simulated_warehouse(warehouse_config_t cfg);
 int validate_int(const char* arg, int min, const char* name);
+int validate_boolean(const char* arg, int min, int max, const char* name);
 cell_e* generate_simulated_layout(const warehouse_t* warehouse, warehouse_config_t cfg);
 bool is_vertical_end_aisle_simulated(const warehouse_t* warehouse, int row, warehouse_config_t cfg);
 bool is_main_aisle_simulated(int column, warehouse_config_t cfg);
@@ -64,7 +65,7 @@ int main(int argc, char** argv) {
     if (argc >= 6) config.shelf_length = validate_int(argv[5], 1, "shelf length");
     if (argc >= 7) config.aisle_width = validate_int(argv[6], 1, "aisle width");
     if (argc >= 8) config.main_aisle_width = validate_int(argv[7], 1, "main aisle width");
-    if (argc >= 9) config.block_center_aisle = validate_int(argv[8], 1, "block center aisle");
+    if (argc >= 9) config.block_center_aisle = validate_boolean(argv[8], 0, 1, "block center aisle");
 
     //=========== Warehouse size error handling ===========
     if (config.shelf_amount * config.shelf_length > 1000) {
