@@ -23,6 +23,7 @@ typedef struct {
     int aisle_width;
     int main_aisle_width;
     int drop_zones;
+    bool block_center_aisle;
 } warehouse_config_t;
 
 // Default values if user does !pass arguments (This is a 10x18 warehouse layout)
@@ -30,7 +31,8 @@ warehouse_config_t config = {
     .shelf_amount = 3,
     .shelf_length = 6,
     .aisle_width = 1,
-    .main_aisle_width = 2
+    .main_aisle_width = 2,
+    .block_center_aisle = 0
 };
 /*
  *#######################################################################
@@ -41,9 +43,11 @@ warehouse_config_t config = {
  */
 warehouse_t* create_simulated_warehouse(warehouse_config_t cfg);
 int validate_int(const char* arg, int min, const char* name);
+int validate_boolean(const char* arg, int min, int max, const char* name);
 cell_e* generate_simulated_layout(const warehouse_t* warehouse, warehouse_config_t cfg);
 bool is_vertical_end_aisle_simulated(const warehouse_t* warehouse, int row, warehouse_config_t cfg);
 bool is_main_aisle_simulated(int column, warehouse_config_t cfg);
+void block_center_aisle_simulated(warehouse_t* warehouse, warehouse_config_t cfg);
 
 int main(int argc, char** argv) {
     //===============================
@@ -62,6 +66,7 @@ int main(int argc, char** argv) {
     if (argc >= 6) config.shelf_length = validate_int(argv[5], 1, "shelf length");
     if (argc >= 7) config.aisle_width = validate_int(argv[6], 1, "aisle width");
     if (argc >= 8) config.main_aisle_width = validate_int(argv[7], 1, "main aisle width");
+    if (argc >= 9) config.block_center_aisle = validate_boolean(argv[8], 0, 1, "block center aisle");
 
     //=========== Warehouse size error handling ===========
     if (config.shelf_amount * config.shelf_length > 10000) {
@@ -228,6 +233,23 @@ int validate_int(const char* arg, int min, const char* name) {
     return value;
 }
 
+int validate_boolean(const char* arg, int min, int max, const char* name) {
+    int value = atoi(arg);
+    if (value < min) {
+        fprintf(stderr, "ERROR: %s must be >= %d (got %d)\n", name, min, value);
+        exit(EXIT_FAILURE);
+    }
+    if (value > max) {
+        fprintf(stderr, "ERROR: %s must be <= %d (got %d)\n", name, max, value);
+        exit(EXIT_FAILURE);
+    }
+
+    if (value < max)
+        return false;
+
+    return true;
+}
+
 bool is_vertical_end_aisle_simulated(const warehouse_t* warehouse, int row, warehouse_config_t cfg) {
     if (row < cfg.aisle_width
         || row >= warehouse->rows - cfg.aisle_width){
@@ -247,6 +269,14 @@ bool is_main_aisle_simulated(int column, warehouse_config_t cfg) {
         return true; // Left & right side main aisles
         }
     return false;
+}
+
+void block_center_aisle_simulated(warehouse_t* warehouse, warehouse_config_t cfg) {
+    for (int row = cfg.aisle_width; row <= warehouse->rows-cfg.aisle_width*2; row++) {
+        for (int col = 1; col <= cfg.main_aisle_width; col++) {
+            set_obstacle(warehouse,cfg.aisle_width+cfg.shelf_length+col,row);
+        }
+    }
 }
 
 cell_e* generate_simulated_layout(const warehouse_t* warehouse, warehouse_config_t cfg) {
@@ -305,6 +335,10 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->items = read_items_from_file(ITEM_FILE, &warehouse->number_of_items);
     warehouse->shelves = populate_shelves(warehouse);
     warehouse->printing = false;
+
+    if (cfg.block_center_aisle) {
+        block_center_aisle_simulated(warehouse, cfg);
+    }
 
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);

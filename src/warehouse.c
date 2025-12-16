@@ -103,7 +103,24 @@ warehouse_t* create_warehouse() {
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2);
 
+    if (BLOCK_CENTER_MAIN_AISLE) {
+        block_center_aisle(warehouse);
+    }
+
     return warehouse;
+}
+
+void set_obstacle(warehouse_t* warehouse, const int x, const int y) {
+    cell_e* cell = get_cell(warehouse, x, y);
+    *cell = shelf;
+}
+
+void block_center_aisle(warehouse_t* warehouse) {
+    for (int row = AISLE_WIDTH; row <= warehouse->rows-AISLE_WIDTH*2; row++) {
+        for (int col = 1; col <= MAIN_AISLE_WIDTH; col++) {
+            set_obstacle(warehouse,AISLE_WIDTH+SHELF_LENGTH+col,row);
+        }
+    }
 }
 
 void destroy_warehouse(warehouse_t* warehouse) {

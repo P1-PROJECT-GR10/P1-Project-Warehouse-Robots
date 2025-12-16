@@ -26,6 +26,8 @@
 #define ITEM_FILE "items.txt"
 /// Whether to optimize picking order
 #define OPTIMIZE_PICKING_ORDER true
+/// Whether to include obstacles
+#define BLOCK_CENTER_MAIN_AISLE false
 
 //---------------------------------------ENUMERATIONS---------------------------------------
 
@@ -270,3 +272,17 @@ shelf_t* find_nearest_item(int x, int y, const warehouse_t* warehouse, picking_l
  * @param item The item to remove
  */
 void remove_item(picking_list_t* picking_list, item_t item);
+
+/**
+ * Sets obstacles at a given location
+ * @param warehouse The warehouse
+ * @param x The x-coordinate
+ * @param y The y-coordinate
+ */
+void set_obstacle(warehouse_t* warehouse, int x, int y);
+
+/**
+ * Sets obstacles (empty shelves) in the entire center aisle, excluding top and bottom aisles
+ * @param warehouse The warehouse
+ */
+void block_center_aisle(warehouse_t* warehouse);
