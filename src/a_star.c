@@ -226,15 +226,14 @@ node_t* a_star(const warehouse_t* warehouse, node_t* node_map, const int start_x
                 if (neighbour->obstacle || neighbour->visited) continue;
 
                 // Calculate g-cost (cost pr. step is 1.0)
-                float tentative_g = current->g + 1;
+                int tentative_g = current->g + 1;
 
                 // Check if better path was found
                 if (tentative_g < neighbour->g) {
                     // Set up neighbour values
                     neighbour->parent = current;
                     neighbour->g = tentative_g;
-                    neighbour->h = (float)euclidean_dist(neighbour->x, neighbour->y, goal_node->x, goal_node->y);
-                    //neighbour->h = manhat_dist(neighbour->x, neighbour->y, goal_node->x, goal_node->y);
+                    neighbour->h = manhat_dist(neighbour->x, neighbour->y, goal_node->x, goal_node->y);
                     neighbour->f = neighbour->g + neighbour->h;
 
                     // Push neighbour to open_set or reorder heap with new values

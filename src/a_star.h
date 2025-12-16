@@ -14,7 +14,7 @@
  */
 typedef struct node {
     int x, y;               ///< coordinate for node position
-    float g, h ,f;          ///< A* related cost variables
+    int g, h ,f;          ///< A* related cost variables
     bool visited;           ///< Whether node has already been visited
     bool obstacle;          ///< Whether node is an obstacle
     struct node* parent;    ///< Back pointer for path reconstruction
