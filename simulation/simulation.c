@@ -47,6 +47,7 @@ int validate_boolean(const char* arg, int min, int max, const char* name);
 cell_e* generate_simulated_layout(const warehouse_t* warehouse, warehouse_config_t cfg);
 bool is_vertical_end_aisle_simulated(const warehouse_t* warehouse, int row, warehouse_config_t cfg);
 bool is_main_aisle_simulated(int column, warehouse_config_t cfg);
+void block_center_aisle_simulated(warehouse_t* warehouse, warehouse_config_t cfg);
 
 int main(int argc, char** argv) {
     //===============================
@@ -270,6 +271,14 @@ bool is_main_aisle_simulated(int column, warehouse_config_t cfg) {
     return false;
 }
 
+void block_center_aisle_simulated(warehouse_t* warehouse, warehouse_config_t cfg) {
+    for (int row = cfg.aisle_width; row <= warehouse->rows-cfg.aisle_width*2; row++) {
+        for (int col = 1; col <= cfg.main_aisle_width; col++) {
+            set_obstacle(warehouse,cfg.aisle_width+cfg.shelf_length+col,row);
+        }
+    }
+}
+
 cell_e* generate_simulated_layout(const warehouse_t* warehouse, warehouse_config_t cfg) {
     const int rows = warehouse->rows;
     const int columns = warehouse->columns;
@@ -328,7 +337,7 @@ warehouse_t* create_simulated_warehouse(warehouse_config_t cfg) {
     warehouse->printing = false;
 
     if (cfg.block_center_aisle) {
-        block_center_aisle(warehouse);
+        block_center_aisle_simulated(warehouse, cfg);
     }
 
     set_drop_zone_cell(warehouse, warehouse->columns-1, warehouse->rows/2-1);

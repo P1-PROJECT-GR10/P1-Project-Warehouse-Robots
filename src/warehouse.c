@@ -116,9 +116,10 @@ void set_obstacle(warehouse_t* warehouse, const int x, const int y) {
 }
 
 void block_center_aisle(warehouse_t* warehouse) {
-    for (int i = 0; i < warehouse->rows-AISLE_WIDTH*2; i++) {
-        set_obstacle(warehouse,warehouse->columns/2,1+i);
-        set_obstacle(warehouse,warehouse->columns/2-1,1+i);
+    for (int row = AISLE_WIDTH; row <= warehouse->rows-AISLE_WIDTH*2; row++) {
+        for (int col = 1; col <= MAIN_AISLE_WIDTH; col++) {
+            set_obstacle(warehouse,AISLE_WIDTH+SHELF_LENGTH+col,row);
+        }
     }
 }
 
