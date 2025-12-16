@@ -108,7 +108,6 @@ int greedy_step_recursive(const warehouse_t* warehouse, robot_t* robot, const in
             && prev != get_mirror_direction(neighbour[i])) {
             // calculates distance to goal point.
             neighbour[i].distance = (int)euclidean_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
-            // neighbour[i].distance = manhat_dist(neighbour[i].x, neighbour[i].y, goal_x, goal_y);
         } else {
             neighbour[i].distance = INT_MAX; // if not reachable, make distance infinite.
         }
