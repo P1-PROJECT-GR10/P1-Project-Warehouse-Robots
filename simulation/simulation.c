@@ -239,7 +239,7 @@ int validate_boolean(const char* arg, int min, int max, const char* name) {
         exit(EXIT_FAILURE);
     }
     if (value > max) {
-        fprintf(stderr, "ERROR: %s must be >= %d (got %d)\n", name, max, value);
+        fprintf(stderr, "ERROR: %s must be <= %d (got %d)\n", name, max, value);
         exit(EXIT_FAILURE);
     }
 
