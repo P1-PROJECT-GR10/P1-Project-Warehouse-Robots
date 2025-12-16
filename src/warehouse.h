@@ -27,7 +27,7 @@
 /// Whether to optimize picking order
 #define OPTIMIZE_PICKING_ORDER true
 /// Whether to include obstacles
-#define BLOCK_CENTER_MAIN_AISLE false
+#define BLOCK_CENTER_MAIN_AISLE true
 
 //---------------------------------------ENUMERATIONS---------------------------------------
 

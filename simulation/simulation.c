@@ -207,7 +207,7 @@ int main(int argc, char** argv) {
             config.main_aisle_width * 3 + config.shelf_length * 2);
 
     // Scenario
-    if (config.block_center_aisle) fprintf(results, "blockade_simulation=true\n");
+    if (config.block_center_aisle) { fprintf(results, "blockade_simulation=true\n"); }
 
     // Separate results
     fprintf(results, "\n=== A_STAR ===\n");
