@@ -206,6 +206,9 @@ int main(int argc, char** argv) {
     fprintf(results, "warehouse_columns=%d\n",
             config.main_aisle_width * 3 + config.shelf_length * 2);
 
+    // Scenario
+    if (config.block_center_aisle) fprintf(results, "blockade_simulation=true\n");
+
     // Separate results
     fprintf(results, "\n=== A_STAR ===\n");
     fprintf(results, "total_runtime_astar=%.9f\n", total_runtime_astar);

@@ -72,6 +72,7 @@ jobs:
             ${{ github.event.inputs.shelf_length }} \
             ${{ github.event.inputs.aisle_width }} \
             ${{ github.event.inputs.main_aisle_width }}
+            ${{ github.event.inputs.block_center_aisle }}
 
           echo "Simulation finished with custom parameters."
 
