@@ -14,7 +14,7 @@
  */
 // Default values if user does !pass arguments
 #define DEFAULT_PICKING_ITEM_AMOUNT 5
-#define DEFAULT_RUNS 1
+#define DEFAULT_RUNS 10
 #define DEFAULT_SEED 123456789
 
 typedef struct {
@@ -32,7 +32,7 @@ warehouse_config_t config = {
     .shelf_length = 6,
     .aisle_width = 1,
     .main_aisle_width = 2,
-    .block_center_aisle = 0
+    .block_center_aisle = 1
 };
 /*
  *#######################################################################
@@ -90,6 +90,7 @@ int main(int argc, char** argv) {
     double total_runtime_greedy_step = 0.0;
     int A_star_total_steps = 0;
     int bf_total_steps = 0;
+    int bf_dead_runs = 0;
 
     //-------------------------------
     // A* Simulation
@@ -170,7 +171,10 @@ int main(int argc, char** argv) {
         // Run simulation
         greedy_step_get_picking_list(robot1, warehouse, picking_list);
         int bf_steps = robot1->steps;
-        bf_total_steps += bf_steps;
+        if (config.block_center_aisle && bf_steps < 0)
+            bf_dead_runs += 1;
+        else
+            bf_total_steps += bf_steps;
 
         // End timer
         clock_gettime(CLOCK_MONOTONIC, &end);
@@ -221,6 +225,10 @@ int main(int argc, char** argv) {
     fprintf(results, "avg_runtime_greedy_step=%.9f\n", total_runtime_greedy_step / runs);
     fprintf(results, "total_steps_greedy_step=%d\n", bf_total_steps);
     fprintf(results, "avg_steps_greedy_step=%.2f\n", bf_average_steps);
+    if (bf_dead_runs > 0) {
+        fprintf(results, "greedy_dead_runs=%d\n", bf_dead_runs);
+        fprintf(results, "greedy_successful_runs=%d\n", runs-bf_dead_runs);
+    }
 
     fclose(results);
     return 0;

@@ -60,6 +60,10 @@ void greedy_step_get_picking_list(robot_t* robot1, const warehouse_t* warehouse,
                "Navigating to (%d, %d)\n", i+1, goal_shelf->x, goal_shelf->y, goal_x, goal_y);
 
         greedy_step_algorithm(warehouse, robot1, goal_x, goal_y);
+        if (robot1->steps < 0) {
+            printf("Robot failed, and took %d steps in total.\n\n",robot1->steps);
+            return;
+        }
         if (check_shelf(robot1, warehouse, goal_shelf)) {
             robot_item_pickup(robot1, goal_shelf, 1);
             remove_item(picking_list, goal_shelf->item);
@@ -132,6 +136,11 @@ int greedy_step_recursive(const warehouse_t* warehouse, robot_t* robot, const in
     // printf("%d moves \n  \n", moves);        // nice for testing purposes.
 
     prev = heading; // prepares the function for the next iteration.
+
+    if (moves > 999) {
+        robot->steps = -1;
+        return -1;
+    }
 
     // executes the next step.
     return greedy_step_recursive(warehouse, robot, goal_x, goal_y, prev, moves + 1);
