@@ -14,7 +14,7 @@
  */
 // Default values if user does !pass arguments
 #define DEFAULT_PICKING_ITEM_AMOUNT 5
-#define DEFAULT_RUNS 10
+#define DEFAULT_RUNS 1
 #define DEFAULT_SEED 123456789
 
 typedef struct {
@@ -32,7 +32,7 @@ warehouse_config_t config = {
     .shelf_length = 6,
     .aisle_width = 1,
     .main_aisle_width = 2,
-    .block_center_aisle = 1
+    .block_center_aisle = 0
 };
 /*
  *#######################################################################
